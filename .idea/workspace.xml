@@ -50,7 +50,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/adapters/ExploreAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.9186992">
-              <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+              <caret line="35" column="11" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#389#390#0" expanded="true" />
@@ -59,6 +59,8 @@
                 <element signature="e#542#543#0" expanded="true" />
                 <element signature="e#600#601#0" expanded="true" />
                 <element signature="e#642#643#0" expanded="true" />
+                <element signature="e#828#829#0" expanded="true" />
+                <element signature="e#847#848#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2336,7 +2338,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/adapters/ExploreAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.9186992">
-          <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+          <caret line="35" column="11" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#389#390#0" expanded="true" />
@@ -2345,6 +2347,8 @@
             <element signature="e#542#543#0" expanded="true" />
             <element signature="e#600#601#0" expanded="true" />
             <element signature="e#642#643#0" expanded="true" />
+            <element signature="e#828#829#0" expanded="true" />
+            <element signature="e#847#848#0" expanded="true" />
           </folding>
         </state>
       </provider>

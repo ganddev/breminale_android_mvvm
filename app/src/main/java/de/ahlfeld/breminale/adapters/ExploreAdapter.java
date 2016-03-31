@@ -28,6 +28,12 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ExploreV
 
     public static class ExploreViewHolder.RecyclerView.ViewHolder {
 
-        public ExploreViewHolder()
+        public ExploreViewHolder() {
+            super();
+        }
+
+        void bindLocation(Location location) {
+        if()
+    }
     }
 }
