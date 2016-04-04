@@ -2,10 +2,12 @@ package de.ahlfeld.breminale.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by bjornahlfeld on 31.03.16.
  */
-public class Location {
+public class Location extends RealmObject {
 
     @SerializedName("id")
     private int id;
@@ -19,7 +21,7 @@ public class Location {
     @SerializedName("longitude")
     private Double longitude;
 
-    @SerializedName("image_url")
+    @SerializedName("original_image_url")
     private String imageUrl;
 
     @SerializedName("description")

@@ -2,6 +2,8 @@ package de.ahlfeld.breminale.models;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -22,7 +24,18 @@ public interface BreminaleService {
 
     class Factory {
         public static BreminaleService create() {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+// set your desired log level
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+// add your other interceptors …
+
+// add logging as last interceptor
+            httpClient.addInterceptor(logging);  // <-- this is the important line!
+
             Retrofit retrofit = new Retrofit.Builder()
+                    .client(httpClient.build())
                     .baseUrl("https://serene-ocean-3356.herokuapp.com/api/v1/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

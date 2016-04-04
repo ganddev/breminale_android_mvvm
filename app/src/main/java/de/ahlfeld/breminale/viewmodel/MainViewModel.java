@@ -56,16 +56,18 @@ public class MainViewModel implements ViewModel {
         }
         BreminaleApplication application = BreminaleApplication.get(context);
         BreminaleService breminaleService = application.getBreminaleService();
-        subscription = breminaleService.getLocations().observeOn(AndroidSchedulers.mainThread())
+        subscription = breminaleService.getLocations()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(application.getDefaultSubscribeScheduler())
                 .subscribe(new Subscriber<List<Location>>() {
                     @Override
                     public void onCompleted() {
-                        if(dataListener != null) {
+                        Log.d(TAG, "on complete locations size: " + locations.size());
+                        if (dataListener != null) {
                             dataListener.onLocationsChanged(locations);
                         }
                         progressVisibility.set(View.INVISIBLE);
-                        if(!locations.isEmpty()) {
+                        if (!locations.isEmpty()) {
                             recyclerViewVisibility.set(View.VISIBLE);
                         }
                     }
@@ -74,7 +76,7 @@ public class MainViewModel implements ViewModel {
                     public void onError(Throwable e) {
                         Log.e(TAG, "Error loading locations", e);
                         progressVisibility.set(View.INVISIBLE);
-                        if(isHttp404(e)) {
+                        if (isHttp404(e)) {
 
                         } else {
 
@@ -85,6 +87,47 @@ public class MainViewModel implements ViewModel {
                     public void onNext(List<Location> locations) {
                         Log.i(TAG, "Locations loaded " + locations);
                         MainViewModel.this.locations = locations;
+                    }
+                });
+    }
+
+    private void loadSingleLocation(int id) {
+        progressVisibility.set(View.VISIBLE);
+        recyclerViewVisibility.set(View.INVISIBLE);
+        if(subscription != null && subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
+        BreminaleApplication application = BreminaleApplication.get(context);
+        BreminaleService breminaleService = application.getBreminaleService();
+        subscription = breminaleService.getLocation(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(application.getDefaultSubscribeScheduler())
+                .subscribe(new Subscriber<Location>() {
+                    @Override
+                    public void onCompleted() {
+                        if (dataListener != null) {
+                            dataListener.onLocationsChanged(locations);
+                        }
+                        progressVisibility.set(View.INVISIBLE);
+                        if (!locations.isEmpty()) {
+                            recyclerViewVisibility.set(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "Error loading locations", e);
+                        progressVisibility.set(View.INVISIBLE);
+                        if (isHttp404(e)) {
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onNext(Location location) {
+                        Log.i(TAG, "Locations loaded " + locations);
                     }
                 });
     }
