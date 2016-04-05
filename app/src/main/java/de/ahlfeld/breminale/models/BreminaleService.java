@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.RealmObject;
 import okhttp3.OkHttpClient;
@@ -34,7 +35,10 @@ public interface BreminaleService {
 // set your desired log level
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+            OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+                    .connectTimeout(35, TimeUnit.SECONDS)
+                    .writeTimeout(35, TimeUnit.SECONDS)
+                    .readTimeout(35, TimeUnit.SECONDS);
 // add your other interceptors …
 
 // add logging as last interceptor
