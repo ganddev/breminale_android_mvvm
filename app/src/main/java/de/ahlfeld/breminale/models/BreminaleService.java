@@ -1,7 +1,13 @@
 package de.ahlfeld.breminale.models;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.List;
 
+import io.realm.RealmObject;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -16,10 +22,10 @@ import rx.Observable;
  */
 public interface BreminaleService {
 
-    @GET("locations")
+    @GET("locations.json")
     Observable<List<Location>> getLocations();
 
-    @GET("locations/{id}")
+    @GET("locations/{id}.json")
     Observable<Location> getLocation(@Path("id") int locationId);
 
     class Factory {
@@ -34,10 +40,25 @@ public interface BreminaleService {
 // add logging as last interceptor
             httpClient.addInterceptor(logging);  // <-- this is the important line!
 
+            Gson gson = new GsonBuilder()
+                    .setExclusionStrategies(new ExclusionStrategy() {
+                        @Override
+                        public boolean shouldSkipField(FieldAttributes f) {
+                            return f.getDeclaringClass().equals(RealmObject.class);
+                        }
+
+                        @Override
+                        public boolean shouldSkipClass(Class<?> clazz) {
+                            return false;
+                        }
+                    })
+                    .create();
+
+
             Retrofit retrofit = new Retrofit.Builder()
                     .client(httpClient.build())
                     .baseUrl("https://serene-ocean-3356.herokuapp.com/api/v1/")
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
             return retrofit.create(BreminaleService.class);

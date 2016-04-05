@@ -30,8 +30,6 @@ public class Location extends RealmObject {
     @SerializedName("deleted")
     private boolean deleted;
 
-    public Location() {
-    }
 
     public int getId() {
         return id;

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import de.ahlfeld.breminale.models.BreminaleService;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import rx.Scheduler;
 import rx.schedulers.Schedulers;
 
@@ -14,6 +16,14 @@ public class BreminaleApplication extends Application {
 
     private BreminaleService breminaleService;
     private Scheduler defaultSubscribeScheduler;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        RealmConfiguration config = new RealmConfiguration.Builder(this).build();
+        Realm.deleteRealm(config);
+        Realm.setDefaultConfiguration(config);
+    }
 
     public static BreminaleApplication get(Context ctx) {
         return (BreminaleApplication) ctx.getApplicationContext();

@@ -11,9 +11,12 @@ import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.models.BreminaleService;
 import de.ahlfeld.breminale.models.Location;
 import retrofit2.adapter.rxjava.HttpException;
+import rx.Observable;
+import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by bjornahlfeld on 31.03.16.
@@ -21,20 +24,9 @@ import rx.android.schedulers.AndroidSchedulers;
 public class MainViewModel implements ViewModel {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
-    public ObservableInt progressVisibility;
-    public ObservableInt recyclerViewVisibility;
-
-    private Context context;
     private Subscription subscription;
-
-    private List<Location> locations;
-    private DataListener dataListener;
-
     public MainViewModel(Context ctx, DataListener dataListener) {
-        this.context = ctx;
-        this.dataListener = dataListener;
-        progressVisibility = new ObservableInt(View.VISIBLE);
-        recyclerViewVisibility = new ObservableInt(View.INVISIBLE);
+
         loadLocations();
     }
 
@@ -45,92 +37,31 @@ public class MainViewModel implements ViewModel {
             subscription.unsubscribe();
         }
         subscription = null;
-        context = null;
     }
 
     private void loadLocations() {
-        progressVisibility.set(View.VISIBLE);
-        recyclerViewVisibility.set(View.INVISIBLE);
-        if(subscription != null && subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
-        }
-        BreminaleApplication application = BreminaleApplication.get(context);
-        BreminaleService breminaleService = application.getBreminaleService();
-        subscription = breminaleService.getLocations()
+        BreminaleService service = BreminaleService.Factory.create();
+        Observable<Location> call = service.getLocation(1);
+        subscription = call.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(application.getDefaultSubscribeScheduler())
-                .subscribe(new Subscriber<List<Location>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "on complete locations size: " + locations.size());
-                        if (dataListener != null) {
-                            dataListener.onLocationsChanged(locations);
-                        }
-                        progressVisibility.set(View.INVISIBLE);
-                        if (!locations.isEmpty()) {
-                            recyclerViewVisibility.set(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Error loading locations", e);
-                        progressVisibility.set(View.INVISIBLE);
-                        if (isHttp404(e)) {
-
-                        } else {
-
-                        }
-                    }
-
-                    @Override
-                    public void onNext(List<Location> locations) {
-                        Log.i(TAG, "Locations loaded " + locations);
-                        MainViewModel.this.locations = locations;
-                    }
-                });
-    }
-
-    private void loadSingleLocation(int id) {
-        progressVisibility.set(View.VISIBLE);
-        recyclerViewVisibility.set(View.INVISIBLE);
-        if(subscription != null && subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
-        }
-        BreminaleApplication application = BreminaleApplication.get(context);
-        BreminaleService breminaleService = application.getBreminaleService();
-        subscription = breminaleService.getLocation(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(application.getDefaultSubscribeScheduler())
                 .subscribe(new Subscriber<Location>() {
                     @Override
                     public void onCompleted() {
-                        if (dataListener != null) {
-                            dataListener.onLocationsChanged(locations);
-                        }
-                        progressVisibility.set(View.INVISIBLE);
-                        if (!locations.isEmpty()) {
-                            recyclerViewVisibility.set(View.VISIBLE);
-                        }
+                        Log.e(TAG, "on compledted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "Error loading locations", e);
-                        progressVisibility.set(View.INVISIBLE);
-                        if (isHttp404(e)) {
-
-                        } else {
-
-                        }
                     }
 
                     @Override
                     public void onNext(Location location) {
-                        Log.i(TAG, "Locations loaded " + locations);
+                        Log.i(TAG, "Locations loaded " + location);
                     }
                 });
     }
+
 
     private static boolean isHttp404(Throwable error) {
         return error instanceof HttpException && ((HttpException) error).code() == 404;
