@@ -3,6 +3,7 @@ package de.ahlfeld.breminale.view;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import java.util.List;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.adapters.EventAdapter;
 import de.ahlfeld.breminale.databinding.ActivityMainBinding;
 import de.ahlfeld.breminale.models.BreminaleService;
 import de.ahlfeld.breminale.models.Location;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Dat
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainViewModel = new MainViewModel(this, this);
         binding.setViewModel(mainViewModel);
-
+        setupRecyclerView(binding.eventsRecyclerView);
     }
 
     @Override
@@ -66,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Dat
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        //recyclerView.setAdapter(new ExploreAdapter());
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new EventAdapter());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

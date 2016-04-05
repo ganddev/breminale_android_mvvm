@@ -29,6 +29,13 @@ public interface BreminaleService {
     @GET("locations/{id}.json")
     Observable<Location> getLocation(@Path("id") int locationId);
 
+    @GET("events.json")
+    Observable<List<Event>> getEvents();
+
+    @GET("events/{id}.json")
+    Observable<Event> getEvent(@Path("id") int eventId);
+
+
     class Factory {
         public static BreminaleService create() {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();

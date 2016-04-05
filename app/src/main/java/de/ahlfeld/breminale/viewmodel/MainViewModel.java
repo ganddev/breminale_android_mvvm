@@ -24,10 +24,22 @@ import rx.schedulers.Schedulers;
 public class MainViewModel implements ViewModel {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
+    private DataListener dataListener;
     private Subscription subscription;
-    public MainViewModel(Context ctx, DataListener dataListener) {
+    public ObservableInt progressVisibility;
+    public ObservableInt recyclerViewVisibility;
+    private List<Location> locations;
 
+    public MainViewModel(Context ctx, DataListener dataListener) {
+        this.dataListener = dataListener;
+        progressVisibility = new ObservableInt(View.VISIBLE);
+        recyclerViewVisibility = new ObservableInt(View.INVISIBLE);
         loadLocations();
+    }
+
+
+    public void setDataListener(DataListener dataListener) {
+        this.dataListener = dataListener;
     }
 
 
@@ -37,17 +49,22 @@ public class MainViewModel implements ViewModel {
             subscription.unsubscribe();
         }
         subscription = null;
+        dataListener = null;
     }
 
     private void loadLocations() {
         BreminaleService service = BreminaleService.Factory.create();
-        Observable<Location> call = service.getLocation(1);
+        Observable<List<Location>> call = service.getLocations();
         subscription = call.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Location>() {
+                .subscribe(new Subscriber<List<Location>>() {
                     @Override
                     public void onCompleted() {
-                        Log.e(TAG, "on compledted");
+                        if (dataListener != null) dataListener.onLocationsChanged(locations);
+                        progressVisibility.set(View.INVISIBLE);
+                        if (!locations.isEmpty()) {
+                            recyclerViewVisibility.set(View.VISIBLE);
+                        }
                     }
 
                     @Override
@@ -56,8 +73,9 @@ public class MainViewModel implements ViewModel {
                     }
 
                     @Override
-                    public void onNext(Location location) {
-                        Log.i(TAG, "Locations loaded " + location);
+                    public void onNext(List<Location> locations) {
+                        Log.i(TAG, "Locations loaded " + locations.size());
+                        MainViewModel.this.locations = locations;
                     }
                 });
     }
