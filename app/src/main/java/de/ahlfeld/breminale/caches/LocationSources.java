@@ -1,13 +1,12 @@
 package de.ahlfeld.breminale.caches;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.ahlfeld.breminale.models.BreminaleService;
 import de.ahlfeld.breminale.models.Location;
 import io.realm.Realm;
 import rx.Observable;
-import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Created by bjornahlfeld on 06.04.16.
@@ -27,31 +26,25 @@ public class LocationSources {
     }
 
     public Observable<List<Location>> memory() {
-        List<Location> locations = new ArrayList<>(Realm.getDefaultInstance().where(Location.class).findAll());
-        Observable<List<Location>> observable = Observable.just(locations);
-        return observable;
+        final Realm realm = Realm.getDefaultInstance();
+        return Observable.just(realm.copyFromRealm(realm.where(Location.class).findAll())).filter(new Func1<List<Location>, Boolean>() {
+            @Override
+            public Boolean call(List<Location> locations) {
+                return !locations.isEmpty();
+            }
+        });
     }
 
     public Observable<List<Location>> network() {
         BreminaleService service = BreminaleService.Factory.create();
-        return service.getLocations().subscribe(new Subscriber<List<Location>>() {
+        return service.getLocations().map(new Func1<List<Location>, List<Location>>() {
             @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(List<Location> locations) {
-                Realm realm = Realm.getDefaultInstance();
-
+            public List<Location> call(List<Location> locations) {
+                final Realm realm = Realm.getDefaultInstance();
                 realm.beginTransaction();
                 realm.copyToRealmOrUpdate(locations);
                 realm.commitTransaction();
+                return locations;
             }
         });
     }

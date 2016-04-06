@@ -99,8 +99,8 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
-    <orderEntry type="library" exported="" name="compiler-1.0-rc5" level="project" />
     <orderEntry type="library" exported="" name="juniversalchardet-1.0.3" level="project" />
+    <orderEntry type="library" exported="" name="compiler-1.0-rc5" level="project" />
     <orderEntry type="library" exported="" name="gson-2.6.2" level="project" />
     <orderEntry type="library" exported="" name="baseLibrary-1.0-rc5" level="project" />
     <orderEntry type="library" exported="" name="adapter-rxjava-2.0.1" level="project" />

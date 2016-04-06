@@ -14,6 +14,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -52,7 +53,12 @@ public class MainViewModel implements ViewModel {
 
     private void loadLocations() {
         LocationSources sources = new LocationSources();
-        Observable<List<Location>> call = Observable.concat(sources.network(),sources.memory()).first();
+        Observable<List<Location>> call = Observable.concat(sources.memory(),sources.network()).first(new Func1<List<Location>, Boolean>() {
+            @Override
+            public Boolean call(List<Location> locations) {
+                return locations != null && !locations.isEmpty();
+            }
+        });
         subscription = call.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Location>>() {
