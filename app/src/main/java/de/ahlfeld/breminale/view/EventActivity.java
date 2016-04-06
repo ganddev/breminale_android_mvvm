@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.databinding.ActivityEventBinding;
 import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.viewmodel.EventViewModel;
 
@@ -34,7 +35,7 @@ public class EventActivity extends AppCompatActivity {
 
         Event event = getIntent().getParcelableExtra(EXTRA_EVENT);
 
-        eventViewModel = new EventViewModel(this)
+        eventViewModel = new EventViewModel(this);
 
     }
 }

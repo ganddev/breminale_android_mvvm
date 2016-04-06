@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <data
+    <data>
 
-        />
+        <variable
+            name="viewModel"
+            type="de.ahlfeld.breminale.viewmodel.EventViewModel" />
+    </data>
 
+    <RelativeLayout>
+
+    </RelativeLayout>
 </layout>
