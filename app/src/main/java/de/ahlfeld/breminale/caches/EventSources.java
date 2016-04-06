@@ -1,5 +1,6 @@
 package de.ahlfeld.breminale.caches;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class EventSources {
     }
 
     public Observable<List<Event>> memory() {
-        Observable<List<Event>> observable = Realm.getDefaultInstance().where(Event.class).findAllAsync().asObservable();
+        List<Event> events = new ArrayList<>(Realm.getDefaultInstance().where(Event.class).findAll());
+        Observable<List<Event>> observable = Observable.just(events);
         return observable;
     }
 
