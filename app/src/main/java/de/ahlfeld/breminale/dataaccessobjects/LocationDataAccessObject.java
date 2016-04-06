@@ -19,7 +19,7 @@ public class LocationDataAccessObject implements ILocation{
 
 
     public Observable<Location> getLocation(Integer locationId) {
-        return realm.where(Location.class).equalTo("id", locationId).findFirstAsync();
+        return realm.where(Location.class).equalTo("id", locationId).findFirstAsync().asObservable();
     }
 
     public List<Location> getAllLocations() {

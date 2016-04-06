@@ -23,10 +23,10 @@ public class Location extends RealmObject implements Parcelable {
     private String name;
     @SerializedName("latitude")
     @Expose
-    private Integer latitude;
+    private Double latitude;
     @SerializedName("longitude")
     @Expose
-    private Integer longitude;
+    private Double longitude;
     @SerializedName("original_image_url")
     @Expose
     private String originalImageUrl;
@@ -43,12 +43,19 @@ public class Location extends RealmObject implements Parcelable {
     @Expose
     private Boolean deleted;
 
+    public Location() {
+        super();
+    }
+
     protected Location(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         originalImageUrl = in.readString();
         mediumImageUrl = in.readString();
         thumbImageUrl = in.readString();
         description = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -94,28 +101,28 @@ public class Location extends RealmObject implements Parcelable {
     /**
      * @return The latitude
      */
-    public Integer getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
     /**
      * @param latitude The latitude
      */
-    public void setLatitude(Integer latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
     /**
      * @return The longitude
      */
-    public Integer getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
     /**
      * @param longitude The longitude
      */
-    public void setLongitude(Integer longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
@@ -196,10 +203,13 @@ public class Location extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(originalImageUrl);
         dest.writeString(mediumImageUrl);
         dest.writeString(thumbImageUrl);
         dest.writeString(description);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
 }

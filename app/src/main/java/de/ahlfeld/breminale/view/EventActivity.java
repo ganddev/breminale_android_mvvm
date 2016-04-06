@@ -35,7 +35,8 @@ public class EventActivity extends AppCompatActivity {
 
         Event event = getIntent().getParcelableExtra(EXTRA_EVENT);
 
-        eventViewModel = new EventViewModel(this);
+        eventViewModel = new EventViewModel(this, event);
 
+        binding.setViewModel(eventViewModel);
     }
 }

@@ -7,12 +7,10 @@ import android.view.View;
 
 import java.util.List;
 
-import de.ahlfeld.breminale.BreminaleApplication;
-import de.ahlfeld.breminale.models.BreminaleService;
+import de.ahlfeld.breminale.caches.LocationSources;
 import de.ahlfeld.breminale.models.Location;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -53,8 +51,8 @@ public class MainViewModel implements ViewModel {
     }
 
     private void loadLocations() {
-        BreminaleService service = BreminaleService.Factory.create();
-        Observable<List<Location>> call = service.getLocations();
+        LocationSources sources = new LocationSources();
+        Observable<List<Location>> call = Observable.concat(sources.network(),sources.memory()).first();
         subscription = call.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Location>>() {

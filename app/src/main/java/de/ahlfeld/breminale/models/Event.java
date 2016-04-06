@@ -47,6 +47,10 @@ public class Event extends RealmObject implements Parcelable {
     @Expose
     private Boolean deleted;
 
+    public Event() {
+        super();
+    }
+
     protected Event(Parcel in) {
         name = in.readString();
         description = in.readString();

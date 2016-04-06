@@ -1,15 +1,12 @@
 package de.ahlfeld.breminale.caches;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import de.ahlfeld.breminale.models.BreminaleService;
 import de.ahlfeld.breminale.models.Event;
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by bjornahlfeld on 06.04.16.
@@ -37,7 +34,6 @@ public class EventSources {
         BreminaleService service = BreminaleService.Factory.create();
         Observable<List<Event>> call = service.getEvents();
         //TODO store object in database;
-
         return call;
     }
 }
