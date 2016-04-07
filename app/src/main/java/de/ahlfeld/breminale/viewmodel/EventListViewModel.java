@@ -26,7 +26,7 @@ public class EventListViewModel implements ViewModel {
     public ObservableInt progressVisibility;
     public ObservableInt recyclerViewVisibility;
     private DataListener dataListener;
-    private final Context context;
+    private Context context;
     private List<Event> events;
     private Subscription subscription;
 
@@ -40,7 +40,7 @@ public class EventListViewModel implements ViewModel {
 
     private void loadEvents() {
         EventSources sourcess = new EventSources();
-        Observable<List<Event>> call = Observable.concat(sourcess.memory(),sourcess.network()).first(new Func1<List<Event>, Boolean>() {
+        Observable<List<Event>> call = Observable.concat(sourcess.memory(), sourcess.network()).first(new Func1<List<Event>, Boolean>() {
             @Override
             public Boolean call(List<Event> events) {
                 return events != null && !events.isEmpty();
@@ -62,7 +62,8 @@ public class EventListViewModel implements ViewModel {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e(TAG, "Error loading events", e);
+                        progressVisibility.set(View.INVISIBLE);
                     }
 
                     @Override
@@ -78,11 +79,14 @@ public class EventListViewModel implements ViewModel {
     }
 
 
-
-
     @Override
     public void destroy() {
-
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
+        subscription = null;
+        context = null;
+        dataListener = null;
     }
 
 

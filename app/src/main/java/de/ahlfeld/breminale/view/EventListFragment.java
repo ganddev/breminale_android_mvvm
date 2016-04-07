@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import de.ahlfeld.breminale.viewmodel.EventListViewModel;
 public class EventListFragment extends Fragment implements EventListViewModel.DataListener {
 
 
+    private static final String TAG = EventListFragment.class.getSimpleName();
     private FragmentEventListBinding binding;
     private EventListViewModel viewModel;
 
@@ -52,11 +54,17 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
 
     @Override
     public void onEventsChanged(List<Event> events) {
-
+        Log.i(TAG, "onEventsChanged");
+        EventAdapter adapter = (EventAdapter) binding.eventsRecyclerView.getAdapter();
+        adapter.setEvents(events);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setAdapter(new EventAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    public static EventListFragment newInstance() {
+        return new EventListFragment();
     }
 }

@@ -1,23 +1,14 @@
 package de.ahlfeld.breminale.viewmodel;
 
+
 import android.content.Context;
-import android.databinding.ObservableInt;
-import android.util.Log;
-import android.view.View;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
-import com.roughike.bottombar.BottomBar;
-
-import java.util.List;
-
-import de.ahlfeld.breminale.caches.LocationSources;
-import de.ahlfeld.breminale.models.Location;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.view.EventListFragment;
+import de.ahlfeld.breminale.view.MainActivity;
 
 /**
  * Created by bjornahlfeld on 31.03.16.
@@ -25,14 +16,24 @@ import rx.schedulers.Schedulers;
 public class MainViewModel implements ViewModel {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
+    private final MainActivity view;
 
-    public MainViewModel(Context ctx) {
-
+    public MainViewModel(MainActivity  view) {
+        this.view = view;
     }
 
 
     @Override
     public void destroy() {
 
+    }
+
+
+    public void showFavorits() {
+        this.view.showFavorits();
+    }
+
+    public void showEvents() {
+        this.view.showEvents();
     }
 }

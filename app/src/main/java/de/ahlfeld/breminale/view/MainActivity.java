@@ -3,6 +3,8 @@ package de.ahlfeld.breminale.view;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.OnMenuTabClickListener;
 import com.roughike.bottombar.OnMenuTabSelectedListener;
 
 import java.util.List;
@@ -68,11 +72,38 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupBottomBar(Bundle savedInstanceState) {
         BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
-        bottomBar.setItemsFromMenu(R.menu.menu_main, new OnMenuTabSelectedListener() {
+        bottomBar.setItemsFromMenu(R.menu.menu_main, new OnMenuTabClickListener() {
             @Override
-            public void onMenuItemSelected(int menuItemId) {
+            public void onMenuTabSelected(int menuItemId) {
+                switch (menuItemId) {
+                    case R.id.location_item:
+                        mainViewModel.showEvents();
+                        return;
+                    case R.id.favorite_item:
+                        mainViewModel.showFavorits();
+                        return;
+                }
+
+            }
+
+            @Override
+            public void onMenuTabReSelected(int menuItemId) {
 
             }
         });
+    }
+
+    public void showEvents() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.fragment_container, EventListFragment.newInstance());
+        ft.commit();
+    }
+
+    public void showFavorits() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        //TODO ft.replace(R.id.fragment_container, );
+        ft.commit();
     }
 }
