@@ -11,18 +11,22 @@ import rx.functions.Func1;
 /**
  * Created by bjornahlfeld on 06.04.16.
  */
-public class LocationSources {
+public class LocationSources implements IPersist<Location>{
 
     public Observable<Location> memory(Integer locationId) {
-        Observable<Location> observable = Realm.getDefaultInstance().where(Location.class).equalTo("id", locationId).findFirstAsync().asObservable();
-        return observable;
+        return Realm.getDefaultInstance().where(Location.class).equalTo("id", locationId).findFirstAsync().asObservable();
     }
 
     public Observable<Location> network(Integer locationId) {
         BreminaleService service = BreminaleService.Factory.create();
-        Observable<Location> call = service.getLocation(locationId);
-        //TODO store object in database
-        return call;
+        return service.getLocation(locationId).map(new Func1<Location, Location>() {
+            @Override
+            public Location call(Location location) {
+                persistObject(location);
+                return location;
+            }
+        });
+
     }
 
     public Observable<List<Location>> memory() {
@@ -40,15 +44,27 @@ public class LocationSources {
         return service.getLocations().map(new Func1<List<Location>, List<Location>>() {
             @Override
             public List<Location> call(List<Location> locations) {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(locations);
-                realm.commitTransaction();
-                realm.close();
+                persistObjects(locations);
                 return locations;
             }
         });
     }
 
+    @Override
+    public void persistObject(Location object) {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+        realm.close();
+    }
 
+    @Override
+    public void persistObjects(List<Location> objects) {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(objects);
+        realm.commitTransaction();
+        realm.close();
+    }
 }
