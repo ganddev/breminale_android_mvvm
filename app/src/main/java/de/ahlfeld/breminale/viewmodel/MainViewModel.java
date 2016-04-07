@@ -64,7 +64,9 @@ public class MainViewModel implements ViewModel {
                 .subscribe(new Subscriber<List<Location>>() {
                     @Override
                     public void onCompleted() {
-                        if (dataListener != null) dataListener.onLocationsChanged(locations);
+                        if (dataListener != null) {
+                            dataListener.onLocationsChanged(locations);
+                        }
                         progressVisibility.set(View.INVISIBLE);
                         if (!locations.isEmpty()) {
                             recyclerViewVisibility.set(View.VISIBLE);

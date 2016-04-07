@@ -44,6 +44,7 @@ public class LocationSources {
                 realm.beginTransaction();
                 realm.copyToRealmOrUpdate(locations);
                 realm.commitTransaction();
+                realm.close();
                 return locations;
             }
         });
