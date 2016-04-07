@@ -10,7 +10,6 @@ import java.util.List;
 import de.ahlfeld.breminale.caches.EventSources;
 import de.ahlfeld.breminale.models.Event;
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -24,8 +23,8 @@ public class EventListViewModel implements ViewModel {
 
 
     private static final String TAG = EventListViewModel.class.getSimpleName();
-    private ObservableInt progressVisibility;
-    private ObservableInt recyclerViewVisibility;
+    public ObservableInt progressVisibility;
+    public ObservableInt recyclerViewVisibility;
     private DataListener dataListener;
     private final Context context;
     private List<Event> events;

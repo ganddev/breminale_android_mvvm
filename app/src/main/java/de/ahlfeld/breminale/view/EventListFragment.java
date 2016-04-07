@@ -52,7 +52,7 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
 
     @Override
     public void onEventsChanged(List<Event> events) {
-        
+
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {

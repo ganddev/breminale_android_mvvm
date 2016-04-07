@@ -8,26 +8,27 @@
             name="viewModel"
             type="de.ahlfeld.breminale.viewmodel.MainViewModel" />
     </data>
-
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/three_buttons_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            app:visibility="@{viewModel.progressVisibility}"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/events_recycler_view"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"
-            app:visibility="@{viewModel.recyclerViewVisibility}"/>
+            android:background="#fff">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Three Buttons Bar"
+                android:id="@+id/textView"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="35sp" />
+        </RelativeLayout>
 
-    </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>
