@@ -23,7 +23,7 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     @Override
     public void destroy() {
-
+        //
     }
 
     public void onItemClick(View view) {
@@ -33,5 +33,6 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     public void setEvent(Event event) {
         this.event = event;
+        notifyChange();
     }
 }

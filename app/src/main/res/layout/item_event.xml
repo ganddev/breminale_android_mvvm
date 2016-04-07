@@ -12,15 +12,28 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
         card_view:cardCornerRadius="2dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/item_event_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/item_event_text_background">
+
+            </LinearLayout>
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
