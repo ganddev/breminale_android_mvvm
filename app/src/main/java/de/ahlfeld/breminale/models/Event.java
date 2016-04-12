@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -39,7 +41,7 @@ public class Event extends RealmObject implements Parcelable {
     private String thumbImageUrl;
     @SerializedName("start_time")
     @Expose
-    private String startTime;
+    private Date startTime;
     @SerializedName("soundcloud_url")
     @Expose
     private String soundcloudUrl;
@@ -57,7 +59,7 @@ public class Event extends RealmObject implements Parcelable {
         originalImageUrl = in.readString();
         mediumImageUrl = in.readString();
         thumbImageUrl = in.readString();
-        startTime = in.readString();
+        startTime = new Date(in.readLong());
         soundcloudUrl = in.readString();
     }
 
@@ -174,14 +176,14 @@ public class Event extends RealmObject implements Parcelable {
     /**
      * @return The startTime
      */
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
     /**
      * @param startTime The start_time
      */
-    public void setStartTime(String startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
@@ -225,7 +227,7 @@ public class Event extends RealmObject implements Parcelable {
         dest.writeString(originalImageUrl);
         dest.writeString(mediumImageUrl);
         dest.writeString(thumbImageUrl);
-        dest.writeString(startTime);
+        dest.writeLong(startTime.getTime());
         dest.writeString(soundcloudUrl);
     }
 }
