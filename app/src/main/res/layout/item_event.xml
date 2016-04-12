@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -39,6 +40,7 @@
             android:layout_above="@id/item_event_date_time_location"
             android:layout_marginLeft="@dimen/item_event_margin_left"
             android:textColor="@color/white"
+            app:font="@{`roboto-regular`}"
             android:text="@{viewModel.name}"
             android:textSize="@dimen/item_event_artist_text_size" />
 

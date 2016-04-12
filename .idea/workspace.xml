@@ -10,9 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbf73cda-451c-4c48-a764-25e2d5c1f8fc" name="Default" comment="">
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/assets/Roboto-Bold.ttf" afterPath="$PROJECT_DIR$/app/src/main/assets/fonts/Roboto-Bold.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/assets/Roboto-Light.ttf" afterPath="$PROJECT_DIR$/app/src/main/assets/fonts/Roboto-Light.ttf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/assets/Roboto-Regular.ttf" afterPath="$PROJECT_DIR$/app/src/main/assets/fonts/Roboto-Regular.ttf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/models/Event.java" afterPath="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/models/Event.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/viewmodel/ItemEventViewModel.java" afterPath="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/viewmodel/ItemEventViewModel.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/BreminaleApplication.java" afterPath="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/BreminaleApplication.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_event.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_event.xml" />
     </list>
     <ignored path="breminale_android_mvvm.iws" />
@@ -64,22 +66,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="item_event.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="item_event.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_event.xml">
           <provider editor-type-id="android-designer">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4355717">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+            <state vertical-scroll-proportion="6.018868">
+              <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
               <folding>
-                <element signature="e#459#485#0" expanded="true" />
-                <element signature="e#1116#1147#0" expanded="true" />
-                <element signature="e#1226#1260#0" expanded="true" />
-                <element signature="e#1533#1564#0" expanded="true" />
-                <element signature="e#1684#1720#0" expanded="true" />
-                <element signature="e#1777#1810#0" expanded="true" />
-                <element signature="e#1845#1878#0" expanded="true" />
+                <element signature="e#515#541#0" expanded="true" />
+                <element signature="e#1172#1203#0" expanded="true" />
+                <element signature="e#1282#1316#0" expanded="true" />
+                <element signature="e#1589#1620#0" expanded="true" />
+                <element signature="e#1783#1819#0" expanded="true" />
+                <element signature="e#1876#1909#0" expanded="true" />
+                <element signature="e#1944#1977#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BreminaleApplication.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/BreminaleApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.81953645">
+              <caret line="46" column="76" selection-start-line="46" selection-start-column="76" selection-end-line="46" selection-end-column="76" />
+              <folding>
+                <element signature="e#688#689#0" expanded="true" />
+                <element signature="e#718#719#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1909,7 +1924,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/dataaccessobjects/LocationDataAccessObject.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/models/Location.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/BreminaleApplication.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/caches/IPersist.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/caches/LocationSources.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_event_list.xml" />
@@ -1932,7 +1946,10 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/models/Event.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/viewmodel/ItemEventViewModel.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/bindings/Bindings.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/caches/FontCache.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/item_event.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/BreminaleApplication.java" />
       </list>
     </option>
   </component>
@@ -2191,6 +2208,10 @@
               <option name="myItemId" value="assets" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fonts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -2200,6 +2221,82 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breminale_android_mvvm" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breminale_android_mvvm" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breminale" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breminale_android_mvvm" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breminale" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breminale_android_mvvm" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breminale" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bindings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2231,17 +2328,21 @@
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Android_TV_1080p_API_21" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="de.ahlfeld.breminale.viewmodel" />
-      <recent name="de.ahlfeld.breminale.view" />
-    </key>
-    <key name="android.template.packageName">
-      <recent name="de.ahlfeld.breminale.view" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi" />
       <recent name="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi" />
       <recent name="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/assets/fonts" />
+    </key>
+    <key name="android.template.packageName">
+      <recent name="de.ahlfeld.breminale.view" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="de.ahlfeld.breminale.caches" />
+      <recent name="de.ahlfeld.breminale.viewmodel" />
+      <recent name="de.ahlfeld.breminale.view" />
     </key>
   </component>
   <component name="RunManager" selected="Android Application.app">
@@ -2572,24 +2673,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/viewmodel/EventViewModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="48" selection-start-line="5" selection-start-column="48" selection-end-line="5" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_event.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/view/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2608,13 +2691,13 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="50" selection-start-line="10" selection-start-column="50" selection-end-line="10" selection-end-column="50" />
           <folding>
-            <element signature="e#459#485#0" expanded="true" />
-            <element signature="e#1116#1147#0" expanded="true" />
-            <element signature="e#1226#1260#0" expanded="true" />
-            <element signature="e#1533#1564#0" expanded="true" />
-            <element signature="e#1684#1720#0" expanded="true" />
-            <element signature="e#1777#1810#0" expanded="true" />
-            <element signature="e#1845#1878#0" expanded="true" />
+            <element signature="e#515#541#0" expanded="true" />
+            <element signature="e#1172#1203#0" expanded="true" />
+            <element signature="e#1282#1316#0" expanded="true" />
+            <element signature="e#1589#1620#0" expanded="true" />
+            <element signature="e#1783#1819#0" expanded="true" />
+            <element signature="e#1876#1909#0" expanded="true" />
+            <element signature="e#1944#1977#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2690,13 +2773,13 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="71" selection-start-line="7" selection-start-column="71" selection-end-line="7" selection-end-column="71" />
           <folding>
-            <element signature="e#459#485#0" expanded="true" />
-            <element signature="e#1116#1147#0" expanded="true" />
-            <element signature="e#1226#1260#0" expanded="true" />
-            <element signature="e#1533#1564#0" expanded="true" />
-            <element signature="e#1684#1720#0" expanded="true" />
-            <element signature="e#1777#1810#0" expanded="true" />
-            <element signature="e#1845#1878#0" expanded="true" />
+            <element signature="e#515#541#0" expanded="true" />
+            <element signature="e#1172#1203#0" expanded="true" />
+            <element signature="e#1282#1316#0" expanded="true" />
+            <element signature="e#1589#1620#0" expanded="true" />
+            <element signature="e#1783#1819#0" expanded="true" />
+            <element signature="e#1876#1909#0" expanded="true" />
+            <element signature="e#1944#1977#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2814,13 +2897,6 @@
         <state vertical-scroll-proportion="0.43290043">
           <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/BreminaleApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.56277055">
-          <caret line="38" column="57" selection-start-line="38" selection-start-column="57" selection-end-line="38" selection-end-column="57" />
         </state>
       </provider>
     </entry>
@@ -3049,21 +3125,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/caches/FontCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="65" column="5" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#849#850#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/bindings/Bindings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34768212">
+          <caret line="14" column="38" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_event.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4355717">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        <state vertical-scroll-proportion="6.018868">
+          <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
           <folding>
-            <element signature="e#459#485#0" expanded="true" />
-            <element signature="e#1116#1147#0" expanded="true" />
-            <element signature="e#1226#1260#0" expanded="true" />
-            <element signature="e#1533#1564#0" expanded="true" />
-            <element signature="e#1684#1720#0" expanded="true" />
-            <element signature="e#1777#1810#0" expanded="true" />
-            <element signature="e#1845#1878#0" expanded="true" />
+            <element signature="e#515#541#0" expanded="true" />
+            <element signature="e#1172#1203#0" expanded="true" />
+            <element signature="e#1282#1316#0" expanded="true" />
+            <element signature="e#1589#1620#0" expanded="true" />
+            <element signature="e#1783#1819#0" expanded="true" />
+            <element signature="e#1876#1909#0" expanded="true" />
+            <element signature="e#1944#1977#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/de/ahlfeld/breminale/BreminaleApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.81953645">
+          <caret line="46" column="76" selection-start-line="46" selection-start-column="76" selection-end-line="46" selection-end-column="76" />
+          <folding>
+            <element signature="e#688#689#0" expanded="true" />
+            <element signature="e#718#719#0" expanded="true" />
           </folding>
         </state>
       </provider>
