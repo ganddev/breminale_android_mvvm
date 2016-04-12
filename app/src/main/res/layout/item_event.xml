@@ -22,7 +22,7 @@
 
         <TextView
             android:id="@+id/item_event_date_time_location"
-            android:text="@{viewModel.}"
+            android:text="@{viewModel.getDateTimeLocation}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

@@ -29,7 +29,7 @@ public class Event extends RealmObject implements Parcelable {
     private String description;
     @SerializedName("location_id")
     @Expose
-    private Integer locationId;
+    private Location location;
     @SerializedName("original_image_url")
     @Expose
     private String originalImageUrl;
@@ -55,6 +55,7 @@ public class Event extends RealmObject implements Parcelable {
 
     protected Event(Parcel in) {
         name = in.readString();
+        location = in.readParcelable(Location.class.getClassLoader());
         description = in.readString();
         originalImageUrl = in.readString();
         mediumImageUrl = in.readString();
@@ -118,17 +119,17 @@ public class Event extends RealmObject implements Parcelable {
     }
 
     /**
-     * @return The locationId
+     * @return The location
      */
-    public Integer getLocationId() {
-        return locationId;
+    public Location getLocation() {
+        return location;
     }
 
     /**
-     * @param locationId The location_id
+     * @param location The location
      */
-    public void setLocationId(Integer locationId) {
-        this.locationId = locationId;
+    public void setLocationId(Location location) {
+        this.location = location;
     }
 
     /**
@@ -223,6 +224,7 @@ public class Event extends RealmObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeParcelable(this.location, flags);
         dest.writeString(description);
         dest.writeString(originalImageUrl);
         dest.writeString(mediumImageUrl);

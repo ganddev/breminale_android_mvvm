@@ -34,11 +34,12 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     }
 
     public String getDateTimeLocation() {
-        SimpleDateFormat sdf = new SimpleDateFormat("EE, d. MMMM");
+        SimpleDateFormat sdf = new SimpleDateFormat("EE, d. MMMM / HH:mm");
         StringBuilder sb = new StringBuilder();
-
-        sb.append(sdf.format(event.getStartTime()))
-        return
+        sb.append(sdf.format(event.getStartTime()));
+        sb.append(" / ");
+        sb.append(event.getLocation().getName());
+        return sb.toString();
     }
 
 
