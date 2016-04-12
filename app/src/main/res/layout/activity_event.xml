@@ -11,12 +11,37 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <TextView
+            android:id="@+id/event_description"
+            android:layout_marginLeft="@dimen/event_detail_margin_left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/event_description_text_size"
+            android:textColor="@color/black"
             android:text="Hello"/>
 
+
+        <View
+            android:id="@+id/border1"
+            android:layout_marginTop="7dp"
+            android:layout_below="@+id/event_description"
+            android:layout_width="match_parent"
+            android:background="@color/warm_grey"
+            android:layout_marginLeft="@dimen/event_detail_margin_left"
+            android:layout_height="1dp"
+            />
+
+        <Button
+            android:text="@string/navigate_to_location"
+            android:layout_below="@id/border1"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:background="@color/carmine"
+            android:layout_width="250dp"
+            android:layout_height="30dp" />
     </RelativeLayout>
 </layout>
