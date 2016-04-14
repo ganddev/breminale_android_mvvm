@@ -63,6 +63,7 @@ public interface BreminaleService {
                             return false;
                         }
                     })
+                    .registerTypeAdapter(Event.class, new Event())
                     .create();
 
 

@@ -14,7 +14,7 @@ import rx.functions.Func1;
 public class LocationSources implements IPersist<Location>{
 
     public Observable<Location> memory(Integer locationId) {
-        return Realm.getDefaultInstance().where(Location.class).equalTo("id", locationId).findFirstAsync().asObservable();
+        return Realm.getDefaultInstance().where(Location.class).equalTo("id", locationId).findFirst().asObservable();
     }
 
     public Observable<Location> network(Integer locationId) {

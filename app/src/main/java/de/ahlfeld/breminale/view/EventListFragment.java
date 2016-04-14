@@ -57,6 +57,7 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
         Log.i(TAG, "onEventsChanged");
         EventAdapter adapter = (EventAdapter) binding.eventsRecyclerView.getAdapter();
         adapter.setEvents(events);
+        adapter.notifyDataSetChanged();
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {

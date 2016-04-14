@@ -14,7 +14,7 @@ import rx.functions.Func1;
 public class EventSources implements IPersist<Event>{
 
     public Observable<Event> memory(Integer eventId) {
-        return Realm.getDefaultInstance().where(Event.class).equalTo("id", eventId).findFirstAsync().asObservable();
+        return Realm.getDefaultInstance().where(Event.class).equalTo("id", eventId).findFirst().asObservable();
     }
 
     public Observable<List<Event>> memory() {
