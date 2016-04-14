@@ -6,8 +6,7 @@ import android.content.Context;
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
-import java.util.regex.Pattern;
-
+import de.ahlfeld.breminale.caches.FontCache;
 import de.ahlfeld.breminale.models.BreminaleService;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -22,9 +21,17 @@ public class BreminaleApplication extends Application {
     private BreminaleService breminaleService;
     private Scheduler defaultSubscribeScheduler;
 
+    private static Context context;
+
+    public static Context getAppContext() {
+        return context;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
+
         RealmConfiguration config = new RealmConfiguration.Builder(this).build();
         Realm.setDefaultConfiguration(config);
 
@@ -34,6 +41,11 @@ public class BreminaleApplication extends Application {
                         .enableWebKitInspector(RealmInspectorModulesProvider.builder(this)
                                 .build())
                         .build());
+
+        FontCache.getInstance().addFont("roboto-regular", "Roboto-Regular.ttf");
+        FontCache.getInstance().addFont("roboto-bold", "Roboto-Bold.ttf");
+        FontCache.getInstance().addFont("roboto-light", "Roboto-Light.ttf");
+
     }
 
     public static BreminaleApplication get(Context ctx) {

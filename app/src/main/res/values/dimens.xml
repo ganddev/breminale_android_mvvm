@@ -3,4 +3,11 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="item_event_height">193dp</dimen>
+    <dimen name="item_event_date_text_size">14sp</dimen>
+    <dimen name="item_event_margin_left">6dp</dimen>
+    <dimen name="item_event_artist_text_size">24sp</dimen>
+    <dimen name="item_event_favorit_image">22dp</dimen>
+    <dimen name="event_description_text_size">10sp</dimen>
+    <dimen name="event_detail_margin_left">9dp</dimen>
 </resources>

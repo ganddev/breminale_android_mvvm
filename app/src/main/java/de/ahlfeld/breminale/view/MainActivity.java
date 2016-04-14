@@ -2,33 +2,18 @@ package de.ahlfeld.breminale.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnMenuTabClickListener;
-import com.roughike.bottombar.OnMenuTabSelectedListener;
-
-import java.util.List;
 
 import de.ahlfeld.breminale.R;
-import de.ahlfeld.breminale.adapters.EventAdapter;
 import de.ahlfeld.breminale.databinding.ActivityMainBinding;
-import de.ahlfeld.breminale.models.BreminaleService;
-import de.ahlfeld.breminale.models.Location;
 import de.ahlfeld.breminale.viewmodel.MainViewModel;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMenuTabSelected(int menuItemId) {
                 switch (menuItemId) {
+                    case R.id.recent_item:
+                        mainViewModel.showMap();
+                        return;
                     case R.id.location_item:
                         mainViewModel.showEvents();
                         return;
@@ -104,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         //TODO ft.replace(R.id.fragment_container, );
+        ft.commit();
+    }
+
+    public void showMap() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.fragment_container, MapFragment.newInstance());
         ft.commit();
     }
 }

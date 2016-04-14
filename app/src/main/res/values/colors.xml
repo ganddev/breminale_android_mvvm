@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#C2185B</color>
     <color name="colorAccent">#4CAF50</color>
     <color name="item_event_text_background">#7f8c8d</color>
+    <color name="white">@android:color/white</color>
+    <color name="ugly_pink">#ca6e79</color>
+    <color name="purplish_grey">#79767a</color>
+    <color name="carmine">#9a0b1d</color>
+    <color name="warm_grey">#979797</color>
+    <color name="black">#343434</color>
 </resources>

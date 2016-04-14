@@ -1,13 +1,6 @@
 package de.ahlfeld.breminale.viewmodel;
 
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-
-import de.ahlfeld.breminale.R;
-import de.ahlfeld.breminale.view.EventListFragment;
 import de.ahlfeld.breminale.view.MainActivity;
 
 /**
@@ -35,5 +28,9 @@ public class MainViewModel implements ViewModel {
 
     public void showEvents() {
         this.view.showEvents();
+    }
+
+    public void showMap() {
+        this.view.showMap();
     }
 }

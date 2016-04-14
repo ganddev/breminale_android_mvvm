@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="de.ahlfeld.breminale.viewmodel.ItemEventViewModel" />
     </data>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        card_view:cardCornerRadius="2dp">
+        android:layout_height="@dimen/item_event_height"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/item_event_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
 
-            <ImageView
-                android:id="@+id/item_event_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/item_event_date_time_location"
+            android:text="@{viewModel.getDateTimeLocation}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="@dimen/item_event_margin_left"
+            android:textColor="@color/ugly_pink"
+            android:textSize="@dimen/item_event_date_text_size" />
 
+        <TextView
+            android:id="@+id/item_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/item_event_date_time_location"
+            android:layout_marginLeft="@dimen/item_event_margin_left"
+            android:textColor="@color/white"
+            app:font="@{`roboto-regular`}"
+            android:text="@{viewModel.name}"
+            android:textSize="@dimen/item_event_artist_text_size" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/item_event_text_background">
-
-            </LinearLayout>
-        </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
-
+        <ImageView
+            android:layout_width="@dimen/item_event_favorit_image"
+            android:layout_height="@dimen/item_event_favorit_image"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
 </layout>

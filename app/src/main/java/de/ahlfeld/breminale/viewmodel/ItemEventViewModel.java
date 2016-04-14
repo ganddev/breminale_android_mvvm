@@ -4,6 +4,8 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.view.View;
 
+import java.text.SimpleDateFormat;
+
 import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.view.EventActivity;
 
@@ -25,6 +27,23 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     public void destroy() {
         //
     }
+
+
+    public String getName() {
+        return event.getName();
+    }
+
+    public String getDateTimeLocation() {
+        SimpleDateFormat sdf = new SimpleDateFormat("EE, d. MMMM / HH:mm");
+        StringBuilder sb = new StringBuilder();
+        sb.append(sdf.format(event.getStartTime()));
+        sb.append(" / ");
+        sb.append(event.getLocation().getName());
+        return sb.toString();
+    }
+
+
+
 
     public void onItemClick(View view) {
         context.startActivity(EventActivity.newIntent(context, event));
