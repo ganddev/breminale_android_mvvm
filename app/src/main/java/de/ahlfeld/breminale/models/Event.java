@@ -22,6 +22,7 @@ import java.util.List;
 
 import de.ahlfeld.breminale.caches.LocationSources;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import rx.Observable;
 import rx.Subscriber;
@@ -42,6 +43,7 @@ public class Event extends RealmObject implements Parcelable, JsonDeserializer<E
     private Integer id;
     private String name;
     private String description;
+
     private Location location;
     private String originalImageUrl;
     private String mediumImageUrl;
@@ -49,6 +51,11 @@ public class Event extends RealmObject implements Parcelable, JsonDeserializer<E
     private Date startTime;
     private String soundcloudUrl;
     private Boolean deleted;
+
+    @Ignore
+    private int locationId;
+
+
 
     private Boolean favorit = false;
     private String soundcloudUserId;
@@ -133,7 +140,7 @@ public class Event extends RealmObject implements Parcelable, JsonDeserializer<E
     /**
      * @param location The location
      */
-    public void setLocationId(Location location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -247,6 +254,22 @@ public class Event extends RealmObject implements Parcelable, JsonDeserializer<E
         dest.writeString(soundcloudUserId);
     }
 
+    public Boolean getFavorit() {
+        return favorit;
+    }
+
+    public void setFavorit(Boolean favorit) {
+        this.favorit = favorit;
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
     @Override
     public Event deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         final Event event = new Event();
@@ -262,34 +285,9 @@ public class Event extends RealmObject implements Parcelable, JsonDeserializer<E
         if (!obj.get("description").isJsonNull()) {
             event.setDescription(obj.get("description").getAsString());
         }
+
         if (!obj.get("location_id").isJsonNull()) {
-            LocationSources sources = new LocationSources();
-            Observable<Location> call = Observable.concat(sources.memory(obj.get("location_id").getAsInt()), sources.network(obj.get("location_id").getAsInt())).first(new Func1<Location, Boolean>() {
-                @Override
-                public Boolean call(Location location) {
-                    return location != null;
-                }
-            });
-
-            Subscription subscription = call.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Location>() {
-                        @Override
-                        public void onCompleted() {
-                           Log.d(TAG, "on conplete");
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e(TAG, "Error loading location.", e);
-                        }
-
-                        @Override
-                        public void onNext(Location location) {
-                            Log.d(TAG, "on next");
-                            event.setLocationId(location);
-                        }
-                    });
+           event.setLocationId(obj.get("location_id").getAsInt());
         }
         if (!obj.get("original_image_url").isJsonNull()) {
             event.setOriginalImageUrl(obj.get("original_image_url").getAsString());
