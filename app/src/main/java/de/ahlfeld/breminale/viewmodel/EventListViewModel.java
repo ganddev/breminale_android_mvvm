@@ -40,6 +40,7 @@ public class EventListViewModel implements ViewModel {
 
     private void loadEvents() {
         EventSources sourcess = new EventSources();
+        //Retrieve first source with data...
         Observable<List<Event>> call = Observable.concat(sourcess.memory(), sourcess.network()).first(new Func1<List<Event>, Boolean>() {
             @Override
             public Boolean call(List<Event> events) {
@@ -51,6 +52,7 @@ public class EventListViewModel implements ViewModel {
                 .subscribe(new Subscriber<List<Event>>() {
                     @Override
                     public void onCompleted() {
+                        Log.i(TAG, "oncomplete");
                         if (dataListener != null) {
                             dataListener.onEventsChanged(events);
                         }
@@ -68,7 +70,6 @@ public class EventListViewModel implements ViewModel {
 
                     @Override
                     public void onNext(List<Event> events) {
-                        Log.i(TAG, "Events loaded " + events.size());
                         EventListViewModel.this.events = events;
                     }
                 });

@@ -27,9 +27,6 @@ public class Event extends RealmObject implements Parcelable {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("location_id")
-    @Expose
-    private Location location;
     @SerializedName("original_image_url")
     @Expose
     private String originalImageUrl;
@@ -45,23 +42,36 @@ public class Event extends RealmObject implements Parcelable {
     @SerializedName("soundcloud_url")
     @Expose
     private String soundcloudUrl;
+    @SerializedName("soundcloud_user_id")
+    @Expose
+    private String soundcloudUserId;
+
     @SerializedName("deleted")
     @Expose
     private Boolean deleted;
+    @SerializedName("location_id")
+    @Expose
+    private int locationId;
+
+
+    private Boolean favorit = false;
 
     public Event() {
         super();
     }
 
+
     protected Event(Parcel in) {
+        id = in.readInt();
         name = in.readString();
-        location = in.readParcelable(Location.class.getClassLoader());
         description = in.readString();
         originalImageUrl = in.readString();
         mediumImageUrl = in.readString();
         thumbImageUrl = in.readString();
         startTime = new Date(in.readLong());
         soundcloudUrl = in.readString();
+        soundcloudUserId = in.readString();
+        locationId = in.readInt();
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -116,20 +126,6 @@ public class Event extends RealmObject implements Parcelable {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return The location
-     */
-    public Location getLocation() {
-        return location;
-    }
-
-    /**
-     * @param location The location
-     */
-    public void setLocationId(Location location) {
-        this.location = location;
     }
 
     /**
@@ -216,6 +212,14 @@ public class Event extends RealmObject implements Parcelable {
         this.deleted = deleted;
     }
 
+    public void setSoundcloudUserId(String soundcloudUserId) {
+        this.soundcloudUserId = soundcloudUserId;
+    }
+
+    public String getSoundcloudUserId() {
+        return soundcloudUserId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -223,13 +227,32 @@ public class Event extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(name);
-        dest.writeParcelable(this.location, flags);
         dest.writeString(description);
         dest.writeString(originalImageUrl);
         dest.writeString(mediumImageUrl);
         dest.writeString(thumbImageUrl);
         dest.writeLong(startTime.getTime());
         dest.writeString(soundcloudUrl);
+        dest.writeString(soundcloudUserId);
+        dest.writeInt(locationId);
     }
+
+    public Boolean getFavorit() {
+        return favorit;
+    }
+
+    public void setFavorit(Boolean favorit) {
+        this.favorit = favorit;
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
 }

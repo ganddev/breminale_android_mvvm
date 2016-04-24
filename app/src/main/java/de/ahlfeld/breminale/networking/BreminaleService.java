@@ -1,4 +1,4 @@
-package de.ahlfeld.breminale.models;
+package de.ahlfeld.breminale.networking;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -8,6 +8,8 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import de.ahlfeld.breminale.models.Event;
+import de.ahlfeld.breminale.models.Location;
 import io.realm.RealmObject;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

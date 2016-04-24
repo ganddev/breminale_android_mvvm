@@ -22,8 +22,8 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/item_event_date_time_location"
-            android:text="@{viewModel.getDateTimeLocation}"
+            android:id="@+id/item_event_date_time"
+            android:text="@{viewModel.getDateTime}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -37,12 +37,25 @@
             android:id="@+id/item_event_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/item_event_date_time_location"
+            android:layout_above="@id/item_event_date_time"
             android:layout_marginLeft="@dimen/item_event_margin_left"
             android:textColor="@color/white"
             app:font="@{`roboto-regular`}"
             android:text="@{viewModel.name}"
             android:textSize="@dimen/item_event_artist_text_size" />
+
+        <TextView
+            android:id="@+id/item_event_location"
+            android:text="@{viewModel.locationName}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/item_event_date_time"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="@dimen/item_event_margin_left"
+            android:textColor="@color/ugly_pink"
+            android:textSize="@dimen/item_event_date_text_size" />
+
 
         <ImageView
             android:layout_width="@dimen/item_event_favorit_image"

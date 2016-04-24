@@ -9,7 +9,7 @@ import io.realm.RealmObject;
  */
 public interface IPersist<E extends RealmObject> {
 
-    void persistObject(E object);
+    E persistObject(E object);
 
-    void persistObjects(List<E> objects);
+    List<E> persistObjects(List<E> objects);
 }

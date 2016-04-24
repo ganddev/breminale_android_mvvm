@@ -7,7 +7,7 @@ import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import de.ahlfeld.breminale.caches.FontCache;
-import de.ahlfeld.breminale.models.BreminaleService;
+import de.ahlfeld.breminale.networking.BreminaleService;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import rx.Scheduler;
