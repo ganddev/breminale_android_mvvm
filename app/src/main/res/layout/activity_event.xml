@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.ahlfeld.breminale.viewmodel.EventViewModel" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="235dp">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <ImageView
+                    android:id="@+id/expandedImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="235dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/beach_scene"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7" />
+
+                <RelativeLayout
+                    android:id="@+id/title_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="@dimen/event_detail_margin_left">
+
+                    <TextView
+                        android:id="@+id/item_event_date_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginLeft="@dimen/item_event_margin_left"
+                        android:text="@{viewModel.getDateTime}"
+                        android:textColor="@color/ugly_pink"
+                        android:textSize="@dimen/item_event_date_text_size"
+                        app:font="@{`roboto-regular`}" />
+
+                    <TextView
+                        android:id="@+id/item_event_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/item_event_date_time"
+                        android:layout_marginLeft="@dimen/item_event_margin_left"
+                        android:text="@{viewModel.name}"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/item_event_artist_text_size"
+                        app:font="@{`georgia`}" />
+
+                    <TextView
+                        android:id="@+id/item_event_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginLeft="@dimen/item_event_margin_left"
+                        android:layout_toRightOf="@id/item_event_date_time"
+                        android:text="@{viewModel.locationName}"
+                        android:textColor="@color/ugly_pink"
+                        android:textSize="@dimen/item_event_date_text_size"
+                        app:font="@{`roboto-regular`}" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:title="">
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@{viewModel.name}"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        app:font="@{`georgia`}" />
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textview_event_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="72dp"
+                    android:layout_marginLeft="@dimen/event_detail_margin_left"
+                    android:layout_marginRight="@dimen/event_detail_margin_left"
+                    android:layout_marginTop="@dimen/event_description_margin_top"
+                    android:text="@{viewModel.description}"
+                    app:font="@{`roboto-regular`}" />
+
+                <View
+                    android:id="@+id/border1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/event_border_size"
+                    android:layout_below="@id/textview_event_description"
+                    android:layout_marginLeft="@dimen/event_detail_margin_left"
+                    android:layout_marginTop="@dimen/event_border_margin_top"
+                    android:background="@color/warm_grey" />
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapImageView"
+                    android:layout_below="@id/border1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/event_map_height"
+                    map:liteMode="true"
+                    map:mapType="normal"
+                    map:cameraZoom="17"/>
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

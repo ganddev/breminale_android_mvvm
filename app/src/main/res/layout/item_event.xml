@@ -1,18 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="de.ahlfeld.breminale.viewmodel.ItemEventViewModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/item_event_height"
+        android:background="@android:color/black"
+        android:onClick="@{viewModel.onItemClick}"
         android:orientation="vertical">
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/item_event_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+        <TextView
+            android:id="@+id/item_event_date_time"
+            android:text="@{viewModel.getDateTime}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="@dimen/item_event_margin_left"
+            android:textColor="@color/ugly_pink"
+            android:textSize="@dimen/item_event_date_text_size" />
+
+        <TextView
+            android:id="@+id/item_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/item_event_date_time"
+            android:layout_marginLeft="@dimen/item_event_margin_left"
+            android:textColor="@color/white"
+            app:font="@{`georgia`}"
+            android:text="@{viewModel.name}"
+            android:textSize="@dimen/item_event_artist_text_size" />
+
+        <TextView
+            android:id="@+id/item_event_location"
+            android:text="@{viewModel.locationName}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/item_event_date_time"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="@dimen/item_event_margin_left"
+            android:textColor="@color/ugly_pink"
+            android:textSize="@dimen/item_event_date_text_size" />
+
+
+        <ImageView
+            android:layout_width="@dimen/item_event_favorit_image"
+            android:layout_height="@dimen/item_event_favorit_image"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
 </layout>

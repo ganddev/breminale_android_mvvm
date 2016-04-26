@@ -22,10 +22,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private List<Event> events;
 
     public EventAdapter() {
+        super();
         this.events = Collections.emptyList();
     }
 
     public EventAdapter(List<Event> events) {
+        super();
         this.events = events;
     }
 
