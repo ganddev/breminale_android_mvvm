@@ -14,6 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_event_height"
+        android:background="@android:color/black"
         android:onClick="@{viewModel.onItemClick}"
         android:orientation="vertical">
 
@@ -41,7 +42,7 @@
             android:layout_above="@id/item_event_date_time"
             android:layout_marginLeft="@dimen/item_event_margin_left"
             android:textColor="@color/white"
-            app:font="@{`roboto-regular`}"
+            app:font="@{`georgia`}"
             android:text="@{viewModel.name}"
             android:textSize="@dimen/item_event_artist_text_size" />
 

@@ -76,7 +76,6 @@
 
         <activity
             android:name=".view.EventActivity"
-            android:label="@string/title_activity_event"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

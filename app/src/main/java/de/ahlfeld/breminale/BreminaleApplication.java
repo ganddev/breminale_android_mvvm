@@ -45,6 +45,7 @@ public class BreminaleApplication extends Application {
         FontCache.getInstance().addFont("roboto-regular", "Roboto-Regular.ttf");
         FontCache.getInstance().addFont("roboto-bold", "Roboto-Bold.ttf");
         FontCache.getInstance().addFont("roboto-light", "Roboto-Light.ttf");
+        FontCache.getInstance().addFont("georgia", "Georgia.ttf");
 
     }
 

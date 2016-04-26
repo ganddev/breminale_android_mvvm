@@ -39,7 +39,6 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     @Override
     public void destroy() {
-        //
         if(locationSubscription != null && !locationSubscription.isUnsubscribed()) {
             locationSubscription.unsubscribe();
         }

@@ -10,4 +10,8 @@
     <dimen name="item_event_favorit_image">22dp</dimen>
     <dimen name="event_description_text_size">10sp</dimen>
     <dimen name="event_detail_margin_left">9dp</dimen>
+    <dimen name="event_border_size">1dp</dimen>
+    <dimen name="event_border_margin_top">6.5dp</dimen>
+    <dimen name="event_description_margin_top">16dp</dimen>
+    <dimen name="event_map_height">150dp</dimen>
 </resources>
