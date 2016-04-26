@@ -11,14 +11,10 @@ import de.ahlfeld.breminale.databinding.ActivityEventBinding;
 import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.viewmodel.EventViewModel;
 
-/**
- * Created by bjornahlfeld on 05.04.16.
- */
+
 public class EventActivity extends AppCompatActivity {
 
-
-    private static final String EXTRA_EVENT = "EXTRA_EVENT";
-
+    private static final String EXTRA_EVENT = "event";
     private EventViewModel eventViewModel;
     private ActivityEventBinding binding;
 
@@ -39,4 +35,5 @@ public class EventActivity extends AppCompatActivity {
 
         binding.setViewModel(eventViewModel);
     }
+
 }

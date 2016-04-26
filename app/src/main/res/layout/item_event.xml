@@ -14,6 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_event_height"
+        android:onClick="@{viewModel.onItemClick}"
         android:orientation="vertical">
 
         <ImageView
