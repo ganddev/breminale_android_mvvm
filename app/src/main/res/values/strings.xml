@@ -4,7 +4,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_app_id">364520566935527</string>
     <string name="google_maps_key">AIzaSyCIx0X6dnh64a4b8jhtqFut5l_pgU2SY_o</string>
     <string name="navigate_to_location">Route zur Location</string>
 </resources>

@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
@@ -76,3 +75,5 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

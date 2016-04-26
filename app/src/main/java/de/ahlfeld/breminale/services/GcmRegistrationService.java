@@ -11,6 +11,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.utils.BreminaleConsts;
 
 
 /**
@@ -24,7 +25,7 @@ public class GcmRegistrationService extends IntentService {
 
     private static final String TAG = GcmRegistrationService.class.getSimpleName();
 
-    public GcmService() {
+    public GcmRegistrationService() {
         super("GcmService");
     }
 
@@ -38,9 +39,9 @@ public class GcmRegistrationService extends IntentService {
             sendRegistrationToServer(token);
         } catch (Exception e) {
             Log.e(TAG, "Failed to complete token refresh", e);
-            sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false).apply();
+            sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, false).apply();
             // Notify UI that registration has completed, so the progress indicator can be hidden.
-            Intent registrationComplete = new Intent(QuickstartPreferences.REGISTRATION_COMPLETE);
+            Intent registrationComplete = new Intent(BreminaleConsts.REGISTRATION_COMPLETE);
             LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
         }
 
