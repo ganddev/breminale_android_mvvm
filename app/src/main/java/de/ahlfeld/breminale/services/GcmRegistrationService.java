@@ -14,6 +14,11 @@ import com.google.gson.JsonObject;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.networking.BreminaleService;
 import de.ahlfeld.breminale.utils.BreminaleConsts;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -26,6 +31,7 @@ public class GcmRegistrationService extends IntentService {
 
 
     private static final String TAG = GcmRegistrationService.class.getSimpleName();
+    private Subscription deviceSubscription;
 
     public GcmRegistrationService() {
         super("GcmService");
@@ -46,7 +52,15 @@ public class GcmRegistrationService extends IntentService {
             Intent registrationComplete = new Intent(BreminaleConsts.REGISTRATION_COMPLETE);
             LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
         }
+    }
 
+    @Override
+    public void onDestroy() {
+        if(deviceSubscription != null && !deviceSubscription.isUnsubscribed()) {
+            deviceSubscription.unsubscribe();
+        }
+        deviceSubscription = null;
+        super.onDestroy();
     }
 
     /**
@@ -60,7 +74,29 @@ public class GcmRegistrationService extends IntentService {
     private void sendRegistrationToServer(JsonObject device) {
         // Add custom implementation, as needed.
         final BreminaleService service = BreminaleService.Factory.create();
-        service.postDeviceToken(device);
+        Observable<JsonObject> call = service.postDeviceToken(device);
+        deviceSubscription = call.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JsonObject>() {
+                    @Override
+                    public void onCompleted() {
+                        // You should store a boolean that indicates whether the generated token has been
+                        // sent to your server. If the boolean is false, send the token to your server,
+                        // otherwise your server should have already received the token.
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GcmRegistrationService.this);
+                        sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, true).apply();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "An error accured while sending divce object", e);
+                    }
+
+                    @Override
+                    public void onNext(JsonObject jsonObject) {
+                        Log.i(TAG, jsonObject.toString());
+                    }
+                });
     }
 
     private JsonObject createDeviceObject(final String token) {

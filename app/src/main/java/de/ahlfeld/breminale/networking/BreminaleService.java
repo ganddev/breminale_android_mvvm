@@ -17,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -39,10 +40,8 @@ public interface BreminaleService {
     @GET("events/{id}.json")
     Observable<Event> getEvent(@Path("id") int eventId);
 
-    @POST("")
-    Observable<JsonObject> postDeviceToken(JsonObject device){
-
-    }
+    @POST("devices.json")
+    Observable<JsonObject> postDeviceToken(@Body JsonObject device);
 
 
     class Factory {
