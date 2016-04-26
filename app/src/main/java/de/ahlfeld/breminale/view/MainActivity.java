@@ -1,14 +1,21 @@
 package de.ahlfeld.breminale.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -18,6 +25,7 @@ import com.roughike.bottombar.OnMenuTabClickListener;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.databinding.ActivityMainBinding;
 import de.ahlfeld.breminale.services.GcmRegistrationService;
+import de.ahlfeld.breminale.utils.BreminaleConsts;
 import de.ahlfeld.breminale.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding binding;
     private MainViewModel mainViewModel;
+    private boolean isReceiverRegistered;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
 
     @Override
@@ -37,6 +47,26 @@ public class MainActivity extends AppCompatActivity {
         binding.setViewModel(mainViewModel);
         setupBottomBar(savedInstanceState);
 
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    //Success
+                } else {
+                    //Error
+                }
+            }
+        };
+
+        // Registering BroadcastReceiver
+        registerReceiver();
+
+
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, GcmRegistrationService.class);
@@ -44,6 +74,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver();
+    }
+
+
+    private void registerReceiver(){
+        if(!isReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                    new IntentFilter(BreminaleConsts.REGISTRATION_COMPLETE));
+            isReceiverRegistered = true;
+        }
+    }
+
 
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();

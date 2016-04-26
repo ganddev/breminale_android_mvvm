@@ -4,6 +4,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +18,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -36,6 +38,11 @@ public interface BreminaleService {
 
     @GET("events/{id}.json")
     Observable<Event> getEvent(@Path("id") int eventId);
+
+    @POST("")
+    Observable<JsonObject> postDeviceToken(JsonObject device){
+
+    }
 
 
     class Factory {

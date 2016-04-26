@@ -9,8 +9,10 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.google.gson.JsonObject;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.networking.BreminaleService;
 import de.ahlfeld.breminale.utils.BreminaleConsts;
 
 
@@ -36,7 +38,7 @@ public class GcmRegistrationService extends IntentService {
             InstanceID instanceID = InstanceID.getInstance(this);
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             Log.i(TAG, "GCM Registration Token: " + token);
-            sendRegistrationToServer(token);
+            sendRegistrationToServer(createDeviceObject(token));
         } catch (Exception e) {
             Log.e(TAG, "Failed to complete token refresh", e);
             sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, false).apply();
@@ -53,9 +55,18 @@ public class GcmRegistrationService extends IntentService {
      * Modify this method to associate the user's GCM registration token with any server-side account
      * maintained by your application.
      *
-     * @param token The new token.
+     * @param device The new device object.
      */
-    private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer(JsonObject device) {
         // Add custom implementation, as needed.
+        final BreminaleService service = BreminaleService.Factory.create();
+        service.postDeviceToken(device);
+    }
+
+    private JsonObject createDeviceObject(final String token) {
+        JsonObject object = new JsonObject();
+        object.addProperty("device_type", BreminaleConsts.DEVICE_TYPE);
+        object.addProperty("device_token",token);
+        return object;
     }
 }
