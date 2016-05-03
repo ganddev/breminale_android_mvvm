@@ -4,14 +4,14 @@
     tools:context=".view.MainActivity">
     <item
         android:id="@+id/recent_item"
-        android:icon="@mipmap/ic_update_white_24dp"
-        android:title="Recents" />
+        android:icon="@drawable/music_unselected24dp"
+        android:title="@string/program" />
     <item
         android:id="@+id/location_item"
-        android:icon="@mipmap/ic_location_on_white_24dp"
-        android:title="Location" />
+        android:icon="@drawable/map_unselected_24dp"
+        android:title="@string/map" />
     <item
         android:id="@+id/favorite_item"
         android:icon="@mipmap/ic_favorite_white_24dp"
-        android:title="Favorire" />
+        android:title="@string/favorits" />
 </menu>

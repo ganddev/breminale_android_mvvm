@@ -72,10 +72,10 @@ public interface SoundcloudService {
             Retrofit retrofit = new Retrofit.Builder()
                     .client(httpClient.build())
                     .baseUrl("https://api.soundcloud.com")
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
-            return retrofit.create(BreminaleService.class);
+            return retrofit.create(SoundcloudService.class);
         }
     }
 }
