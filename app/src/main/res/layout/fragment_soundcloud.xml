@@ -14,13 +14,32 @@
         
         <ImageView
             android:id="@+id/image_view_soundcloud"
-            android:layout_marginLeft="@dimen/soundcloud_icon_margin"
-            android:layout_marginTop="@dimen/soundcloud_icon_margin"
+            android:layout_marginLeft="@dimen/soundcloud_icon_margin_left"
+            android:layout_marginTop="@dimen/soundcloud_icon_margin_top"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_width="@dimen/soundcloud_icon_size"
             android:layout_height="@dimen/soundcloud_icon_size" />
 
+
+        <TextView
+            android:id="@+id/tv_soundcloud_track"
+            android:layout_marginTop="@dimen/soundcloud_track_margin_top"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/image_view_soundcloud"
+            app:font="@{`roboto-regular`}"
+            android:textSize="@dimen/soundcloud_artist_text_size"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        
+        <TextView
+            android:id="@+id/tv_soundcloud_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textColor="@color/warm_grey"
+            app:font="@{`roboto-regular`}" />
 
         <ImageButton
             android:id="@+id/image_btn_play"
@@ -28,19 +47,22 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/play_button_margin_top"
             android:layout_marginRight="@dimen/play_button_margin_right"
-            android:src="@drawable/play_button60dp"
+            android:src="@drawable/play30dp"
             android:background="@null"
+            android:onClick="@{viewModel.onPlayClick}"
             android:layout_width="@dimen/button_play_size"
             android:layout_height="@dimen/button_play_size" />
 
 
         <ImageButton
             android:id="@+id/image_btn_rewind"
-            android:src="@drawable/rewind_icon"
+            android:src="@drawable/rewind"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/image_view_soundcloud"
             android:layout_marginTop="@dimen/rewind_button_margin_top"
             android:layout_marginLeft="@dimen/rewind_button_margin_left"
+            android:layout_marginBottom="@dimen/forward_button_margin_bottom"
+            android:onClick="@{viewModel.onRewindClick}"
             android:background="@null"
             android:layout_width="@dimen/forward_button_width"
             android:layout_height="@dimen/forward_button_height" />
@@ -52,14 +74,18 @@
             android:layout_below="@id/image_btn_play"
             android:layout_marginTop="@dimen/forward_btn_margin_top"
             android:layout_marginRight="@dimen/forward_button_margin_right"
+            android:layout_marginBottom="@dimen/forward_button_margin_bottom"
             android:background="@null"
+            android:onClick="@{viewModel.onForwardClick}"
             android:layout_width="@dimen/forward_button_width"
             android:layout_height="@dimen/forward_button_height" />
 
         <SeekBar
             android:id="@+id/seekbar_soundcloud"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/seekbar_width"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/seekbar_margin_top"
+            android:layout_below="@id/tv_soundcloud_user_name"
             android:layout_toRightOf="@+id/image_btn_rewind"
             android:layout_toLeftOf="@+id/image_btn_forward" />
 

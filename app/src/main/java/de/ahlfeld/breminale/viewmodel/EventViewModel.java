@@ -1,14 +1,19 @@
 package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableFloat;
+import android.databinding.ObservableInt;
 import android.util.Log;
+import android.view.View;
 
 import java.text.SimpleDateFormat;
 
 import de.ahlfeld.breminale.caches.LocationSources;
 import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.models.Location;
+import de.ahlfeld.breminale.utils.DPtoPXUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -23,21 +28,22 @@ public class EventViewModel implements ViewModel{
 
 
     private Location location;
-    private Context context;
 
     private Event event;
     private Subscription locationSubscription;
 
     public ObservableField<String> locationName;
 
+    public ObservableBoolean isCompact;
+
     private DataListener dataListener;
     private String TAG = EventViewModel.class.getSimpleName();
 
     public EventViewModel(Context context, Event event, DataListener dataListener) {
-        this.context = context;
         this.event = event;
         this.dataListener = dataListener;
-        locationName = new ObservableField<>("No location");
+        this.locationName = new ObservableField<>("No location");
+        this.isCompact = new ObservableBoolean(true);
         getLocationName();
     }
 
@@ -47,7 +53,6 @@ public class EventViewModel implements ViewModel{
             locationSubscription.unsubscribe();
         }
         locationSubscription = null;
-        context = null;
     }
 
     public void getLocationName() {
@@ -87,6 +92,11 @@ public class EventViewModel implements ViewModel{
         sb.append("Uhr");
         sb.append(" /");
         return sb.toString();
+    }
+
+    public void onExpandClick(View view) {
+        Log.d(TAG, "onexpand click");
+        this.isCompact.set(!this.isCompact.get());
     }
 
     public String name() {return this.event.getName(); }
