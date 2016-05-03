@@ -38,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="26sp"
+            android:text="@{viewModel.soundCloudArtist}"
             android:textColor="@color/warm_grey"
             app:font="@{`roboto-regular`}" />
 

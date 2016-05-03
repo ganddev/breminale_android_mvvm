@@ -1,5 +1,6 @@
 package de.ahlfeld.breminale.viewmodel;
 
+import android.databinding.ObservableField;
 import android.util.Log;
 import android.view.View;
 
@@ -11,8 +12,10 @@ public class SoundcloudViewModel implements ViewModel {
 
     private static final String TAG = SoundcloudViewModel.class.getSimpleName();
 
-    public SoundcloudViewModel() {
+    public ObservableField<String> soundCloudArtist;
 
+    public SoundcloudViewModel() {
+        soundCloudArtist = new ObservableField<>("");
     }
 
 
