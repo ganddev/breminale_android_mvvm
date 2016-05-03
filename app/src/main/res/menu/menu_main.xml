@@ -12,6 +12,16 @@
         android:title="@string/map" />
     <item
         android:id="@+id/favorite_item"
-        android:icon="@mipmap/ic_favorite_white_24dp"
+        android:icon="@mipmap/favorit_menu"
         android:title="@string/favorits" />
+
+    <item
+        android:id="@+id/brefunk_item"
+        android:icon="@drawable/brefunk_unselected_24dp"
+        android:title="@string/brefunk" />
+
+    <item
+        android:id="@+id/more_item"
+        android:icon="@drawable/more_unselected_24dp"
+        android:title="@string/more" />
 </menu>

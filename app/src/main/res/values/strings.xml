@@ -10,4 +10,6 @@
     <string name="program">Program</string>
     <string name="map">Map</string>
     <string name="favorits">Favorits</string>
+    <string name="brefunk">Brefunk</string>
+    <string name="more">More</string>
 </resources>
