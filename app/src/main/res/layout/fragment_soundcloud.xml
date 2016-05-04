@@ -25,6 +25,7 @@
         <TextView
             android:id="@+id/tv_soundcloud_track"
             android:layout_marginTop="@dimen/soundcloud_track_margin_top"
+            android:layout_marginLeft="@dimen/soundcloud_track_margin_left"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/image_view_soundcloud"
             app:font="@{`roboto-regular`}"
@@ -35,9 +36,12 @@
         
         <TextView
             android:id="@+id/tv_soundcloud_user_name"
+            android:layout_toRightOf="@id/image_view_soundcloud"
+            android:layout_marginLeft="@dimen/soundcloud_track_margin_left"
+            android:layout_below="@id/tv_soundcloud_track"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="26sp"
+            android:textSize="13sp"
             android:text="@{viewModel.soundCloudArtist}"
             android:textColor="@color/warm_grey"
             app:font="@{`roboto-regular`}" />
