@@ -14,6 +14,7 @@ import de.ahlfeld.breminale.caches.LocationSources;
 import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.models.Location;
 import de.ahlfeld.breminale.utils.DPtoPXUtils;
+import io.realm.Realm;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -104,6 +105,15 @@ public class EventViewModel implements ViewModel{
         return this.event.getDescription();
     }
 
+
+    public void onFabClick(View view) {
+        this.event.setFavorit(!this.event.getFavorit());
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(this.event);
+        realm.commitTransaction();
+        realm.close();
+    }
 
     public interface DataListener {
         void onLocationChanged(Location location);

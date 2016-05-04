@@ -101,6 +101,18 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:clickable="true"
+            android:onClick="@{viewModel.onFabClick}"
+            android:background="@android:color/white"
+            android:src="@mipmap/favorit_menu"
+            app:layout_anchor="@id/app_bar_layout"
+            app:layout_anchorGravity="bottom|right|end" />
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -158,8 +170,6 @@
                     map:liteMode="true"
                     map:mapType="normal"
                     map:cameraZoom="17"/>
-
-
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
