@@ -4,8 +4,6 @@ import android.content.Context;
 import android.databinding.ObservableField;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.net.rtp.AudioStream;
 import android.util.Log;
 import android.view.View;
 
@@ -70,15 +68,9 @@ public class SoundcloudViewModel implements ViewModel {
                     public void onCompleted() {
                         if (!mSoundcloudTracks.isEmpty()) {
                             currentTrack.set(mSoundcloudTracks.get(0).getTitle());
-                            if(mPlayer != null) {
-                                try {
-                                    mPlayer.setDataSource(mSoundcloudTracks.get(currentPlayingTrack).getStreamUrl()+CLIENT_ID);
-                                }catch (IOException e) {
-                                    Log.e(TAG, e.getMessage());
-                                }
-                            }
                         } else {
                             currentTrack.set(mContext.getString(R.string.empty_soundcloud_sounds));
+                            setDataSourceAndPreparePlayer();
                         }
                     }
 
@@ -122,14 +114,14 @@ public class SoundcloudViewModel implements ViewModel {
         currentPlayingTrack++;
         currentTrack.set(mSoundcloudTracks.get(currentPlayingTrack).getTitle());
         stopAndResetPlayer();
-        setDataSourceAndStartPlaying();
+        setDataSourceAndPreparePlayer();
+        mPlayer.start();
     }
 
-    private void setDataSourceAndStartPlaying() {
+    private void setDataSourceAndPreparePlayer() {
         try {
             mPlayer.setDataSource(mSoundcloudTracks.get(currentPlayingTrack).getStreamUrl() + CLIENT_ID);
             mPlayer.prepare();
-            mPlayer.start();
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -148,30 +140,21 @@ public class SoundcloudViewModel implements ViewModel {
         currentPlayingTrack--;
         currentTrack.set(mSoundcloudTracks.get(currentPlayingTrack).getTitle());
         stopAndResetPlayer();
-        setDataSourceAndStartPlaying();
+        setDataSourceAndPreparePlayer();
+        mPlayer.start();
     }
 
     public void onPlayClick(View view) {
         Log.d(TAG, "onplayclick");
-        prepareMediaPlayer();
-        playOrStopMediaPlayer();
+        startOrStopPlayer();
     }
 
-    private void playOrStopMediaPlayer() {
-        if(!mPlayer.isPlaying()) {
-            mPlayer.start();
-        } else {
-            mPlayer.stop();
-        }
-    }
-
-    private void prepareMediaPlayer() {
-        if(mPlayer != null && !mMediaplayerIsPrepared) {
-            try {
-                mPlayer.prepare();
-                mMediaplayerIsPrepared = true;
-            }catch (IOException e){
-                Log.e(TAG, e.getMessage());
+    private void startOrStopPlayer() {
+        if(mPlayer != null) {
+            if(mPlayer.isPlaying()) {
+                mPlayer.stop();
+            } else {
+                mPlayer.stop();
             }
         }
     }
