@@ -69,10 +69,11 @@ public interface SoundcloudService {
 // add logging as last interceptor
             httpClient.addInterceptor(logging);  // <-- this is the important line!
 
+            Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/DD HH:mm:ss Z").create();
             Retrofit retrofit = new Retrofit.Builder()
                     .client(httpClient.build())
                     .baseUrl("https://api.soundcloud.com")
-                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
             return retrofit.create(SoundcloudService.class);

@@ -12,4 +12,5 @@
     <string name="favorits">Favorits</string>
     <string name="brefunk">Brefunk</string>
     <string name="more">More</string>
+    <string name="empty_soundcloud_sounds">No sounds for event</string>
 </resources>

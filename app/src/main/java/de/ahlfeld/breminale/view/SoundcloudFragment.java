@@ -31,9 +31,15 @@ public class SoundcloudFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_soundcloud,container,false);
-        viewModel = new SoundcloudViewModel(296190);
+        viewModel = new SoundcloudViewModel(getContext(), 3207);
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
+
+    @Override
+    public void onDestroy() {
+        viewModel.destroy();
+        super.onDestroy();
+    }
 }
