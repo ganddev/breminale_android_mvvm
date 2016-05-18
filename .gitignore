@@ -1,3 +1,6 @@
+## Directory-based project format:
+.idea/
+
 # Built application files
 *.apk
 *.ap_
