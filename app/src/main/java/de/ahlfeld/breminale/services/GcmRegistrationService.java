@@ -11,14 +11,13 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.gson.JsonObject;
 
+import de.ahlfeld.breminale.BuildConfig;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.networking.BreminaleService;
 import de.ahlfeld.breminale.utils.BreminaleConsts;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import rx.observables.BlockingObservable;
 
 
 /**
@@ -43,7 +42,6 @@ public class GcmRegistrationService extends IntentService {
         try {
             InstanceID instanceID = InstanceID.getInstance(this);
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            Log.i(TAG, "GCM Registration Token: " + token);
             sendRegistrationToServer(createDeviceObject(token));
         } catch (Exception e) {
             Log.e(TAG, "Failed to complete token refresh", e);
@@ -74,35 +72,37 @@ public class GcmRegistrationService extends IntentService {
     private void sendRegistrationToServer(JsonObject device) {
         // Add custom implementation, as needed.
         final BreminaleService service = BreminaleService.Factory.create();
-        Observable<JsonObject> call = service.postDeviceToken(device);
-        deviceSubscription = call.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonObject>() {
-                    @Override
-                    public void onCompleted() {
-                        // You should store a boolean that indicates whether the generated token has been
-                        // sent to your server. If the boolean is false, send the token to your server,
-                        // otherwise your server should have already received the token.
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GcmRegistrationService.this);
-                        sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, true).apply();
-                    }
+        BlockingObservable<JsonObject> call = service.postDeviceToken(BuildConfig.BREMINALE_API_KEY, device).toBlocking();
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "An error accured while sending divce object", e);
-                    }
+        call.subscribe(new Subscriber<JsonObject>() {
+            @Override
+            public void onCompleted() {
+                // You should store a boolean that indicates whether the generated token has been
+                // sent to your server. If the boolean is false, send the token to your server,
+                // otherwise your server should have already received the token.
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GcmRegistrationService.this);
+                sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, true).apply();
+            }
 
-                    @Override
-                    public void onNext(JsonObject jsonObject) {
-                        Log.i(TAG, jsonObject.toString());
-                    }
-                });
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "An error accured while sending divce object", e);
+            }
+
+            @Override
+            public void onNext(JsonObject jsonObject) {
+                Log.i(TAG, jsonObject.toString());
+            }
+        });
+        //deviceSubscription = call.subscribeOn(Schedulers.io())
+        //        .observeOn(Schedulers.immediate())
+
     }
 
     private JsonObject createDeviceObject(final String token) {
         JsonObject object = new JsonObject();
         object.addProperty("device_type", BreminaleConsts.DEVICE_TYPE);
-        object.addProperty("device_token",token);
+        object.addProperty("device_token", token);
         return object;
     }
 }

@@ -23,6 +23,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -45,7 +46,7 @@ public interface BreminaleService {
     Observable<Event> getEvent(@Path("id") int eventId);
 
     @POST("devices.json")
-    Observable<JsonObject> postDeviceToken(@Body JsonObject device);
+    Observable<JsonObject> postDeviceToken(@Header("XAuthToken") String authToken, @Body JsonObject device);
 
 
     class Factory {
@@ -63,9 +64,6 @@ public interface BreminaleService {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request.Builder requestBuilder = chain.request().newBuilder();
-
-                    //TODO add auth-token to gradle.
-                    //requestBuilder.addHeader("X",breminaleAuthToken);
 
                     return chain.proceed(requestBuilder.build());
                 }
