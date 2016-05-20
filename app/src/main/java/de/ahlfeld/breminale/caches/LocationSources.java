@@ -2,11 +2,10 @@ package de.ahlfeld.breminale.caches;
 
 import java.util.List;
 
-import de.ahlfeld.breminale.networking.BreminaleService;
 import de.ahlfeld.breminale.models.Location;
+import de.ahlfeld.breminale.networking.BreminaleService;
 import io.realm.Realm;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by bjornahlfeld on 06.04.16.
@@ -20,32 +19,17 @@ public class LocationSources implements IPersist<Location>{
 
     public Observable<Location> network(Integer locationId) {
         BreminaleService service = BreminaleService.Factory.create();
-        return service.getLocation(locationId).map(new Func1<Location, Location>() {
-            @Override
-            public Location call(Location location) {
-                return persistObject(location);
-            }
-        });
+        return service.getLocation(locationId).map(location -> persistObject(location));
     }
 
     public Observable<List<Location>> memory() {
         final Realm realm = Realm.getDefaultInstance();
-        return Observable.just(realm.copyFromRealm(realm.where(Location.class).findAll())).filter(new Func1<List<Location>, Boolean>() {
-            @Override
-            public Boolean call(List<Location> locations) {
-                return !locations.isEmpty();
-            }
-        });
+        return Observable.just(realm.copyFromRealm(realm.where(Location.class).findAll())).filter(locations -> !locations.isEmpty());
     }
 
     public Observable<List<Location>> network() {
         BreminaleService service = BreminaleService.Factory.create();
-        return service.getLocations().map(new Func1<List<Location>, List<Location>>() {
-            @Override
-            public List<Location> call(List<Location> locations) {
-                return persistObjects(locations);
-            }
-        });
+        return service.getLocations().map(locations -> persistObjects(locations));
     }
 
     @Override

@@ -7,7 +7,6 @@ import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.networking.BreminaleService;
 import io.realm.Realm;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by bjornahlfeld on 06.04.16.
@@ -27,12 +26,7 @@ public class EventSources implements IPersist<Event> {
 
     public Observable<List<Event>> memory() {
         final Realm realm = Realm.getDefaultInstance();
-        return Observable.just(realm.copyFromRealm(realm.where(Event.class).findAll())).filter(new Func1<List<Event>, Boolean>() {
-            @Override
-            public Boolean call(List<Event> events) {
-                return !events.isEmpty();
-            }
-        });
+        return Observable.just(realm.copyFromRealm(realm.where(Event.class).findAll())).filter(events -> !events.isEmpty());
     }
 
     public Observable<Event> network(final Integer eventId) {
@@ -49,12 +43,7 @@ public class EventSources implements IPersist<Event> {
     */
     public Observable<List<Event>> network() {
         BreminaleService service = BreminaleService.Factory.create();
-        return service.getEvents().map(new Func1<List<Event>, List<Event>>() {
-            @Override
-            public List<Event> call(List<Event> events) {
-                return persistObjects(events);
-            }
-        });
+        return service.getEvents().map(events -> persistObjects(events));
     }
 
     @Override

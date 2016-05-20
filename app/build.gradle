@@ -12,6 +12,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        buildConfigField "String", "BREMINALE_API_KEY", getApiKey("BREMINALE_API_KEY")
     }
 
     buildTypes {
@@ -77,6 +78,13 @@ dependencies {
 
     //Image loading
     compile 'com.squareup.picasso:picasso:2.5.2'
+}
+
+//return a BREMINALE API KEY from a properties file.
+def getApiKey(String property){
+    Properties properties = new Properties()
+    properties.load(new FileInputStream('/Users/bjornahlfeld/breminale_android_mvvm/.breminale_api_key'))
+    return "\"" + properties.getProperty(property) +"\""
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -60,7 +60,7 @@
         </receiver>
 
         <service
-            android:name=".services.GcmService"
+            android:name=".services.BreminaleGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
