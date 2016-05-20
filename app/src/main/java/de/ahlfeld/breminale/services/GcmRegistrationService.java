@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -41,14 +40,12 @@ public class GcmRegistrationService extends IntentService {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         try {
             InstanceID instanceID = InstanceID.getInstance(this);
+            Log.d(TAG, "instance id " + instanceID.toString());
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             sendRegistrationToServer(createDeviceObject(token));
         } catch (Exception e) {
             Log.e(TAG, "Failed to complete token refresh", e);
             sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, false).apply();
-            // Notify UI that registration has completed, so the progress indicator can be hidden.
-            Intent registrationComplete = new Intent(BreminaleConsts.REGISTRATION_COMPLETE);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
         }
     }
 
@@ -77,9 +74,6 @@ public class GcmRegistrationService extends IntentService {
         call.subscribe(new Subscriber<JsonObject>() {
             @Override
             public void onCompleted() {
-                // You should store a boolean that indicates whether the generated token has been
-                // sent to your server. If the boolean is false, send the token to your server,
-                // otherwise your server should have already received the token.
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GcmRegistrationService.this);
                 sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, true).apply();
             }
@@ -94,9 +88,6 @@ public class GcmRegistrationService extends IntentService {
                 Log.i(TAG, jsonObject.toString());
             }
         });
-        //deviceSubscription = call.subscribeOn(Schedulers.io())
-        //        .observeOn(Schedulers.immediate())
-
     }
 
     private JsonObject createDeviceObject(final String token) {
