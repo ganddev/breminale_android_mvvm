@@ -6,6 +6,7 @@
 
     <data>
 
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="de.ahlfeld.breminale.viewmodel.EventViewModel" />
@@ -154,17 +155,17 @@
                     android:background="@color/warm_grey" />
 
 
-                <fragment
+                <FrameLayout
+                    android:id="@+id/container_soundcloud"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:name="de.ahlfeld.breminale.view.SoundcloudFragment"
-                    android:id="@+id/fragment_soundcloud"
+                    android:visibility="@{viewModel.showSoundcloudFragment ? View.VISIBLE : View.GONE}"
                     android:layout_below="@+id/border1"
-                    android:layout_alignParentLeft="true" />
+                    android:layout_alignParentLeft="true"/>
 
                 <com.google.android.gms.maps.MapView
                     android:id="@+id/mapImageView"
-                    android:layout_below="@id/fragment_soundcloud"
+                    android:layout_below="@id/container_soundcloud"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/event_map_height"
                     map:liteMode="true"

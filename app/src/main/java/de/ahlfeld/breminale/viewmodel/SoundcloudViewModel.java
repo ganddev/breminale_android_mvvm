@@ -68,9 +68,9 @@ public class SoundcloudViewModel implements ViewModel {
                     public void onCompleted() {
                         if (!mSoundcloudTracks.isEmpty()) {
                             currentTrack.set(mSoundcloudTracks.get(0).getTitle());
+                            setDataSourceAndPreparePlayer();
                         } else {
                             currentTrack.set(mContext.getString(R.string.empty_soundcloud_sounds));
-                            setDataSourceAndPreparePlayer();
                         }
                     }
 

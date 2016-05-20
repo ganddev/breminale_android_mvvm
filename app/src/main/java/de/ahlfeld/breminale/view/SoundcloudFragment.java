@@ -18,6 +18,7 @@ import de.ahlfeld.breminale.viewmodel.SoundcloudViewModel;
 public class SoundcloudFragment extends Fragment {
 
 
+    private static final String SOUNDCLOUD_USER_ID = "soundclouduserid";
     private SoundcloudViewModel viewModel;
     private FragmentSoundcloudBinding binding;
 
@@ -25,13 +26,25 @@ public class SoundcloudFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static SoundcloudFragment newInstance(long soundcloudUsersId) {
+        SoundcloudFragment sFm = new SoundcloudFragment();
+        Bundle args = new Bundle();
+        args.putLong(SOUNDCLOUD_USER_ID, soundcloudUsersId);
+        sFm.setArguments(args);
+        return sFm;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_soundcloud,container,false);
-        viewModel = new SoundcloudViewModel(getContext(), 3207);
+        Bundle args  = getArguments();
+        if(!args.containsKey(SOUNDCLOUD_USER_ID)) {
+            throw new IllegalStateException("soundcloud user id is not set");
+        }
+        long soundcloudUserId = args.getLong(SOUNDCLOUD_USER_ID);
+        viewModel = new SoundcloudViewModel(getContext(), soundcloudUserId);
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }

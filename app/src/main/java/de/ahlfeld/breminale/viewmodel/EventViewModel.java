@@ -28,6 +28,7 @@ import rx.schedulers.Schedulers;
 public class EventViewModel implements ViewModel{
 
 
+    private Context context;
     private Location location;
 
     private Event event;
@@ -45,6 +46,7 @@ public class EventViewModel implements ViewModel{
         this.dataListener = dataListener;
         this.locationName = new ObservableField<>("No location");
         this.isCompact = new ObservableBoolean(true);
+        this.context = context;
         getLocationName();
     }
 
@@ -54,6 +56,15 @@ public class EventViewModel implements ViewModel{
             locationSubscription.unsubscribe();
         }
         locationSubscription = null;
+        context = null;
+    }
+
+    public boolean showSoundcloudFragment() {
+        try {
+            return Long.parseLong(this.event.getSoundcloudUserId()) > 0;
+        }catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public void getLocationName() {
