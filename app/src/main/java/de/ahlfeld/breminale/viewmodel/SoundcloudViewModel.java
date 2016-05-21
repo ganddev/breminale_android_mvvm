@@ -1,14 +1,18 @@
 package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.models.SoundcloudTrack;
@@ -20,10 +24,11 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+
 /**
  * Created by bjornahlfeld on 03.05.16.
  */
-public class SoundcloudViewModel implements ViewModel {
+public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionListener {
 
 
     private static final String TAG = SoundcloudViewModel.class.getSimpleName();
@@ -32,19 +37,26 @@ public class SoundcloudViewModel implements ViewModel {
     public ObservableField<String> soundCloudArtist;
     public ObservableField<String> currentTrack;
 
+    public ObservableBoolean isPlaying;
+    public ObservableInt max;
+
+
     private Subscription mSoundclouduserSubscription;
 
     private SoundcloudUser mSoundcloudUser;
     private Subscription mSoundcloudTracksSusbcriptions;
 
+    private Subscription progressSubscription;
+
     private List<SoundcloudTrack> mSoundcloudTracks;
 
     private MediaPlayer mPlayer;
 
-    private boolean mMediaplayerIsPrepared;
+    private Handler myHandler;
 
     private static final String CLIENT_ID = "?client_id=469443570702bcc59666de5950139327";
     private int currentPlayingTrack;
+    public ObservableInt progress;
 
     public SoundcloudViewModel(Context ctx, long soundcloudUserId) {
         mContext = ctx.getApplicationContext();
@@ -55,9 +67,38 @@ public class SoundcloudViewModel implements ViewModel {
         getTracksForSoundcloudUser(soundcloudUserId);
 
         mPlayer = new MediaPlayer();
+        mPlayer.setOnCompletionListener(this);
         mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mMediaplayerIsPrepared = false;
         currentPlayingTrack = 0;
+        max = new ObservableInt(0);
+        progress = new ObservableInt(0);
+        isPlaying = new ObservableBoolean(false);
+
+        myHandler = new Handler();
+    }
+
+    public void prepareProgress() {
+        Observable.interval(16, TimeUnit.MILLISECONDS)
+                .map(y -> {
+                    Log.d(TAG, "tick: " + y);
+                    progress.set(mPlayer.getCurrentPosition());
+                    return null;
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Object o) {
+                Log.d(TAG, "object" + o.toString());
+            }
+        });
     }
 
     private void getTracksForSoundcloudUser(long soundcloudUserId) {
@@ -110,12 +151,10 @@ public class SoundcloudViewModel implements ViewModel {
 
 
     public void onForwardClick(View view) {
-        Log.d(TAG, "on forwardclick");
         currentPlayingTrack++;
         currentTrack.set(mSoundcloudTracks.get(currentPlayingTrack).getTitle());
         stopAndResetPlayer();
         setDataSourceAndPreparePlayer();
-        mPlayer.start();
     }
 
     private void setDataSourceAndPreparePlayer() {
@@ -127,8 +166,8 @@ public class SoundcloudViewModel implements ViewModel {
         }
     }
 
-    private void stopAndResetPlayer(){
-        if(mPlayer != null ) {
+    private void stopAndResetPlayer() {
+        if (mPlayer != null) {
             mPlayer.reset();
             mPlayer.stop();
         }
@@ -136,25 +175,27 @@ public class SoundcloudViewModel implements ViewModel {
 
 
     public void onRewindClick(View view) {
-        Log.d(TAG, "onRewindClick");
         currentPlayingTrack--;
         currentTrack.set(mSoundcloudTracks.get(currentPlayingTrack).getTitle());
         stopAndResetPlayer();
         setDataSourceAndPreparePlayer();
-        mPlayer.start();
     }
 
     public void onPlayClick(View view) {
-        Log.d(TAG, "onplayclick");
         startOrStopPlayer();
     }
 
     private void startOrStopPlayer() {
-        if(mPlayer != null) {
-            if(mPlayer.isPlaying()) {
-                mPlayer.stop();
+        if (mPlayer != null) {
+            if (mPlayer.isPlaying()) {
+                mPlayer.pause();
+                isPlaying.set(false);
             } else {
-                mPlayer.stop();
+                progress.set(0);
+                max.set(mPlayer.getDuration());
+                myHandler.postDelayed(UpdateSongTime,16);
+                mPlayer.start();
+                isPlaying.set(true);
             }
         }
     }
@@ -167,11 +208,29 @@ public class SoundcloudViewModel implements ViewModel {
         if (mSoundcloudTracksSusbcriptions != null && !mSoundcloudTracksSusbcriptions.isUnsubscribed()) {
             mSoundcloudTracksSusbcriptions.unsubscribe();
         }
-        if(mPlayer != null) {
+        if (mPlayer != null) {
             mPlayer.stop();
             mPlayer.release();
         }
+        mPlayer = null;
         mSoundcloudTracksSusbcriptions = null;
         mSoundclouduserSubscription = null;
     }
+
+
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        isPlaying.set(false);
+    }
+
+    private Runnable UpdateSongTime = new Runnable() {
+        @Override
+        public void run() {
+            if(mPlayer != null && mPlayer.isPlaying()) {
+                progress.set(mPlayer.getCurrentPosition());
+                myHandler.postDelayed(this, 16);
+            }
+        }
+    };
+
 }
