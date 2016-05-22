@@ -80,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/kalender"
                     android:drawableLeft="@drawable/kalender"
+                    android:drawablePadding="7dp"
                     app:font="@{`roboto-light`}"/>
 
                 <com.viewpagerindicator.CirclePageIndicator
