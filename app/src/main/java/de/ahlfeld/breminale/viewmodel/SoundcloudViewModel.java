@@ -152,13 +152,16 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
 
     public void onForwardClick(View view) {
         currentPlayingTrack++;
-        currentTrack.set(mSoundcloudTracks.get(currentPlayingTrack).getTitle());
+        if(currentPlayingTrack > mSoundcloudTracks.size()-1) {
+            currentPlayingTrack-= mSoundcloudTracks.size();
+        }
         stopAndResetPlayer();
         setDataSourceAndPreparePlayer();
     }
 
     private void setDataSourceAndPreparePlayer() {
         try {
+            currentTrack.set(mSoundcloudTracks.get(currentPlayingTrack % mSoundcloudTracks.size()).getTitle());
             mPlayer.setDataSource(mSoundcloudTracks.get(currentPlayingTrack).getStreamUrl() + CLIENT_ID);
             mPlayer.prepare();
         } catch (IOException e) {
@@ -176,7 +179,9 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
 
     public void onRewindClick(View view) {
         currentPlayingTrack--;
-        currentTrack.set(mSoundcloudTracks.get(currentPlayingTrack).getTitle());
+        if(currentPlayingTrack < 0) {
+            currentPlayingTrack+=mSoundcloudTracks.size();
+        }
         stopAndResetPlayer();
         setDataSourceAndPreparePlayer();
     }
@@ -221,6 +226,7 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         isPlaying.set(false);
+        progress.set(0);
     }
 
     private Runnable UpdateSongTime = new Runnable() {
