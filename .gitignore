@@ -66,3 +66,5 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+.breminale_api_key

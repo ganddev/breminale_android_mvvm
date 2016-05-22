@@ -3,11 +3,15 @@ package de.ahlfeld.breminale;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import de.ahlfeld.breminale.caches.FontCache;
 import de.ahlfeld.breminale.networking.BreminaleService;
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import rx.Scheduler;
@@ -30,6 +34,8 @@ public class BreminaleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
+        Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
         context = getApplicationContext();
 
         RealmConfiguration config = new RealmConfiguration.Builder(this).build();

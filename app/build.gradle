@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'realm-android'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -13,6 +28,8 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField "String", "BREMINALE_API_KEY", getApiKey("BREMINALE_API_KEY")
+        buildConfigField "String", "TWITTER_KEY", getApiKey("TWITTER_KEY")
+        buildConfigField "String", "TWITTER_SECRET", getApiKey("TWITTER_SECRET")
     }
 
     buildTypes {
@@ -76,11 +93,20 @@ dependencies {
 
     //Image loading
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    //Twitter
+    compile('com.twitter.sdk.android:twitter:1.13.1@aar') {
+        transitive = true
+    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:answers:1.3.6@aar') {
+        transitive = true;
+    }
     //Debugging
     compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
     compile 'com.uphyca:stetho_realm:0.9.0'
-
-
 }
 
 //return a BREMINALE API KEY from a properties file.

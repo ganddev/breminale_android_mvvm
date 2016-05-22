@@ -46,6 +46,15 @@ public class Bindings {
         }
     }
 
+    @BindingAdapter({"favoritList"})
+    public static void favoritList(ImageView iv, boolean isFavorit) {
+        if(isFavorit) {
+            iv.setImageResource(R.drawable.is_favorit_list);
+        } else {
+            iv.setImageResource(R.mipmap.favorit_menu);
+        }
+    }
+
     @BindingAdapter("android:layout_height")
     public static void setLayoutHeight(TextView view, float height) {
         ResizeAnimation resizeAnimation = new ResizeAnimation(view, (int)height, view.getHeight());
