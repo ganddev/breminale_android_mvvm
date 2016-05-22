@@ -49,7 +49,9 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewModel.destroy();
+        if(viewModel!= null) {
+            viewModel.destroy();
+        }
     }
 
     @Override
