@@ -104,9 +104,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupBottomBar(Bundle savedInstanceState) {
         bottomBar = BottomBar.attach(this, savedInstanceState);
-        bottomBar.setBackgroundColor(getResources().getColor(android.R.color.white));
+        bottomBar.noTopOffset();
         bottomBar.noNavBarGoodness();
         bottomBar.setTypeFace("fonts/Roboto-Regular.ttf");
+        bottomBar.useFixedMode();
         bottomBar.setItemsFromMenu(R.menu.menu_main, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(int menuItemId) {

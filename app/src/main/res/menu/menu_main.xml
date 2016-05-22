@@ -27,4 +27,5 @@
         android:id="@+id/more_item"
         android:icon="@drawable/more_unselected_24dp"
         android:title="@string/more" />
+
 </menu>
