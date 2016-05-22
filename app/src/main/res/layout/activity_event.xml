@@ -6,6 +6,7 @@
 
     <data>
 
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="de.ahlfeld.breminale.viewmodel.EventViewModel" />
@@ -101,6 +102,18 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:clickable="true"
+            android:onClick="@{viewModel.onFabClick}"
+            android:background="@android:color/white"
+            android:src="@mipmap/favorit_menu"
+            app:layout_anchor="@id/app_bar_layout"
+            app:layout_anchorGravity="bottom|right|end" />
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -113,13 +126,24 @@
 
                 <TextView
                     android:id="@+id/textview_event_description"
-                    android:layout_width="fill_parent"
-                    android:layout_height="72dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@{viewModel.isCompact ? @dimen/event_description_text_height : @dimen/event_description_text_height_max , default = @dimen/event_description_text_height}"
                     android:layout_marginLeft="@dimen/event_detail_margin_left"
                     android:layout_marginRight="@dimen/event_detail_margin_left"
                     android:layout_marginTop="@dimen/event_description_margin_top"
                     android:text="@{viewModel.description}"
                     app:font="@{`roboto-regular`}" />
+                
+                <ImageButton
+                    android:id="@+id/image_btn_expand_text"
+                    android:src="@drawable/row_down"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/textview_event_description"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:onClick="@{viewModel.onExpandClick}"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
 
                 <View
                     android:id="@+id/border1"
@@ -130,9 +154,18 @@
                     android:layout_marginTop="@dimen/event_border_margin_top"
                     android:background="@color/warm_grey" />
 
+
+                <FrameLayout
+                    android:id="@+id/container_soundcloud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.showSoundcloudFragment ? View.VISIBLE : View.GONE}"
+                    android:layout_below="@+id/border1"
+                    android:layout_alignParentLeft="true"/>
+
                 <com.google.android.gms.maps.MapView
                     android:id="@+id/mapImageView"
-                    android:layout_below="@id/border1"
+                    android:layout_below="@id/container_soundcloud"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/event_map_height"
                     map:liteMode="true"

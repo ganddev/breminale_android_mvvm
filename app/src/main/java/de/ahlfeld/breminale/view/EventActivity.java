@@ -7,8 +7,11 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
@@ -86,7 +89,24 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
+        addSoundcloudFragment(event);
+
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
+    }
+
+    private void addSoundcloudFragment(Event event) {
+        try {
+            long soundcloudUserId = Long.parseLong(event.getSoundcloudUserId());
+            if(soundcloudUserId > 0 ) {
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                SoundcloudFragment sFm = SoundcloudFragment.newInstance(soundcloudUserId);
+                ft.replace(R.id.container_soundcloud, sFm);
+                ft.commit();
+            }
+        }catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override

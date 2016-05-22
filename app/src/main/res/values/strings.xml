@@ -7,4 +7,10 @@
     <string name="google_maps_key">AIzaSyCIx0X6dnh64a4b8jhtqFut5l_pgU2SY_o</string>
     <string name="navigate_to_location">Route zur Location</string>
     <string name="title_activity_event">Event</string>
+    <string name="program">Program</string>
+    <string name="map">Map</string>
+    <string name="favorits">Favorits</string>
+    <string name="brefunk">Brefunk</string>
+    <string name="more">More</string>
+    <string name="empty_soundcloud_sounds">No sounds for event</string>
 </resources>
