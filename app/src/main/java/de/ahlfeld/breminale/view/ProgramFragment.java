@@ -14,10 +14,11 @@ import de.ahlfeld.breminale.adapters.ProgramPageAdapter;
 import de.ahlfeld.breminale.databinding.FragmentProgramBinding;
 import de.ahlfeld.breminale.viewmodel.ProgramViewModel;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeListener {
+public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeListener, ProgramViewModel.OnPageChangeListener {
 
     private FragmentProgramBinding binding;
 
@@ -37,7 +38,7 @@ public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeL
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_program,container,false);
         ProgramPageAdapter adapter = new ProgramPageAdapter(getChildFragmentManager());
-        viewModel = new ProgramViewModel(getContext(),adapter);
+        viewModel = new ProgramViewModel(getContext(),adapter,this);
         binding.setViewModel(viewModel);
         binding.viewpager.setAdapter(adapter);
         binding.viewpager.addOnPageChangeListener(this);
@@ -58,5 +59,12 @@ public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeL
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void pageChanged(int currentPage) {
+        if(binding.viewpager != null) {
+            binding.viewpager.setCurrentItem(currentPage, true);
+        }
     }
 }

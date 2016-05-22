@@ -32,6 +32,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
+                <ImageButton
+                    android:id="@+id/ib_prev_page"
+                    android:layout_marginTop="@dimen/program_btn_margin_top"
+                    android:layout_marginLeft="@dimen/program_nextpage_margin_right"
+                    android:layout_alignParentLeft="true"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_left"
+                    android:onClick="@{viewModel.prevPage}"
+                    android:background="@null"/>
+
+                <ImageButton
+                    android:id="@+id/ib_next_page"
+                    android:layout_marginTop="@dimen/program_btn_margin_top"
+                    android:layout_marginRight="@dimen/program_nextpage_margin_right"
+                    android:layout_alignParentRight="true"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:onClick="@{viewModel.nextPage}"
+                    android:background="@null"/>
+
                 <TextView
                     android:id="@+id/tv_date"
                     android:textColor="@android:color/white"
@@ -51,6 +78,8 @@
                     android:textColor="@android:color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/kalender"
+                    android:drawableLeft="@drawable/kalender"
                     app:font="@{`roboto-light`}"/>
 
                 <com.viewpagerindicator.CirclePageIndicator
