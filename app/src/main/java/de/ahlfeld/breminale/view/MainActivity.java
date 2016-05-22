@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private MainViewModel mainViewModel;
 
+    private BottomBar bottomBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,21 +92,34 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Necessary to restore the BottomBar's state, otherwise we would
+        // lose the current tab on orientation change.
+        bottomBar.onSaveInstanceState(outState);
+    }
+
+
     public void setupBottomBar(Bundle savedInstanceState) {
-        BottomBar bottomBar = BottomBar.attach(this, savedInstanceState);
+        bottomBar = BottomBar.attach(this, savedInstanceState);
+        bottomBar.setBackgroundColor(getResources().getColor(android.R.color.white));
+        bottomBar.noNavBarGoodness();
+        bottomBar.setTypeFace("fonts/Roboto-Regular.ttf");
         bottomBar.setItemsFromMenu(R.menu.menu_main, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(int menuItemId) {
                 switch (menuItemId) {
-                    case R.id.recent_item:
-                        mainViewModel.showMap();
-                        return;
-                    case R.id.location_item:
+                    case R.id.program_item:
                         mainViewModel.showEvents();
                         return;
-                    case R.id.favorite_item:
-                        mainViewModel.showFavorits();
+                    case R.id.map_item:
+                        mainViewModel.showMap();
                         return;
+                   /* case R.id.favorite_item:
+                        mainViewModel.showFavorits();
+                        return;*/
                 }
 
             }

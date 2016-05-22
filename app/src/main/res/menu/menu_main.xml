@@ -3,17 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.MainActivity">
     <item
-        android:id="@+id/recent_item"
+        android:id="@+id/program_item"
         android:icon="@drawable/music_unselected24dp"
         android:title="@string/program" />
     <item
-        android:id="@+id/location_item"
+        android:id="@+id/map_item"
         android:icon="@drawable/map_unselected_24dp"
         android:title="@string/map" />
+
+    <!--
     <item
         android:id="@+id/favorite_item"
         android:icon="@mipmap/favorit_menu"
         android:title="@string/favorits" />
+        -->
 
     <item
         android:id="@+id/brefunk_item"

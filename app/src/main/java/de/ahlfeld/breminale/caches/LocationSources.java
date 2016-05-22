@@ -24,7 +24,7 @@ public class LocationSources implements IPersist<Location>{
 
     public Observable<List<Location>> memory() {
         final Realm realm = Realm.getDefaultInstance();
-        return Observable.just(realm.copyFromRealm(realm.where(Location.class).findAll())).filter(locations -> !locations.isEmpty());
+        return Observable.just(realm.copyFromRealm(realm.where(Location.class).equalTo("deleted",false).findAll())).filter(locations -> !locations.isEmpty());
     }
 
     public Observable<List<Location>> network() {
@@ -37,6 +37,32 @@ public class LocationSources implements IPersist<Location>{
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+        realm.close();
+        return object;
+    }
+
+    public Location createUpdateOrDelete(Location object) {
+        final Realm realm = Realm.getDefaultInstance();
+        Location locationToUpdate = realm.where(Location.class).equalTo("id",object.getId()).findFirst();
+        realm.beginTransaction();
+        if(locationToUpdate != null) {
+            if(object.getDeleted()) {
+                locationToUpdate.deleteFromRealm();
+            } else {
+                locationToUpdate.setName(object.getName());
+                locationToUpdate.setDescription(object.getDescription());
+                locationToUpdate.setLatitude(object.getLatitude());
+                locationToUpdate.setLongitude(object.getLongitude());
+                locationToUpdate.setOriginalImageUrl(object.getOriginalImageUrl());
+                locationToUpdate.setMediumImageUrl(object.getMediumImageUrl());
+                locationToUpdate.setThumbImageUrl(object.getThumbImageUrl());
+            }
+        } else {
+            if(!object.getDeleted()) {
+                realm.copyToRealm(object);
+            }
+        }
         realm.commitTransaction();
         realm.close();
         return object;
