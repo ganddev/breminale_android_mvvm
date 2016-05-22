@@ -7,6 +7,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="android.graphics.drawable.Drawable"/>
         <variable
             name="viewModel"
             type="de.ahlfeld.breminale.viewmodel.EventViewModel" />
@@ -111,7 +112,7 @@
             android:clickable="true"
             android:onClick="@{viewModel.onFabClick}"
             android:background="@android:color/white"
-            android:src="@mipmap/favorit_menu"
+            app:isFavorit="@{viewModel.isFavorit}"
             app:layout_anchor="@id/app_bar_layout"
             app:layout_anchorGravity="bottom|right|end" />
 

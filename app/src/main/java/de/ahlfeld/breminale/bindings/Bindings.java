@@ -2,16 +2,13 @@ package de.ahlfeld.breminale.bindings;
 
 import android.databinding.BindingAdapter;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.Interpolator;
-import android.view.animation.RotateAnimation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.animations.ResizeAnimation;
 import de.ahlfeld.breminale.caches.FontCache;
 
@@ -33,6 +30,15 @@ public class Bindings {
                 .load(imageUrl)
                 .centerCrop()
                 .into(view);
+    }
+
+    @BindingAdapter({"isFavorit"})
+    public static void isFavorit(ImageView iv, boolean isFavorit) {
+        if(isFavorit) {
+            iv.setImageResource(R.mipmap.favorit_selected);
+        } else {
+            iv.setImageResource(R.mipmap.favorit_menu);
+        }
     }
 
     @BindingAdapter("android:layout_height")
