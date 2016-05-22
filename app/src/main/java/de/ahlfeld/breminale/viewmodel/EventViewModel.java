@@ -131,6 +131,10 @@ public class EventViewModel implements ViewModel {
         realm.close();
     }
 
+    public String imageUrl() {
+        return this.event.imageUrl();
+    }
+
     public interface DataListener {
         void onLocationChanged(Location location);
     }

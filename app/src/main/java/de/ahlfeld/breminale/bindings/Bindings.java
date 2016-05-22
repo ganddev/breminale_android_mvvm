@@ -26,10 +26,15 @@ public class Bindings {
 
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
-        Picasso.with(view.getContext())
-                .load(imageUrl)
-                .centerCrop()
-                .into(view);
+        if(!imageUrl.isEmpty()) {
+            Picasso.with(view.getContext())
+                    .load(imageUrl)
+                    .fit()
+                    .centerCrop()
+                    .into(view);
+        } else {
+            view.setImageDrawable(null);
+        }
     }
 
     @BindingAdapter({"isFavorit"})

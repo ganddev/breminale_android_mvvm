@@ -27,15 +27,9 @@ public class Event extends RealmObject implements Parcelable {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("original_image_url")
+    @SerializedName("image_url")
     @Expose
-    private String originalImageUrl;
-    @SerializedName("medium_image_url")
-    @Expose
-    private String mediumImageUrl;
-    @SerializedName("thumb_image_url")
-    @Expose
-    private String thumbImageUrl;
+    private String imageUrl;
     @SerializedName("start_time")
     @Expose
     private Date startTime;
@@ -48,13 +42,12 @@ public class Event extends RealmObject implements Parcelable {
 
     @SerializedName("deleted")
     @Expose
-    private Boolean deleted;
+    private boolean deleted;
     @SerializedName("location_id")
     @Expose
     private int locationId;
 
-
-    private Boolean favorit = false;
+    private boolean favorit;
 
     public Event() {
         super();
@@ -65,13 +58,13 @@ public class Event extends RealmObject implements Parcelable {
         id = in.readInt();
         name = in.readString();
         description = in.readString();
-        originalImageUrl = in.readString();
-        mediumImageUrl = in.readString();
-        thumbImageUrl = in.readString();
+        imageUrl = in.readString();
         startTime = new Date(in.readLong());
         soundcloudUrl = in.readString();
         soundcloudUserId = in.readString();
         locationId = in.readInt();
+        favorit = in.readInt() == 1 ? true : false;
+        deleted = in.readInt() == 1 ? true : false;
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -131,43 +124,15 @@ public class Event extends RealmObject implements Parcelable {
     /**
      * @return The originalImageUrl
      */
-    public String getOriginalImageUrl() {
-        return originalImageUrl;
+    public String imageUrl() {
+        return imageUrl;
     }
 
     /**
-     * @param originalImageUrl The original_image_url
+     * @param imageUrl The original_image_url
      */
-    public void setOriginalImageUrl(String originalImageUrl) {
-        this.originalImageUrl = originalImageUrl;
-    }
-
-    /**
-     * @return The mediumImageUrl
-     */
-    public String getMediumImageUrl() {
-        return mediumImageUrl;
-    }
-
-    /**
-     * @param mediumImageUrl The medium_image_url
-     */
-    public void setMediumImageUrl(String mediumImageUrl) {
-        this.mediumImageUrl = mediumImageUrl;
-    }
-
-    /**
-     * @return The thumbImageUrl
-     */
-    public String getThumbImageUrl() {
-        return thumbImageUrl;
-    }
-
-    /**
-     * @param thumbImageUrl The thumb_image_url
-     */
-    public void setThumbImageUrl(String thumbImageUrl) {
-        this.thumbImageUrl = thumbImageUrl;
+    public void imageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     /**
@@ -230,13 +195,13 @@ public class Event extends RealmObject implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeString(originalImageUrl);
-        dest.writeString(mediumImageUrl);
-        dest.writeString(thumbImageUrl);
+        dest.writeString(imageUrl);
         dest.writeLong(startTime.getTime());
         dest.writeString(soundcloudUrl);
         dest.writeString(soundcloudUserId);
         dest.writeInt(locationId);
+        dest.writeInt(favorit ? 1 : 0);
+        dest.writeInt(deleted? 1 : 0);
     }
 
     public Boolean getFavorit() {

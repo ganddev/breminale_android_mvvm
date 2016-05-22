@@ -21,7 +21,8 @@
         <ImageView
             android:id="@+id/item_event_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:imageUrl="@{viewModel.getImageUrl}"/>
 
         <TextView
             android:id="@+id/item_event_date_time"

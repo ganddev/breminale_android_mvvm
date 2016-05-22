@@ -1,6 +1,8 @@
 package de.ahlfeld.breminale.caches;
 
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.ahlfeld.breminale.models.Event;
@@ -26,7 +28,7 @@ public class EventSources implements IPersist<Event> {
 
     public Observable<List<Event>> memory() {
         final Realm realm = Realm.getDefaultInstance();
-        return Observable.just(realm.copyFromRealm(realm.where(Event.class).findAll())).filter(events -> !events.isEmpty());
+        return Observable.just(realm.copyFromRealm(realm.where(Event.class).equalTo("deleted", false).findAll().sort("startTime"))).filter(events -> !events.isEmpty());
     }
 
     public Observable<Event> network(final Integer eventId) {
@@ -48,9 +50,31 @@ public class EventSources implements IPersist<Event> {
 
     @Override
     public Event persistObject(final Event object) {
+        return createUpdateOrDelete(object);
+    }
+
+    @NonNull
+    private Event createUpdateOrDelete(Event object) {
         final Realm realm = Realm.getDefaultInstance();
+        Event eventToUpdate = realm.where(Event.class).equalTo("id",object.getId()).findFirst();
         realm.beginTransaction();
-        realm.copyToRealmOrUpdate(object);
+        if(eventToUpdate != null) {
+            if(object.getDeleted()) {
+                eventToUpdate.deleteFromRealm();
+            } else {
+                eventToUpdate.setName(object.getName());
+                eventToUpdate.setDescription(object.getDescription());
+                eventToUpdate.setLocationId(object.getLocationId());
+                eventToUpdate.setSoundcloudUrl(object.getSoundcloudUrl());
+                eventToUpdate.setSoundcloudUserId(object.getSoundcloudUserId());
+                eventToUpdate.setStartTime(object.getStartTime());
+                eventToUpdate.imageUrl(object.imageUrl());
+            }
+        } else {
+            if(!object.getDeleted()) {
+                realm.copyToRealm(object);
+            }
+        }
         realm.commitTransaction();
         realm.close();
         return object;
@@ -58,11 +82,9 @@ public class EventSources implements IPersist<Event> {
 
     @Override
     public List<Event> persistObjects(List<Event> objects) {
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(objects);
-        realm.commitTransaction();
-        realm.close();
+        for(Event event : objects) {
+            createUpdateOrDelete(event);
+        }
         return objects;
     }
 }
