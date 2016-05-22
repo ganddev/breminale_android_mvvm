@@ -22,8 +22,6 @@ import rx.schedulers.Schedulers;
  */
 public class BreminaleApplication extends Application {
 
-
-
     private BreminaleService breminaleService;
     private Scheduler defaultSubscribeScheduler;
 
@@ -36,7 +34,7 @@ public class BreminaleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
         context = getApplicationContext();
 

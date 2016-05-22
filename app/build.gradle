@@ -28,6 +28,8 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField "String", "BREMINALE_API_KEY", getApiKey("BREMINALE_API_KEY")
+        buildConfigField "String", "TWITTER_KEY", getApiKey("TWITTER_KEY")
+        buildConfigField "String", "TWITTER_SECRET", getApiKey("TWITTER_SECRET")
     }
 
     buildTypes {
