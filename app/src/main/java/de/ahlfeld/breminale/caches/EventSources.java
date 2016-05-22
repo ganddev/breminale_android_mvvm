@@ -8,6 +8,7 @@ import java.util.List;
 import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.networking.BreminaleService;
 import io.realm.Realm;
+import io.realm.Sort;
 import rx.Observable;
 
 /**
@@ -28,7 +29,7 @@ public class EventSources implements IPersist<Event> {
 
     public Observable<List<Event>> memory() {
         final Realm realm = Realm.getDefaultInstance();
-        return Observable.just(realm.copyFromRealm(realm.where(Event.class).equalTo("deleted", false).findAll().sort("startTime"))).filter(events -> !events.isEmpty());
+        return Observable.just(realm.copyFromRealm(realm.where(Event.class).equalTo("deleted", false).findAllSorted("startTime", Sort.ASCENDING))).filter(events -> !events.isEmpty());
     }
 
     public Observable<Event> network(final Integer eventId) {
