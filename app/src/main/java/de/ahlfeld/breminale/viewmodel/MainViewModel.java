@@ -33,4 +33,8 @@ public class MainViewModel implements ViewModel {
     public void showMap() {
         this.view.showMap();
     }
+
+    public void showBrefunk() {
+        this.view.showBrefunk();
+    }
 }

@@ -121,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
                    /* case R.id.favorite_item:
                         mainViewModel.showFavorits();
                         return;*/
+                    case R.id.brefunk_item:
+                        mainViewModel.showBrefunk();
+                        return;
                 }
 
             }
@@ -143,6 +146,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         //TODO ft.replace(R.id.fragment_container, );
+        ft.commit();
+    }
+
+    public void showBrefunk(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.fragment_container, BrefunkFragment.newInstance());
         ft.commit();
     }
 
