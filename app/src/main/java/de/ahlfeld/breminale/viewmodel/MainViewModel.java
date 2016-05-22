@@ -11,7 +11,7 @@ public class MainViewModel implements ViewModel {
     private static final String TAG = MainViewModel.class.getSimpleName();
     private final MainActivity view;
 
-    public MainViewModel(MainActivity  view) {
+    public MainViewModel(MainActivity view) {
         this.view = view;
     }
 
@@ -26,8 +26,8 @@ public class MainViewModel implements ViewModel {
         this.view.showFavorits();
     }
 
-    public void showEvents() {
-        this.view.showEvents();
+    public void showProgram() {
+        this.view.showProgam();
     }
 
     public void showMap() {

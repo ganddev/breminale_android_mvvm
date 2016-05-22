@@ -1,0 +1,107 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="de.ahlfeld.breminale.viewmodel.ProgramViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/program_height"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@mipmap/status_bar_black"
+            android:contentInsetLeft="0dp"
+            android:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            android:contentInsetRight="0dp"
+            android:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetEnd="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <ImageButton
+                    android:id="@+id/ib_prev_page"
+                    android:layout_marginTop="@dimen/program_btn_margin_top"
+                    android:layout_marginLeft="@dimen/program_nextpage_margin_right"
+                    android:layout_alignParentLeft="true"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_left"
+                    android:onClick="@{viewModel.prevPage}"
+                    android:background="@null"/>
+
+                <ImageButton
+                    android:id="@+id/ib_next_page"
+                    android:layout_marginTop="@dimen/program_btn_margin_top"
+                    android:layout_marginRight="@dimen/program_nextpage_margin_right"
+                    android:layout_alignParentRight="true"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:onClick="@{viewModel.nextPage}"
+                    android:background="@null"/>
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/program_header_date"
+                    android:layout_marginTop="@dimen/program_header_date_margin_top"
+                    android:text="@{viewModel.date}"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:font="@{`roboto-light`}"/>
+                <TextView
+                    android:id="@+id/tv_day_number"
+                    android:text="@{viewModel.day}"
+                    android:layout_marginTop="12dp"
+                    android:layout_below="@id/tv_date"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/kalender"
+                    android:drawableLeft="@drawable/kalender"
+                    android:drawablePadding="7dp"
+                    app:font="@{`roboto-light`}"/>
+
+                <com.viewpagerindicator.CirclePageIndicator
+                    android:id="@+id/circles"
+                    android:layout_marginTop="12dp"
+                    android:layout_centerHorizontal="true"
+                    android:minHeight="7dp"
+                    android:layout_below="@id/tv_day_number"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"/>
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
+
+    </LinearLayout>
+</layout>

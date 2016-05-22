@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             public void onMenuTabSelected(int menuItemId) {
                 switch (menuItemId) {
                     case R.id.program_item:
-                        mainViewModel.showEvents();
+                        mainViewModel.showProgram();
                         return;
                     case R.id.map_item:
                         mainViewModel.showMap();
@@ -135,10 +135,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void showEvents() {
+    public void showProgam() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.fragment_container, EventListFragment.newInstance());
+        ft.replace(R.id.fragment_container, ProgramFragment.newInstance());
         ft.commit();
     }
 

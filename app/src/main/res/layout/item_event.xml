@@ -63,6 +63,7 @@
         <ImageView
             android:layout_width="@dimen/item_event_favorit_image"
             android:layout_height="@dimen/item_event_favorit_image"
+            app:favoritList="@{viewModel.isFavorit}"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="12dp"

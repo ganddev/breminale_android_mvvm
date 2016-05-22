@@ -2,11 +2,14 @@
 
 buildscript {
     repositories {
-        jcenter()
         maven {
             url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'
         }
         maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'http://dl.bintray.com/populov/maven'
+        }
+        jcenter()
         mavenCentral()
     }
     dependencies {
@@ -20,11 +23,16 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
         maven {
             url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'
         }
-        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
+        maven {
+            url 'http://dl.bintray.com/populov/maven'
+        }
+        jcenter()
         mavenCentral()
     }
 }

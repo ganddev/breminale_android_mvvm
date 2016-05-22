@@ -11,12 +11,12 @@
         android:icon="@drawable/map_unselected_24dp"
         android:title="@string/map" />
 
-    <!--
+<!--
     <item
         android:id="@+id/favorite_item"
         android:icon="@mipmap/favorit_menu"
         android:title="@string/favorits" />
-        -->
+-->
 
     <item
         android:id="@+id/brefunk_item"

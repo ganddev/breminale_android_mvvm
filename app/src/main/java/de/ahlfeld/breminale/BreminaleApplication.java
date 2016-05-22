@@ -22,7 +22,7 @@ import rx.schedulers.Schedulers;
  */
 public class BreminaleApplication extends Application {
 
-   
+
 
     private BreminaleService breminaleService;
     private Scheduler defaultSubscribeScheduler;
