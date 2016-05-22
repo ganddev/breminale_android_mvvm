@@ -38,6 +38,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     private MapView mMapView;
     private GoogleMap mMap;
 
+    private List<Location> locations;
+
     public MapFragment() {
         // Required empty public constructor
     }
@@ -88,14 +90,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "map is ready");
         mMap = googleMap;
+        drawMarkers();
     }
 
     @Override
     public void onLocationChanged(List<Location> locations) {
-        if(mMap != null) {
+        this.locations = locations;
+        drawMarkers();
+    }
+
+    private void drawMarkers() {
+        if(mMap != null && locations != null) {
             for (Location location : locations) {
                 mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
             }
+        } else {
+            Log.e(TAG, "Map is null");
         }
     }
 }
