@@ -46,6 +46,9 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
         context = null;
     }
 
+    public String getImageUrl() {
+        return event.imageUrl();
+    }
 
     public String getName() {
         return event.getName();
