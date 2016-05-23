@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E91E63</color>
+    <color name="colorPrimary">#9A0B1D</color>
     <color name="colorPrimaryDark">#C2185B</color>
     <color name="colorAccent">@android:color/white</color>
     <color name="item_event_text_background">#7f8c8d</color>
