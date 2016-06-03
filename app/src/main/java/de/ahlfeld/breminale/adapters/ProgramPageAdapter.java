@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import de.ahlfeld.breminale.view.EventListFragment;
 
@@ -31,7 +32,10 @@ public class ProgramPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return EventListFragment.newInstance();
+        Date from = titles[position].getTime();
+        Calendar to = titles[position];
+        to.set(Calendar.DAY_OF_MONTH, titles[position].get(Calendar.DAY_OF_MONTH)+1);
+        return EventListFragment.newInstance(from,to.getTime(),false);
     }
 
     @Override

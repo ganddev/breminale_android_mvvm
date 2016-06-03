@@ -8,22 +8,14 @@ import android.view.View;
 
 import java.text.SimpleDateFormat;
 
-import de.ahlfeld.breminale.caches.LocationSources;
-import de.ahlfeld.breminale.models.Event;
-import de.ahlfeld.breminale.models.Location;
+import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.view.EventActivity;
-import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by bjornahlfeld on 04.04.16.
  */
 public class ItemEventViewModel extends BaseObservable implements ViewModel {
-
 
     private Context context;
     private Event event;
@@ -68,30 +60,7 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     }
 
     public void getLocationName() {
-        LocationSources locationSources = new LocationSources();
-        Observable<Location> call = Observable.concat(locationSources.memory(this.event.getLocationId()),locationSources.network(this.event.getLocationId())).first(new Func1<Location, Boolean>() {
-            @Override
-            public Boolean call(Location location) {
-                return location != null;
-            }
-        });
-        locationSubscription = call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Location>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Location location) {
-                        locationName.set(location.getName());
-                    }
-                });
+        //TODO
     }
 
     public void onItemClick(View view) {

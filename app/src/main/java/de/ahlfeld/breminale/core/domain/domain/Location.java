@@ -1,4 +1,4 @@
-package de.ahlfeld.breminale.models;
+package de.ahlfeld.breminale.core.domain.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,17 +6,13 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
- * Created by bjornahlfeld on 31.03.16.
+ * Created by bjornahlfeld on 28.05.16.
  */
-public class Location extends RealmObject implements Parcelable {
+public class Location implements Parcelable {
 
     @SerializedName("id")
     @Expose
-    @PrimaryKey
     private Integer id;
     @SerializedName("name")
     @Expose

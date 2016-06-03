@@ -47,6 +47,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 retrolambda {
     jdk System.getenv("JAVA8_HOME") ?: getJavaHome("1.8")

@@ -20,6 +20,7 @@ public class SoundcloudFragment extends Fragment {
 
     private static final String SOUNDCLOUD_USER_ID = "soundclouduserid";
     private SoundcloudViewModel viewModel;
+
     private FragmentSoundcloudBinding binding;
 
     public SoundcloudFragment() {

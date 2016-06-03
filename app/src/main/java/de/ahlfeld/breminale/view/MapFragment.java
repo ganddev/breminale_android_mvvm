@@ -18,8 +18,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.databinding.FragmentBreminaleMapBinding;
-import de.ahlfeld.breminale.models.Location;
 import de.ahlfeld.breminale.viewmodel.MapViewModel;
 
 

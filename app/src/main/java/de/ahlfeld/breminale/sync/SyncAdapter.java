@@ -9,17 +9,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.List;
-
-import de.ahlfeld.breminale.caches.EventSources;
-import de.ahlfeld.breminale.caches.LocationSources;
-import de.ahlfeld.breminale.models.Event;
-import de.ahlfeld.breminale.models.Location;
-import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
 /**
@@ -47,50 +37,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         syncEvents();
     }
 
+
     private void syncEvents() {
-        EventSources eventSources = new EventSources();
-        Observable<List<Event>> eventCall = eventSources.network();
-        eventSubscription = eventCall.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Event>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Error synchronizing events", e);
-                    }
-
-                    @Override
-                    public void onNext(List<Event> events) {
-
-                    }
-                });
+        //TODO
     }
 
     private void syncLocations() {
-        LocationSources locationSources = new LocationSources();
-        Observable<List<Location>> locationsCall = locationSources.network();
-        locationSubscription = locationsCall.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Location>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Error synchronize locations", e);
-                    }
-
-                    @Override
-                    public void onNext(List<Location> locations) {
-
-                    }
-                });
+       //TODO
     }
 
 }

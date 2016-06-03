@@ -26,9 +26,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.core.domain.domain.Event;
+import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.databinding.ActivityEventBinding;
-import de.ahlfeld.breminale.models.Event;
-import de.ahlfeld.breminale.models.Location;
 import de.ahlfeld.breminale.viewmodel.EventViewModel;
 
 

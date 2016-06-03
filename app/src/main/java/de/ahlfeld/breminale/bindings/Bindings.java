@@ -19,7 +19,7 @@ public class Bindings {
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
-    @BindingAdapter({"bind:font"})
+    @BindingAdapter({"font"})
     public static void setFont(TextView textView, String fontName) {
         textView.setTypeface(FontCache.getInstance().get(fontName));
     }

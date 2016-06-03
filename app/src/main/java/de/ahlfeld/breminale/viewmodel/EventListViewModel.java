@@ -2,18 +2,20 @@ package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
 import android.databinding.ObservableInt;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
+import java.util.Date;
 import java.util.List;
 
-import de.ahlfeld.breminale.caches.EventSources;
-import de.ahlfeld.breminale.models.Event;
-import rx.Observable;
+import de.ahlfeld.breminale.core.domain.domain.Event;
+import de.ahlfeld.breminale.core.repositories.realm.EventRealmRepository;
+import de.ahlfeld.breminale.core.repositories.realm.specifications.EventByFavoritSpecification;
+import de.ahlfeld.breminale.core.repositories.realm.specifications.EventsByDateSpecification;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -23,6 +25,7 @@ public class EventListViewModel implements ViewModel {
 
 
     private static final String TAG = EventListViewModel.class.getSimpleName();
+    private Subscription favoritSubscription;
     public ObservableInt progressVisibility;
     public ObservableInt recyclerViewVisibility;
     private DataListener dataListener;
@@ -30,49 +33,49 @@ public class EventListViewModel implements ViewModel {
     private List<Event> events;
     private Subscription subscription;
 
-    public EventListViewModel(Context context, DataListener dataListener) {
+    public EventListViewModel(Context context, DataListener dataListener, Date from, Date to, boolean loadFavorits) {
         this.context = context;
         this.dataListener = dataListener;
         progressVisibility = new ObservableInt(View.VISIBLE);
         recyclerViewVisibility = new ObservableInt(View.INVISIBLE);
-        loadEvents();
+        if(loadFavorits) {
+            loadFavorits();
+        } else {
+            loadEvents(from, to);
+        }
     }
 
-    private void loadEvents() {
-        EventSources sourcess = new EventSources();
-        //Retrieve first source with data...
-        Observable<List<Event>> call = Observable.concat(sourcess.memory(), sourcess.network()).first(new Func1<List<Event>, Boolean>() {
+    private void loadFavorits() {
+        EventRealmRepository repository = new EventRealmRepository(context);
+        EventByFavoritSpecification specification = new EventByFavoritSpecification();
+        repository.query(specification);
+    }
+
+    private void loadEvents(@NonNull Date from,@NonNull Date to) {
+        EventRealmRepository repository = new EventRealmRepository(context);
+        EventsByDateSpecification specification = new EventsByDateSpecification(from, to);
+        subscription = repository.query(specification).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
             @Override
-            public Boolean call(List<Event> events) {
-                return events != null && !events.isEmpty();
+            public void onCompleted() {
+                if(dataListener != null) {
+                    dataListener.onEventsChanged(EventListViewModel.this.events);
+                }
+                progressVisibility.set(View.INVISIBLE);
+                if (!events.isEmpty()) {
+                    recyclerViewVisibility.set(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "Error loading events", e);
+            }
+
+            @Override
+            public void onNext(List<Event> events) {
+                EventListViewModel.this.events = events;
             }
         });
-        subscription = call.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Event>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG, "oncomplete");
-                        if (dataListener != null) {
-                            dataListener.onEventsChanged(events);
-                        }
-                        progressVisibility.set(View.INVISIBLE);
-                        if (!events.isEmpty()) {
-                            recyclerViewVisibility.set(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Error loading events", e);
-                        progressVisibility.set(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onNext(List<Event> events) {
-                        EventListViewModel.this.events = events;
-                    }
-                });
     }
 
     public void setDataListener(DataListener dataListener) {
@@ -85,6 +88,10 @@ public class EventListViewModel implements ViewModel {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
+        if(favoritSubscription != null && !favoritSubscription.isUnsubscribed()) {
+            favoritSubscription.unsubscribe();
+        }
+        favoritSubscription = null;
         subscription = null;
         context = null;
         dataListener = null;

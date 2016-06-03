@@ -1,4 +1,4 @@
-package de.ahlfeld.breminale.models;
+package de.ahlfeld.breminale.core.domain.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,18 +8,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
- * Created by bjornahlfeld on 04.04.16.
+ * Created by bjornahlfeld on 28.05.16.
  */
-
-public class Event extends RealmObject implements Parcelable {
+public class Event implements Parcelable {
 
     @SerializedName("id")
     @Expose
-    @PrimaryKey
     private Integer id;
     @SerializedName("name")
     @Expose
@@ -201,7 +196,7 @@ public class Event extends RealmObject implements Parcelable {
         dest.writeString(soundcloudUserId);
         dest.writeInt(locationId);
         dest.writeInt(favorit ? 1 : 0);
-        dest.writeInt(deleted? 1 : 0);
+        dest.writeInt(deleted ? 1 : 0);
     }
 
     public Boolean getFavorit() {
@@ -219,5 +214,6 @@ public class Event extends RealmObject implements Parcelable {
     public void setLocationId(int locationId) {
         this.locationId = locationId;
     }
+
 
 }
