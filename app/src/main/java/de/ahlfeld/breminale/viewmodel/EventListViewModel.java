@@ -16,7 +16,6 @@ import de.ahlfeld.breminale.core.repositories.realm.specifications.EventsByDateS
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by bjornahlfeld on 07.04.16.
@@ -48,13 +47,34 @@ public class EventListViewModel implements ViewModel {
     private void loadFavorits() {
         EventRealmRepository repository = new EventRealmRepository(context);
         EventByFavoritSpecification specification = new EventByFavoritSpecification();
-        repository.query(specification);
+        favoritSubscription = repository.query(specification).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
+            @Override
+            public void onCompleted() {
+                if(dataListener != null) {
+                    dataListener.onEventsChanged(EventListViewModel.this.events);
+                }
+                progressVisibility.set(View.INVISIBLE);
+                if (!events.isEmpty()) {
+                    recyclerViewVisibility.set(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "Error loading favorits", e);
+            }
+
+            @Override
+            public void onNext(List<Event> events) {
+                EventListViewModel.this.events = events;
+            }
+        });
     }
 
     private void loadEvents(@NonNull Date from,@NonNull Date to) {
         EventRealmRepository repository = new EventRealmRepository(context);
         EventsByDateSpecification specification = new EventsByDateSpecification(from, to);
-        subscription = repository.query(specification).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
+        subscription = repository.query(specification).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
             @Override
             public void onCompleted() {
                 if(dataListener != null) {

@@ -30,7 +30,7 @@ public class EventsByDateSpecification implements RealmSpecification<EventRealm>
     public Observable<RealmResults<EventRealm>> toObservableRealmResults(@NonNull Realm realm) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd.MM.yy");
         Log.d(TAG,"Load events between " + sdf.format(from) + " and " + sdf.format(to));
-        return realm.where(EventRealm.class).between("startTime", from, to).findAllSortedAsync("startTime", Sort.ASCENDING).asObservable();
+        return realm.where(EventRealm.class).equalTo("deleted",false).between("startTime", from, to).findAllSortedAsync("startTime", Sort.ASCENDING).asObservable();
     }
 
     @Override
