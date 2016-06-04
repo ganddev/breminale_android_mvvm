@@ -50,6 +50,10 @@ public class MapViewModel implements ViewModel {
         context = null;
     }
 
+    public void onMarkerClick(String markerId) {
+
+    }
+
     public interface DataListener {
         void onLocationsChanged(List<Location> locations);
     }

@@ -3,9 +3,11 @@ package de.ahlfeld.breminale.view;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,12 +19,18 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import de.ahlfeld.breminale.R;
@@ -195,15 +203,27 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
+        drawLocation();
     }
 
     private void drawLocation() {
         if(mMap != null && location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng));
+            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
             CameraUpdate cameraUpdate = CameraUpdateFactory
                     .newLatLngZoom(latLng, 17);
+            loadMarkerIcon(marker, location);
             mMap.moveCamera(cameraUpdate);
         }
+    }
+
+    private void loadMarkerIcon(@NonNull final Marker marker,@NonNull final Location location) {
+        Glide.with(this).load(location.getMediumImageUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resource);
+                marker.setIcon(icon);
+            }
+        });
     }
 }

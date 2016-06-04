@@ -17,12 +17,15 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -105,6 +108,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "map is ready");
         mMap = googleMap;
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(viewModel != null) {
+                    viewModel.onMarkerClick(marker.getId());
+                }
+                return true;
+            }
+        });
         drawMarkers();
     }
 
@@ -118,11 +130,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     private void drawMarkers() {
         Log.d(TAG, "draw markers");
         if (mMap != null && locations != null) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (Location location : locations) {
                 MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()));
+                markerOptions.draggable(false);
                 Marker marker = mMap.addMarker(markerOptions);
+                builder.include(marker.getPosition());
                 loadMarkerIcon(marker, location);
             }
+            LatLngBounds bounds = builder.build();
+            int padding = 0;
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+            mMap.animateCamera(cu);
         } else {
             Log.e(TAG, "Map is null or locations is null");
         }
