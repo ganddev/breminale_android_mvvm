@@ -1,9 +1,7 @@
 package de.ahlfeld.breminale.core.repositories.realm.specifications;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.ahlfeld.breminale.core.repositories.realm.modelRealm.EventRealm;
@@ -28,8 +26,6 @@ public class EventsByDateSpecification implements RealmSpecification<EventRealm>
 
     @Override
     public Observable<RealmResults<EventRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd.MM.yy");
-        Log.d(TAG,"Load events between " + sdf.format(from) + " and " + sdf.format(to));
         return realm.where(EventRealm.class).equalTo("deleted",false).between("startTime", from, to).findAllSortedAsync("startTime", Sort.ASCENDING).asObservable();
     }
 

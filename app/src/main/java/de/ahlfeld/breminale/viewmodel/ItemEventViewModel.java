@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.util.Log;
 import android.view.View;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import rx.Subscription;
  */
 public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
+    private static final String TAG = ItemEventViewModel.class.getSimpleName();
     private Context context;
     private Event event;
 
@@ -26,6 +28,7 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     public ObservableBoolean isFavorit;
 
     public ItemEventViewModel(Context context, Event event) {
+        Log.d(TAG, "item viewmodel");
         this.context = context;
         this.event = event;
         locationName = new ObservableField<>("No location");

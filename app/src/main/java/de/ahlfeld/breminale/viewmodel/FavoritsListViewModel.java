@@ -2,7 +2,6 @@ package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
 import android.databinding.ObservableInt;
-import android.util.Log;
 import android.view.View;
 
 import java.util.List;
@@ -10,9 +9,7 @@ import java.util.List;
 import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.core.repositories.realm.EventRealmRepository;
 import de.ahlfeld.breminale.core.repositories.realm.specifications.EventByFavoritSpecification;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by bjornahlfeld on 03.06.16.
@@ -22,7 +19,6 @@ public class FavoritsListViewModel implements ViewModel {
     private static final String TAG = FavoritsListViewModel.class.getSimpleName();
     private Context context;
     private Subscription favoritSubscription;
-    private List<Event> events;
     private DataListener dataListener;
     public ObservableInt recyclerViewVisibility;
 
@@ -37,27 +33,7 @@ public class FavoritsListViewModel implements ViewModel {
     private void loadFavorits() {
         EventRealmRepository repository = new EventRealmRepository(context);
         EventByFavoritSpecification specification = new EventByFavoritSpecification();
-        favoritSubscription = repository.query(specification).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
-            @Override
-            public void onCompleted() {
-                if(dataListener != null) {
-                    dataListener.onFavoritsChanged(FavoritsListViewModel.this.events);
-                }
-                if (!events.isEmpty()) {
-                    recyclerViewVisibility.set(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "Error loading favorits", e);
-            }
-
-            @Override
-            public void onNext(List<Event> events) {
-                FavoritsListViewModel.this.events = events;
-            }
-        });
+        favoritSubscription = repository.query(specification).subscribe(favoritEventsFromDB -> dataListener.onFavoritsChanged(favoritEventsFromDB));
     }
 
     @Override

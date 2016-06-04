@@ -43,8 +43,10 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorits_list, container, false);
 
-        viewModel = new FavoritsListViewModel(this.getContext(),this);
         setupRecyclerView(binding.eventsRecyclerView);
+
+        viewModel = new FavoritsListViewModel(this.getContext(),this);
+
         return binding.getRoot();
     }
 

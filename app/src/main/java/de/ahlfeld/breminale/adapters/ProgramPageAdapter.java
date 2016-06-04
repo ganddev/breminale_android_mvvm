@@ -3,6 +3,7 @@ package de.ahlfeld.breminale.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,7 +16,14 @@ import de.ahlfeld.breminale.view.EventListFragment;
  */
 public class ProgramPageAdapter extends FragmentPagerAdapter {
 
+    public static final int FIRST_DAY = 13;
+    public static final int MONTH_JULY = 06;
+    public static final int YEAR = 2016;
+    public static final int HOUR_OF_DAY = 0;
+    public static final int MINUTE = 0;
+    public static final int SECOND = 0;
     private Calendar[] titles;
+    private String TAG = ProgramPageAdapter.class.getSimpleName();
 
     public ProgramPageAdapter(FragmentManager manager) {
         super(manager);
@@ -24,12 +32,9 @@ public class ProgramPageAdapter extends FragmentPagerAdapter {
     }
 
     private void setupTitles() {
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             titles[i] = Calendar.getInstance();
-            titles[i].set(2016, 06, (13 + i));
-            titles[i].set(Calendar.HOUR_OF_DAY,0);
-            titles[i].set(Calendar.MINUTE,0);
-            titles[i].set(Calendar.SECOND,0);
+            titles[i].set(YEAR, MONTH_JULY, (FIRST_DAY + i), HOUR_OF_DAY, MINUTE, SECOND);
         }
     }
 
@@ -37,10 +42,8 @@ public class ProgramPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Date from = titles[position].getTime();
         Calendar to = Calendar.getInstance();
-        to.set(2016,06,titles[position].get(Calendar.DAY_OF_MONTH)+1);
-        to.set(Calendar.MINUTE,0);
-        to.set(Calendar.SECOND,0);
-        return EventListFragment.newInstance(from,to.getTime());
+        to.set(YEAR, MONTH_JULY, titles[position].get(Calendar.DAY_OF_MONTH) + 1,HOUR_OF_DAY,MINUTE,SECOND);
+        return EventListFragment.newInstance(from, to.getTime());
     }
 
     @Override

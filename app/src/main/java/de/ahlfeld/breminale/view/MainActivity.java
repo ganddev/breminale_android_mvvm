@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.noTopOffset();
         bottomBar.noNavBarGoodness();
+        bottomBar.setTextAppearance(R.style.MyBottomBarTextExperience);
         bottomBar.setTypeFace("fonts/Roboto-Regular.ttf");
         bottomBar.useFixedMode();
         bottomBar.setItemsFromMenu(R.menu.menu_main, new OnMenuTabClickListener() {
