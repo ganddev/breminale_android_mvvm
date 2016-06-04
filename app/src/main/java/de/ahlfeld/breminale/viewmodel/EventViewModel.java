@@ -3,6 +3,7 @@ package de.ahlfeld.breminale.viewmodel;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
@@ -10,6 +11,8 @@ import java.text.SimpleDateFormat;
 
 import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.core.domain.domain.Location;
+import de.ahlfeld.breminale.core.repositories.realm.EventRealmRepository;
+import de.ahlfeld.breminale.core.repositories.realm.LocationRealmRepository;
 import rx.Subscription;
 
 /**
@@ -33,7 +36,7 @@ public class EventViewModel implements ViewModel {
 
     public ObservableBoolean isFavorit;
 
-    public EventViewModel(Context context, Event event, DataListener dataListener) {
+    public EventViewModel(@NonNull Context context, @NonNull Event event, @NonNull DataListener dataListener) {
         this.event = event;
         this.dataListener = dataListener;
         this.locationName = new ObservableField<>("No location");
@@ -41,6 +44,18 @@ public class EventViewModel implements ViewModel {
         this.context = context;
 
         isFavorit = new ObservableBoolean(event.getFavorit());
+
+        loadLocation();
+    }
+
+    private void loadLocation() {
+        LocationRealmRepository realmRepository = new LocationRealmRepository(context);
+        locationSubscription = realmRepository.getById(event.getLocationId()).subscribe(locationFromDB -> {
+            if(dataListener != null) {
+                dataListener.onLocationChanged(locationFromDB);
+            }
+            locationName.set(locationFromDB.getName());
+        });
     }
 
     @Override
@@ -85,7 +100,10 @@ public class EventViewModel implements ViewModel {
 
 
     public void onFabClick(View view) {
-        isFavorit.set(!this.event.getFavorit());
+        EventRealmRepository repository = new EventRealmRepository(context);
+        event.setFavorit(!event.getFavorit());
+        repository.saveEventAsFavorit(event);
+        isFavorit.set(event.getFavorit());
     }
 
     public String imageUrl() {

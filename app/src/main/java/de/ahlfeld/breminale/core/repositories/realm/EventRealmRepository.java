@@ -12,6 +12,7 @@ import de.ahlfeld.breminale.core.repositories.Repository;
 import de.ahlfeld.breminale.core.repositories.Specification;
 import de.ahlfeld.breminale.core.repositories.realm.mapper.EventRealmToEvent;
 import de.ahlfeld.breminale.core.repositories.realm.mapper.EventToEventRealm;
+import de.ahlfeld.breminale.core.repositories.realm.mapper.EventToEventRealmFavorit;
 import de.ahlfeld.breminale.core.repositories.realm.modelRealm.EventRealm;
 import de.ahlfeld.breminale.core.repositories.realm.specifications.EventByIdSpecification;
 import de.ahlfeld.breminale.core.repositories.realm.specifications.RealmSpecification;
@@ -28,6 +29,7 @@ public class EventRealmRepository implements Repository<Event> {
     private final Mapper<EventRealm, Event> toEvent;
     private final Mapper<Event, EventRealm> toEventRealm;
     private final RealmConfiguration realmConfiguration;
+    private final Mapper<Event, EventRealm> toEventRealmFavorit;
 
     public EventRealmRepository(@NonNull Context context) {
 
@@ -36,6 +38,7 @@ public class EventRealmRepository implements Repository<Event> {
 
         this.toEvent = new EventRealmToEvent();
         this.toEventRealm = new EventToEventRealm(realm);
+        this.toEventRealmFavorit = new EventToEventRealmFavorit(realm);
     }
 
     @Override
@@ -139,5 +142,19 @@ public class EventRealmRepository implements Repository<Event> {
         realm.deleteAll();
         realm.commitTransaction();
         realm.close();
+    }
+
+    public Observable<Event> saveEventAsFavorit(Event item) {
+        final Realm realm = Realm.getDefaultInstance();
+        EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
+
+        if(eventRealm != null) {
+            realm.executeTransaction(realmParam -> {
+                realmParam.copyToRealmOrUpdate(toEventRealmFavorit.copy(item, eventRealm));
+            });
+        }
+        realm.close();
+
+        return Observable.just(item);
     }
 }
