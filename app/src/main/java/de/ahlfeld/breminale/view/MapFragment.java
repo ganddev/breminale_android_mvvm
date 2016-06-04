@@ -1,20 +1,26 @@
 package de.ahlfeld.breminale.view;
 
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.androidmapsextensions.GoogleMap;
@@ -43,10 +49,11 @@ import de.ahlfeld.breminale.viewmodel.MapViewModel;
 
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback, MapViewModel.DataListener, MapViewModel.NavigateListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, MapViewModel.DataListener, MapViewModel.NavigateListener, SearchView.OnQueryTextListener {
 
 
     private static final String TAG = MapFragment.class.getSimpleName();
@@ -57,11 +64,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     private GoogleMap mMap;
 
     private List<Location> locations;
+    private SearchView searchView;
 
     public MapFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,9 +84,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_breminale_map, container, false);
         viewModel = new MapViewModel(getContext(), this, this);
 
-        setHasOptionsMenu(true);
+
 
         binding.setViewModel(viewModel);
+
+        //for crate home button
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(binding.toolbar);
+
         locations = new ArrayList<>();
         mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
@@ -188,5 +207,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         } else {
             Toast.makeText(getContext(),R.string.no_google_maps,Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_map, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            int searchImgId = android.support.v7.appcompat.R.id.search_button; // I used the explicit layout ID of searchview's ImageView
+            ImageView v = (ImageView) searchView.findViewById(searchImgId);
+            v.setImageResource(R.drawable.ic_search);
+            searchView.setQueryHint(getString(R.string.search_location));
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchView.setOnQueryTextListener(this);
+        }
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
