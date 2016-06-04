@@ -71,7 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         locations = new ArrayList<>();
         mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
-        mMapView.getMapAsync((com.google.android.gms.maps.OnMapReadyCallback) this);
+        mMapView.getExtendedMapAsync(this);
         return binding.getRoot();
     }
 
@@ -102,22 +102,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     public static MapFragment newInstance() {
         return new MapFragment();
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        Log.i(TAG, "map is ready");
-        mMap = googleMap;
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if(viewModel != null) {
-                    viewModel.onMarkerClick(marker.getData());
-                }
-                return true;
-            }
-        });
-        drawMarkers();
     }
 
     @Override
@@ -162,4 +146,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.i(TAG, "map is ready");
+        mMap = googleMap;
+        mMap.setOnMarkerClickListener(marker -> {
+            if(viewModel != null) {
+                viewModel.onMarkerClick(marker.getData());
+            }
+            return true;
+        });
+        drawMarkers();
+    }
 }
