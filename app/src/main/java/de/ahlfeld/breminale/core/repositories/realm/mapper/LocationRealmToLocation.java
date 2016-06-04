@@ -11,11 +11,22 @@ import de.ahlfeld.breminale.core.repositories.realm.modelRealm.LocationRealm;
 public class LocationRealmToLocation implements de.ahlfeld.breminale.core.repositories.Mapper<LocationRealm,Location> {
     @Override
     public Location map(@NonNull LocationRealm locationRealm) {
-        return null;
+        Location location = new Location();
+        location.setId(locationRealm.getId());
+        copy(locationRealm, location);
+        return location;
     }
 
     @Override
     public Location copy(@NonNull LocationRealm locationRealm, @NonNull Location location) {
-        return null;
+        location.setName(locationRealm.getName());
+        location.setDescription(locationRealm.getDescription());
+        location.setDeleted(locationRealm.getDeleted());
+        location.setLatitude(locationRealm.getLatitude());
+        location.setLongitude(locationRealm.getLongitude());
+        location.setOriginalImageUrl(locationRealm.getOriginalImageUrl());
+        location.setMediumImageUrl(locationRealm.getMediumImageUrl());
+        location.setThumbImageUrl(locationRealm.getThumbImageUrl());
+        return location;
     }
 }

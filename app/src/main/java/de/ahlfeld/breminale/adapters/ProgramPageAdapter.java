@@ -40,7 +40,7 @@ public class ProgramPageAdapter extends FragmentPagerAdapter {
         to.set(2016,06,titles[position].get(Calendar.DAY_OF_MONTH)+1);
         to.set(Calendar.MINUTE,0);
         to.set(Calendar.SECOND,0);
-        return EventListFragment.newInstance(from,to.getTime(),false);
+        return EventListFragment.newInstance(from,to.getTime());
     }
 
     @Override

@@ -118,10 +118,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.map_item:
                         mainViewModel.showMap();
                         return;
-                   /* case R.id.favorite_item:
-                        //TODO
+                    case R.id.favorite_item:
                         mainViewModel.showFavorits();
-                        return;*/
+                        return;
                     case R.id.brefunk_item:
                         mainViewModel.showBrefunk();
                         return;
@@ -146,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     public void showFavorits() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.fragment_container, EventListFragment.newInstance(null,null,true));
+        ft.replace(R.id.fragment_container, FavoritsListFragment.newInstance());
         ft.commit();
     }
 

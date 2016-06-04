@@ -14,7 +14,7 @@ public class EventToEventRealm implements Mapper<Event, EventRealm> {
 
     private final Realm realm;
 
-    public EventToEventRealm(Realm realm) {
+    public EventToEventRealm(@NonNull Realm realm) {
         this.realm = realm;
     }
 
@@ -28,7 +28,6 @@ public class EventToEventRealm implements Mapper<Event, EventRealm> {
 
     @Override
     public EventRealm copy(@NonNull Event event, @NonNull EventRealm eventRealm) {
-
         eventRealm.setName(event.getName());
         eventRealm.setDescription(event.getDescription());
         eventRealm.setStartTime(event.getStartTime());
@@ -36,9 +35,7 @@ public class EventToEventRealm implements Mapper<Event, EventRealm> {
         eventRealm.setSoundcloudUrl(event.getSoundcloudUrl());
         eventRealm.setSoundcloudUserId(event.getSoundcloudUserId());
         eventRealm.setImageUrl(event.imageUrl());
-        eventRealm.setFavorit(event.getFavorit());
         eventRealm.setDeleted(event.getDeleted());
-
         return eventRealm;
     }
 }

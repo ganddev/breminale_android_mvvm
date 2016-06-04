@@ -14,17 +14,28 @@ public class LocationToLocationRealm implements Mapper<Location, LocationRealm> 
 
     private final Realm realm;
 
-    public LocationToLocationRealm(Realm realm) {
+    public LocationToLocationRealm(@NonNull Realm realm) {
         this.realm = realm;
     }
 
     @Override
     public LocationRealm map(@NonNull Location location) {
-        return null;
+        LocationRealm locationRealm = realm.createObject(LocationRealm.class);
+        locationRealm.setId(location.getId());
+        copy(location, locationRealm);
+        return locationRealm;
     }
 
     @Override
     public LocationRealm copy(@NonNull Location location, @NonNull LocationRealm locationRealm) {
-        return null;
+        locationRealm.setName(location.getName());
+        locationRealm.setDescription(location.getDescription());
+        locationRealm.setLatitude(location.getLatitude());
+        locationRealm.setLongitude(location.getLongitude());
+        locationRealm.setOriginalImageUrl(location.getOriginalImageUrl());
+        locationRealm.setMediumImageUrl(location.getMediumImageUrl());
+        locationRealm.setThumbImageUrl(location.getThumbImageUrl());
+        locationRealm.setDeleted(location.getDeleted());
+        return locationRealm;
     }
 }

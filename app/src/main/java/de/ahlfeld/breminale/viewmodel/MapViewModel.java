@@ -1,10 +1,13 @@
 package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
 import de.ahlfeld.breminale.core.domain.domain.Location;
+import de.ahlfeld.breminale.core.repositories.realm.LocationRealmRepository;
+import de.ahlfeld.breminale.core.repositories.realm.specifications.LocationSpecification;
 import rx.Subscription;
 
 /**
@@ -21,7 +24,7 @@ public class MapViewModel implements ViewModel {
 
     private List<Location> locations;
 
-    public MapViewModel(Context context, DataListener dataListener) {
+    public MapViewModel(@NonNull Context context, @NonNull DataListener dataListener) {
         this.context = context;
         this.dataListener = dataListener;
 
@@ -29,7 +32,9 @@ public class MapViewModel implements ViewModel {
     }
 
     private void loadLocations() {
-       //TODO
+        LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
+        LocationSpecification specification = new LocationSpecification();
+        subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
     }
 
     public void setDataListener(DataListener dataListener) {
@@ -42,9 +47,10 @@ public class MapViewModel implements ViewModel {
             subscription.unsubscribe();
         }
         subscription = null;
+        context = null;
     }
 
     public interface DataListener {
-        void onLocationChanged(List<Location> locations);
+        void onLocationsChanged(List<Location> locations);
     }
 }

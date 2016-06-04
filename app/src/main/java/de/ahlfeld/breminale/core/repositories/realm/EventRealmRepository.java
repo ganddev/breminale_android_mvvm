@@ -77,9 +77,13 @@ public class EventRealmRepository implements Repository<Event> {
         final Realm realm = Realm.getDefaultInstance();
         EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
 
-        //TODO
-        //realm.executeTransaction(realmParam -> realm.copyToRealmOrUpdate());
-
+        if(eventRealm != null) {
+            realm.executeTransaction(realmParam -> {
+                realmParam.copyToRealmOrUpdate(toEventRealm.copy(item, eventRealm));
+            });
+        } else {
+            add(item);
+        }
         realm.close();
 
         return Observable.just(item);
@@ -89,10 +93,13 @@ public class EventRealmRepository implements Repository<Event> {
     public Observable<Integer> remove(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
         EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
-        realm.executeTransaction(realmParam -> eventRealm.deleteFromRealm());
+        if(eventRealm != null) {
+            realm.executeTransaction(realmParam -> eventRealm.deleteFromRealm());
+            return Observable.just(eventRealm.isValid() ? 0 : 1);
+        }
         realm.close();
-        // if plantRealm.isValid() is false, it is because the realm object was deleted
-        return Observable.just(eventRealm.isValid() ? 0 : 1);
+        // if eventRealm.isValid() is false, it is because the realm object was deleted
+        return Observable.just(0);
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.ahlfeld.breminale.R;
@@ -52,6 +53,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_breminale_map, container, false);
         viewModel = new MapViewModel(getContext(),this);
         binding.setViewModel(viewModel);
+        locations = new ArrayList<>();
         mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
@@ -74,6 +76,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+        viewModel.destroy();
     }
 
     @Override
@@ -94,18 +97,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     @Override
-    public void onLocationChanged(List<Location> locations) {
+    public void onLocationsChanged(List<Location> locations) {
+        Log.d(TAG, "Loaded " + locations.size() + " from realm");
         this.locations = locations;
         drawMarkers();
     }
 
     private void drawMarkers() {
+        Log.d(TAG, "draw markers");
         if(mMap != null && locations != null) {
             for (Location location : locations) {
                 mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
             }
         } else {
-            Log.e(TAG, "Map is null");
+            Log.e(TAG, "Map is null or locations is null");
         }
     }
 }

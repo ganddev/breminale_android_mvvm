@@ -3,10 +3,10 @@ package de.ahlfeld.breminale.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +30,6 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
     private static final String TAG = EventListFragment.class.getSimpleName();
     private static final String DATE_FROM = "datefrom";
     private static final String DATE_TO = "dateto";
-    private static final String LOAD_FAVORITS = "loadfavorits";
     private FragmentEventListBinding binding;
     private EventListViewModel viewModel;
 
@@ -47,7 +46,7 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
 
         Bundle args = getArguments();
 
-        viewModel = new EventListViewModel(this.getContext(), this, new Date(args.getLong(DATE_FROM)), new Date(args.getLong(DATE_FROM)), args.getBoolean(LOAD_FAVORITS));
+        viewModel = new EventListViewModel(this.getContext(), this, new Date(args.getLong(DATE_FROM)), new Date(args.getLong(DATE_FROM)));
         binding.setViewModel(viewModel);
         setupRecyclerView(binding.eventsRecyclerView);
         return binding.getRoot();
@@ -67,21 +66,20 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    public static EventListFragment newInstance(Date from, Date to, boolean loadFavorits) {
+    public static EventListFragment newInstance(Date from, Date to) {
         EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
         args.putLong(DATE_FROM, from.getTime());
         args.putLong(DATE_TO, to.getTime());
-        args.putBoolean(LOAD_FAVORITS, loadFavorits);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onEventsChanged(List<Event> events) {
-        Log.i(TAG, "onEventsChanged");
+    public void onEventsChanged(@NonNull List<Event> events) {
+       /* Log.i(TAG, "onEventsChanged");
         EventAdapter adapter = (EventAdapter) binding.eventsRecyclerView.getAdapter();
         adapter.setEvents(events);
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();*/
     }
 }

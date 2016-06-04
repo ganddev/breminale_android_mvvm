@@ -79,9 +79,13 @@ public class LocationRealmRepository implements Repository<Location> {
         final Realm realm = Realm.getDefaultInstance();
         LocationRealm locationRealm = realm.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
 
-        //TODO
-        //realm.executeTransaction(realmParam -> realm.copyToRealmOrUpdate());
-
+        if(locationRealm != null) {
+            realm.executeTransaction(realmParam -> {
+                realm.copyToRealmOrUpdate(toLocationRealm.copy(item, locationRealm));
+            });
+        } else {
+            add(item);
+        }
         realm.close();
 
         return Observable.just(item);
@@ -91,10 +95,15 @@ public class LocationRealmRepository implements Repository<Location> {
     public Observable<Integer> remove(@NonNull Location item) {
         final Realm realm = Realm.getDefaultInstance();
         LocationRealm locationRealm = realm.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
-        realm.executeTransaction(realmParam -> locationRealm.deleteFromRealm());
+        if (locationRealm != null){
+            realm.executeTransaction(realmParam -> locationRealm.deleteFromRealm());
+
+            // if locationrealm.isValid() is false, it is because the realm object was deleted
+            return Observable.just(locationRealm.isValid() ? 0 : 1);
+        }
         realm.close();
-        // if plantRealm.isValid() is false, it is because the realm object was deleted
-        return Observable.just(locationRealm.isValid() ? 0 : 1);
+
+        return Observable.just(0);
     }
 
     @Override
