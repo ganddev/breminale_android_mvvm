@@ -14,20 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MapView;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.OnMapReadyCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         locations = new ArrayList<>();
         mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
-        mMapView.getMapAsync(this);
+        mMapView.getMapAsync((com.google.android.gms.maps.OnMapReadyCallback) this);
         return binding.getRoot();
     }
 
@@ -112,7 +112,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if(viewModel != null) {
-                    viewModel.onMarkerClick(marker.getId());
+                    viewModel.onMarkerClick(marker.getData());
                 }
                 return true;
             }
@@ -122,19 +122,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     @Override
     public void onLocationsChanged(List<Location> locations) {
-        Log.d(TAG, "Loaded " + locations.size() + " from realm");
         this.locations = locations;
         drawMarkers();
     }
 
     private void drawMarkers() {
-        Log.d(TAG, "draw markers");
         if (mMap != null && locations != null) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (Location location : locations) {
                 MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()));
                 markerOptions.draggable(false);
                 Marker marker = mMap.addMarker(markerOptions);
+                marker.setData(location);
                 builder.include(marker.getPosition());
                 loadMarkerIcon(marker, location);
             }

@@ -22,8 +22,6 @@ public class MapViewModel implements ViewModel {
 
     private Subscription subscription;
 
-    private List<Location> locations;
-
     public MapViewModel(@NonNull Context context, @NonNull DataListener dataListener) {
         this.context = context;
         this.dataListener = dataListener;
@@ -50,7 +48,7 @@ public class MapViewModel implements ViewModel {
         context = null;
     }
 
-    public void onMarkerClick(String markerId) {
+    public void onMarkerClick(Location location) {
 
     }
 
