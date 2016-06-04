@@ -64,8 +64,8 @@
             android:layout_height="26dp"
             android:textColor="@android:color/white"
             android:background="@color/carmine"
-            app:font="@{`roboto-medium`}"
-            android:onClick="@{viewModel::toProgram}"/>
+            android:onClick="@{viewModel::toProgram}"
+            app:font="@{`roboto-medium`}"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/events_recycler_view"

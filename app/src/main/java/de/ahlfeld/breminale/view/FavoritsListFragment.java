@@ -47,7 +47,7 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
         setupRecyclerView(binding.eventsRecyclerView);
 
         viewModel = new FavoritsListViewModel(this.getContext(),this, this);
-
+        binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
