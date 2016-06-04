@@ -7,11 +7,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import de.ahlfeld.breminale.models.Event;
-import de.ahlfeld.breminale.models.Location;
 import io.realm.RealmObject;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -22,10 +19,8 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import rx.Observable;
 
 /**
@@ -33,17 +28,8 @@ import rx.Observable;
  */
 public interface BreminaleService {
 
-    @GET("locations.json")
-    Observable<List<Location>> getLocations();
 
-    @GET("locations/{id}.json")
-    Observable<Location> getLocation(@Path("id") int locationId);
 
-    @GET("events.json")
-    Observable<List<Event>> getEvents();
-
-    @GET("events/{id}.json")
-    Observable<Event> getEvent(@Path("id") int eventId);
 
     @POST("devices.json")
     Observable<JsonObject> postDeviceToken(@Header("XAuthToken") String authToken, @Body JsonObject device);

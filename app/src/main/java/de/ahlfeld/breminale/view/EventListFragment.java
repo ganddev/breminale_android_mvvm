@@ -3,6 +3,7 @@ package de.ahlfeld.breminale.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Date;
 import java.util.List;
 
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.adapters.EventAdapter;
+import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.databinding.FragmentEventListBinding;
-import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.viewmodel.EventListViewModel;
 
 
@@ -27,6 +29,8 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
 
 
     private static final String TAG = EventListFragment.class.getSimpleName();
+    private static final String DATE_FROM = "datefrom";
+    private static final String DATE_TO = "dateto";
     private FragmentEventListBinding binding;
     private EventListViewModel viewModel;
 
@@ -39,35 +43,45 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_list,container,false);
-        viewModel = new EventListViewModel(this.getContext(), this);
-        binding.setViewModel(viewModel);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_list, container, false);
+
+        Bundle args = getArguments();
+
         setupRecyclerView(binding.eventsRecyclerView);
+
+        viewModel = new EventListViewModel(this.getContext(), this, new Date(args.getLong(DATE_FROM)), new Date(args.getLong(DATE_TO)));
+        binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(viewModel!= null) {
+        if (viewModel != null) {
             viewModel.destroy();
         }
     }
 
-    @Override
-    public void onEventsChanged(List<Event> events) {
-        Log.i(TAG, "onEventsChanged");
-        EventAdapter adapter = (EventAdapter) binding.eventsRecyclerView.getAdapter();
-        adapter.setEvents(events);
-        adapter.notifyDataSetChanged();
-    }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setAdapter(new EventAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    public static EventListFragment newInstance() {
-        return new EventListFragment();
+    public static EventListFragment newInstance(Date from, Date to) {
+        EventListFragment fragment = new EventListFragment();
+        Bundle args = new Bundle();
+        args.putLong(DATE_FROM, from.getTime());
+        args.putLong(DATE_TO, to.getTime());
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onEventsChanged(@NonNull List<Event> events) {
+        Log.i(TAG, "onEventsChanged size of events: " +events.size());
+        EventAdapter adapter = (EventAdapter) binding.eventsRecyclerView.getAdapter();
+        adapter.setEvents(events);
+        adapter.notifyDataSetChanged();
     }
 }

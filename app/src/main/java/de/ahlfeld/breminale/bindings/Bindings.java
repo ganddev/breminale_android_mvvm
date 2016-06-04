@@ -3,10 +3,11 @@ package de.ahlfeld.breminale.bindings;
 import android.databinding.BindingAdapter;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.animations.ResizeAnimation;
@@ -19,17 +20,21 @@ public class Bindings {
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
-    @BindingAdapter({"bind:font"})
+    @BindingAdapter({"font"})
     public static void setFont(TextView textView, String fontName) {
         textView.setTypeface(FontCache.getInstance().get(fontName));
+    }
+
+    @BindingAdapter({"font"})
+    public static void setFont(Button button, String fontName) {
+        button.setTypeface(FontCache.getInstance().get(fontName));
     }
 
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         if(!imageUrl.isEmpty()) {
-            Picasso.with(view.getContext())
+            Glide.with(view.getContext())
                     .load(imageUrl)
-                    .fit()
                     .centerCrop()
                     .into(view);
         } else {

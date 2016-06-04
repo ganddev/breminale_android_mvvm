@@ -5,12 +5,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import de.ahlfeld.breminale.caches.EventSources;
-import de.ahlfeld.breminale.caches.LocationSources;
-import de.ahlfeld.breminale.models.Event;
-import de.ahlfeld.breminale.models.Location;
-import rx.Subscriber;
-import rx.observables.BlockingObservable;
+import de.ahlfeld.breminale.core.DataManager;
 
 /**
  * Created by bjornahlfeld on 25.04.16.
@@ -46,28 +41,12 @@ public class BreminaleGcmListenerService extends GcmListenerService {
     }
 
     private void loadLocationRessource(int locationId) {
-        LocationSources sources = new LocationSources();
-        BlockingObservable<Location> call = sources.network(locationId).toBlocking();
+        DataManager manager = new DataManager(getApplicationContext());
+        manager.loadLocationById(locationId);
     }
 
     private void loadEventRessource(int eventId) {
-        EventSources sources = new EventSources();
-        BlockingObservable<Event> call = sources.network(eventId).toBlocking();
-        call.subscribe(new Subscriber<Event>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "Error occured while updating ressource", e);
-            }
-
-            @Override
-            public void onNext(Event event) {
-                Log.e(TAG, event.toString());
-            }
-        });
+        DataManager manager = new DataManager(getApplicationContext());
+        manager.loadEventById(eventId);
     }
 }

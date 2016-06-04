@@ -24,7 +24,7 @@
             app:titleTextColor="@android:color/white"
             app:title="@string/map" />
 
-        <com.google.android.gms.maps.MapView
+        <com.androidmapsextensions.MapView
             android:id="@+id/map_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

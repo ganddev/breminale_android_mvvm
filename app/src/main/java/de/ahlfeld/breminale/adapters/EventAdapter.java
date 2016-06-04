@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.databinding.ItemEventBinding;
-import de.ahlfeld.breminale.models.Event;
 import de.ahlfeld.breminale.viewmodel.ItemEventViewModel;
 
 /**

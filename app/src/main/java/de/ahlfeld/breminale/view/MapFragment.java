@@ -2,27 +2,40 @@ package de.ahlfeld.breminale.view;
 
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MapView;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.OnMapReadyCallback;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.ahlfeld.breminale.R;
+import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.databinding.FragmentBreminaleMapBinding;
-import de.ahlfeld.breminale.models.Location;
 import de.ahlfeld.breminale.viewmodel.MapViewModel;
-
-
 
 
 /**
@@ -50,11 +63,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_breminale_map, container, false);
-        viewModel = new MapViewModel(getContext(),this);
+        viewModel = new MapViewModel(getContext(), this);
+
+        setHasOptionsMenu(true);
+
         binding.setViewModel(viewModel);
+        locations = new ArrayList<>();
         mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
-        mMapView.getMapAsync(this);
+        mMapView.getMapAsync((com.google.android.gms.maps.OnMapReadyCallback) this);
         return binding.getRoot();
     }
 
@@ -74,6 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+        viewModel.destroy();
     }
 
     @Override
@@ -90,22 +108,58 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "map is ready");
         mMap = googleMap;
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(viewModel != null) {
+                    viewModel.onMarkerClick(marker.getData());
+                }
+                return true;
+            }
+        });
         drawMarkers();
     }
 
     @Override
-    public void onLocationChanged(List<Location> locations) {
+    public void onLocationsChanged(List<Location> locations) {
         this.locations = locations;
         drawMarkers();
     }
 
     private void drawMarkers() {
-        if(mMap != null && locations != null) {
+        if (mMap != null && locations != null) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (Location location : locations) {
-                mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
+                MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()));
+                markerOptions.draggable(false);
+                Marker marker = mMap.addMarker(markerOptions);
+                marker.setData(location);
+                builder.include(marker.getPosition());
+                loadMarkerIcon(marker, location);
             }
+            LatLngBounds bounds = builder.build();
+            int padding = 0;
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+            mMap.animateCamera(cu);
         } else {
-            Log.e(TAG, "Map is null");
+            Log.e(TAG, "Map is null or locations is null");
         }
     }
+
+    private void loadMarkerIcon(@NonNull final Marker marker, @NonNull final Location location) {
+        Glide.with(this).load(location.getMediumImageUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resource);
+                marker.setIcon(icon);
+            }
+        });
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem mSearchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
+    }
+
 }

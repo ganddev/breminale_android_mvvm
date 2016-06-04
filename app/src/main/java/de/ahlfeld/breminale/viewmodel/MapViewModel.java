@@ -1,18 +1,14 @@
 package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import de.ahlfeld.breminale.caches.LocationSources;
-import de.ahlfeld.breminale.models.Location;
-import rx.Observable;
-import rx.Subscriber;
+import de.ahlfeld.breminale.core.domain.domain.Location;
+import de.ahlfeld.breminale.core.repositories.realm.LocationRealmRepository;
+import de.ahlfeld.breminale.core.repositories.realm.specifications.LocationSpecification;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by bjornahlfeld on 07.04.16.
@@ -26,9 +22,7 @@ public class MapViewModel implements ViewModel {
 
     private Subscription subscription;
 
-    private List<Location> locations;
-
-    public MapViewModel(Context context, DataListener dataListener) {
+    public MapViewModel(@NonNull Context context, @NonNull DataListener dataListener) {
         this.context = context;
         this.dataListener = dataListener;
 
@@ -36,35 +30,9 @@ public class MapViewModel implements ViewModel {
     }
 
     private void loadLocations() {
-        LocationSources sources = new LocationSources();
-
-        Observable<List<Location>> call = Observable.concat(sources.memory(), sources.network()).first(new Func1<List<Location>, Boolean>() {
-            @Override
-            public Boolean call(List<Location> locations) {
-                return locations != null && !locations.isEmpty();
-            }
-        });
-        subscription = call.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Location>>() {
-                    @Override
-                    public void onCompleted() {
-                        if (dataListener != null) {
-                            dataListener.onLocationChanged(locations);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Error loading locations", e);
-                    }
-
-                    @Override
-                    public void onNext(List<Location> locations) {
-                        Log.d(TAG, "locations loaded size: " + locations.size());
-                        MapViewModel.this.locations = locations;
-                    }
-                });
+        LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
+        LocationSpecification specification = new LocationSpecification();
+        subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
     }
 
     public void setDataListener(DataListener dataListener) {
@@ -77,9 +45,14 @@ public class MapViewModel implements ViewModel {
             subscription.unsubscribe();
         }
         subscription = null;
+        context = null;
+    }
+
+    public void onMarkerClick(Location location) {
+
     }
 
     public interface DataListener {
-        void onLocationChanged(List<Location> locations);
+        void onLocationsChanged(List<Location> locations);
     }
 }

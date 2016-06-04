@@ -10,12 +10,12 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import de.ahlfeld.breminale.caches.FontCache;
+import de.ahlfeld.breminale.core.DataManager;
 import de.ahlfeld.breminale.networking.BreminaleService;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import rx.Scheduler;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by bjornahlfeld on 31.03.16.
@@ -51,33 +51,17 @@ public class BreminaleApplication extends Application {
         FontCache.getInstance().addFont("roboto-regular", "Roboto-Regular.ttf");
         FontCache.getInstance().addFont("roboto-bold", "Roboto-Bold.ttf");
         FontCache.getInstance().addFont("roboto-light", "Roboto-Light.ttf");
+        FontCache.getInstance().addFont("roboto-medium", "Roboto-Medium.ttf");
         FontCache.getInstance().addFont("georgia", "Georgia.ttf");
 
+        DataManager dataManager = new DataManager(this);
+        if(dataManager.shouldLoadData()) {
+           dataManager.loadLocations();
+           dataManager.loadEvents();
+        }
     }
 
     public static BreminaleApplication get(Context ctx) {
         return (BreminaleApplication) ctx.getApplicationContext();
-    }
-
-    public BreminaleService getBreminaleService() {
-        if(breminaleService == null) {
-            breminaleService = BreminaleService.Factory.create();
-        }
-        return breminaleService;
-    }
-
-    public void setBreminaleService(BreminaleService breminaleService) {
-        this.breminaleService = breminaleService;
-    }
-
-    public void setDefaultSubscribeScheduler(Scheduler scheduler) {
-        defaultSubscribeScheduler = scheduler;
-    }
-
-    public Scheduler getDefaultSubscribeScheduler() {
-        if (defaultSubscribeScheduler == null) {
-            defaultSubscribeScheduler = Schedulers.io();
-        }
-        return defaultSubscribeScheduler;
     }
 }

@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/fab_margin_right"
             android:clickable="true"
-            android:onClick="@{viewModel.onFabClick}"
+            android:onClick="@{viewModel::onFabClick}"
             android:background="@android:color/white"
             app:isFavorit="@{viewModel.isFavorit}"
             app:layout_anchor="@id/app_bar_layout"
@@ -143,7 +143,7 @@
                     android:layout_below="@id/textview_event_description"
                     android:background="@null"
                     android:gravity="center"
-                    android:onClick="@{viewModel.onExpandClick}"
+                    android:onClick="@{viewModel::onExpandClick}"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
 

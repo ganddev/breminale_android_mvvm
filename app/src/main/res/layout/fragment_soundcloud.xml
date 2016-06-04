@@ -56,7 +56,7 @@
             android:layout_marginRight="@dimen/play_button_margin_right"
             android:src="@{viewModel.isPlaying ? @drawable/pause30dp : @drawable/play30dp}"
             android:background="@null"
-            android:onClick="@{viewModel.onPlayClick}"
+            android:onClick="@{viewModel::onPlayClick}"
             android:layout_width="@dimen/button_play_size"
             android:layout_height="@dimen/button_play_size" />
 
@@ -69,7 +69,7 @@
             android:layout_marginTop="@dimen/rewind_button_margin_top"
             android:layout_marginLeft="@dimen/rewind_button_margin_left"
             android:layout_marginBottom="@dimen/forward_button_margin_bottom"
-            android:onClick="@{viewModel.onRewindClick}"
+            android:onClick="@{viewModel::onRewindClick}"
             android:background="@null"
             android:layout_width="@dimen/forward_button_width"
             android:layout_height="@dimen/forward_button_height" />
@@ -83,7 +83,7 @@
             android:layout_marginRight="@dimen/forward_button_margin_right"
             android:layout_marginBottom="@dimen/forward_button_margin_bottom"
             android:background="@null"
-            android:onClick="@{viewModel.onForwardClick}"
+            android:onClick="@{viewModel::onForwardClick}"
             android:layout_width="@dimen/forward_button_width"
             android:layout_height="@dimen/forward_button_height" />
 
