@@ -1,8 +1,10 @@
 package de.ahlfeld.breminale.view;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.MapView;
@@ -35,13 +38,15 @@ import java.util.List;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.databinding.FragmentBreminaleMapBinding;
+import de.ahlfeld.breminale.utils.DPtoPXUtils;
 import de.ahlfeld.breminale.viewmodel.MapViewModel;
+
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback, MapViewModel.DataListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, MapViewModel.DataListener, MapViewModel.NavigateListener {
 
 
     private static final String TAG = MapFragment.class.getSimpleName();
@@ -63,7 +68,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_breminale_map, container, false);
-        viewModel = new MapViewModel(getContext(), this);
+        viewModel = new MapViewModel(getContext(), this, this);
 
         setHasOptionsMenu(true);
 
@@ -150,12 +155,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "map is ready");
         mMap = googleMap;
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng position) {
+                if(viewModel != null) {
+                    viewModel.onMapClick();
+                }
+                if(mMapView != null) {
+                    mMapView.setPadding(0,0,0,0);
+                }
+            }
+        });
         mMap.setOnMarkerClickListener(marker -> {
             if(viewModel != null) {
                 viewModel.onMarkerClick(marker.getData());
             }
+            if(mMapView != null) {
+                mMapView.setPadding(0,0,0, (int) DPtoPXUtils.convertDpToPixel(60F,getContext()));
+            }
             return true;
         });
         drawMarkers();
+    }
+
+    @Override
+    public void navigateTo(@NonNull Location location) {
+        Uri gmmIntentUri = Uri.parse("google.navigation:q="+location.getLatitude()+","+location.getLongitude());
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(mapIntent);
+        } else {
+            Toast.makeText(getContext(),R.string.no_google_maps,Toast.LENGTH_SHORT).show();
+        }
     }
 }
