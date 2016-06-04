@@ -12,9 +12,9 @@ import rx.Observable;
  */
 public class LocationByIdSpecification implements RealmSpecification {
 
-    private final String id;
+    private final Integer id;
 
-    public LocationByIdSpecification(String id) {
+    public LocationByIdSpecification(Integer id) {
         this.id = id;
     }
 

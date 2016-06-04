@@ -1,5 +1,7 @@
 package de.ahlfeld.breminale.core.repositories.restAPI;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.ahlfeld.breminale.core.domain.domain.Location;
@@ -21,8 +23,8 @@ public class RestLocationAPIRepository implements Repository<Location> {
     }
 
     @Override
-    public Observable<Location> getById(String id) {
-        return api.getLocation(Integer.valueOf(id));
+    public Observable<Location> getById(@NonNull Integer id) {
+        return api.getLocation(id);
     }
 
     @Override

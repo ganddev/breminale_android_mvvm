@@ -20,10 +20,11 @@ import de.ahlfeld.breminale.databinding.FragmentFavoritsListBinding;
 import de.ahlfeld.breminale.viewmodel.FavoritsListViewModel;
 
 
+
 /**
  * Created by bjornahlfeld on 03.06.16.
  */
-public class FavoritsListFragment extends Fragment implements FavoritsListViewModel.DataListener {
+public class FavoritsListFragment extends Fragment implements FavoritsListViewModel.DataListener, FavoritsListViewModel.Navigation {
 
     private static final String TAG = FavoritsListFragment.class.getSimpleName();
     private FavoritsListViewModel viewModel;
@@ -45,7 +46,7 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
 
         setupRecyclerView(binding.eventsRecyclerView);
 
-        viewModel = new FavoritsListViewModel(this.getContext(),this);
+        viewModel = new FavoritsListViewModel(this.getContext(),this, this);
 
         return binding.getRoot();
     }
@@ -69,5 +70,11 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
     public void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setAdapter(new EventAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    @Override
+    public void onProgramClick() {
+        Log.d(TAG, "onProgramClick");
+        ((MainActivity)getActivity()).showProgram();
     }
 }

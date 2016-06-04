@@ -3,6 +3,7 @@ package de.ahlfeld.breminale.bindings;
 import android.databinding.BindingAdapter;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,11 @@ public class Bindings {
     @BindingAdapter({"font"})
     public static void setFont(TextView textView, String fontName) {
         textView.setTypeface(FontCache.getInstance().get(fontName));
+    }
+
+    @BindingAdapter({"font"})
+    public static void setFont(Button button, String fontName) {
+        button.setTypeface(FontCache.getInstance().get(fontName));
     }
 
     @BindingAdapter({"imageUrl"})

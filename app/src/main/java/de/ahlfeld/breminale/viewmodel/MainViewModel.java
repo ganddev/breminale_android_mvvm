@@ -1,7 +1,7 @@
 package de.ahlfeld.breminale.viewmodel;
 
 
-import de.ahlfeld.breminale.view.MainActivity;
+import android.support.annotation.NonNull;
 
 /**
  * Created by bjornahlfeld on 31.03.16.
@@ -9,10 +9,12 @@ import de.ahlfeld.breminale.view.MainActivity;
 public class MainViewModel implements ViewModel {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
-    private final MainActivity view;
 
-    public MainViewModel(MainActivity view) {
-        this.view = view;
+    private final Navigation listener;
+
+
+    public MainViewModel(@NonNull Navigation listener) {
+        this.listener = listener;
     }
 
 
@@ -23,18 +25,40 @@ public class MainViewModel implements ViewModel {
 
 
     public void showFavorits() {
-        this.view.showFavorits();
+        if(listener != null) {
+            listener.showFavorits();
+        }
     }
 
     public void showProgram() {
-        this.view.showProgam();
+        if(listener != null) {
+            listener.showProgram();
+        }
     }
 
     public void showMap() {
-        this.view.showMap();
+        if(listener != null) {
+            listener.showMap();
+        }
     }
 
     public void showBrefunk() {
-        this.view.showBrefunk();
+        if(listener != null) {
+            listener.showBrefunk();
+        }
+    }
+
+    public void showMore(){
+        if(listener != null) {
+            listener.showMore();
+        }
+    }
+
+    public interface Navigation {
+        void showProgram();
+        void showMap();
+        void showFavorits();
+        void showBrefunk();
+        void showMore();
     }
 }

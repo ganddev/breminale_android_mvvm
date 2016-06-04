@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -20,7 +19,7 @@ import de.ahlfeld.breminale.databinding.ActivityMainBinding;
 import de.ahlfeld.breminale.services.GcmRegistrationService;
 import de.ahlfeld.breminale.viewmodel.MainViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainViewModel.Navigation {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -82,15 +81,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -136,13 +126,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void showProgam() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.fragment_container, ProgramFragment.newInstance());
-        ft.commit();
-    }
-
+    @Override
     public void showFavorits() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -150,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
+    @Override
     public void showBrefunk(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -157,6 +142,20 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
+    @Override
+    public void showMore() {
+        //TODO
+    }
+
+    @Override
+    public void showProgram() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.fragment_container, ProgramFragment.newInstance());
+        ft.commit();
+    }
+
+    @Override
     public void showMap() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();

@@ -39,7 +39,7 @@ public class EventRealmRepository implements Repository<Event> {
     }
 
     @Override
-    public Observable<Event> getById(@NonNull String id) {
+    public Observable<Event> getById(@NonNull Integer id) {
         return query(new EventByIdSpecification(id)).flatMap(Observable::from);
     }
 

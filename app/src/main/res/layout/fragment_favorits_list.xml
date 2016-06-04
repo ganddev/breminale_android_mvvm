@@ -10,12 +10,13 @@
             type="de.ahlfeld.breminale.viewmodel.FavoritsListViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -23,14 +24,58 @@
             app:titleTextColor="@android:color/white"
             app:title="@string/favorits" />
 
+
+        <ImageView
+            android:layout_below="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            android:src="@mipmap/empty_state_favorits"/>
+
+        <ImageView
+            android:layout_below="@id/toolbar"
+            android:layout_marginTop="137.5dp"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/empty_favorits_heart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_empty_favorits"
+            android:layout_below="@id/toolbar"
+            android:layout_marginTop="192dp"
+            android:textSize="16sp"
+            android:textColor="@color/purplish_grey"
+            android:layout_centerHorizontal="true"
+            android:text="@string/favorits_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            app:font="@{`roboto-medium`}"/>
+        
+        <Button
+            android:layout_below="@id/toolbar"
+            android:text="@string/program"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            android:layout_marginTop="291dp"
+            android:layout_width="166dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="26dp"
+            android:textColor="@android:color/white"
+            android:background="@color/carmine"
+            app:font="@{`roboto-medium`}"
+            android:onClick="@{viewModel::toProgram}"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/events_recycler_view"
+            android:layout_below="@id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:scrollbars="vertical"
             app:visibility="@{viewModel.recyclerViewVisibility}"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </layout>

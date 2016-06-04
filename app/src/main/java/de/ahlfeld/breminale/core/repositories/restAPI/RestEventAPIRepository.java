@@ -1,5 +1,7 @@
 package de.ahlfeld.breminale.core.repositories.restAPI;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import de.ahlfeld.breminale.core.domain.domain.Event;
@@ -21,8 +23,8 @@ public class RestEventAPIRepository implements Repository<Event> {
     }
 
     @Override
-    public Observable<Event> getById(String id) {
-        return api.getEvent(Integer.valueOf(id));
+    public Observable<Event> getById(@NonNull Integer id) {
+        return api.getEvent(id);
     }
 
     @Override

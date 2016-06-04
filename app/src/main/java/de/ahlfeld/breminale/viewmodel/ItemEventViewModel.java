@@ -10,6 +10,8 @@ import android.view.View;
 import java.text.SimpleDateFormat;
 
 import de.ahlfeld.breminale.core.domain.domain.Event;
+import de.ahlfeld.breminale.core.repositories.realm.LocationRealmRepository;
+import de.ahlfeld.breminale.core.repositories.realm.specifications.LocationByIdSpecification;
 import de.ahlfeld.breminale.view.EventActivity;
 import rx.Subscription;
 
@@ -63,7 +65,9 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     }
 
     public void getLocationName() {
-        //TODO
+        LocationRealmRepository realmRepository = new LocationRealmRepository(context);
+        LocationByIdSpecification specification = new LocationByIdSpecification(event.getLocationId());
+        locationSubscription = realmRepository.getById(event.getLocationId()).subscribe(locationFromDB -> locationName.set(locationFromDB.getName()));
     }
 
     public void onItemClick(View view) {

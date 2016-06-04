@@ -12,9 +12,9 @@ import rx.Observable;
  */
 public class EventByIdSpecification implements RealmSpecification {
 
-    private final String id;
+    private final Integer id;
 
-    public EventByIdSpecification(String id) {
+    public EventByIdSpecification(Integer id) {
         this.id = id;
     }
 

@@ -42,7 +42,7 @@ public class LocationRealmRepository implements Repository<Location> {
     }
 
     @Override
-    public Observable<Location> getById(@NonNull String id) {
+    public Observable<Location> getById(@NonNull Integer id) {
         return query(new LocationByIdSpecification(id)).flatMap(Observable::from);
     }
 

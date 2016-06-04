@@ -9,7 +9,7 @@ import rx.Observable;
  */
 public interface Repository<T> {
 
-    Observable<T> getById(String id);
+    Observable<T> getById(Integer id);
 
     Observable<String> add(T item);
 
