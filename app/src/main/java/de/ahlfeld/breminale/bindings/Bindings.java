@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.animations.ResizeAnimation;
@@ -33,9 +33,8 @@ public class Bindings {
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         if(!imageUrl.isEmpty()) {
-            Picasso.with(view.getContext())
+            Glide.with(view.getContext())
                     .load(imageUrl)
-                    .fit()
                     .centerCrop()
                     .into(view);
         } else {

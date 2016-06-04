@@ -2,17 +2,28 @@ package de.ahlfeld.breminale.view;
 
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -22,8 +33,6 @@ import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.databinding.FragmentBreminaleMapBinding;
 import de.ahlfeld.breminale.viewmodel.MapViewModel;
-
-
 
 
 /**
@@ -51,7 +60,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_breminale_map, container, false);
-        viewModel = new MapViewModel(getContext(),this);
+        viewModel = new MapViewModel(getContext(), this);
+
+        setHasOptionsMenu(true);
+
         binding.setViewModel(viewModel);
         locations = new ArrayList<>();
         mMapView = binding.mapView;
@@ -105,12 +117,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     private void drawMarkers() {
         Log.d(TAG, "draw markers");
-        if(mMap != null && locations != null) {
+        if (mMap != null && locations != null) {
             for (Location location : locations) {
-                mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
+                MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()));
+                Marker marker = mMap.addMarker(markerOptions);
+                loadMarkerIcon(marker, location);
             }
         } else {
             Log.e(TAG, "Map is null or locations is null");
         }
     }
+
+    private void loadMarkerIcon(@NonNull final Marker marker, @NonNull final Location location) {
+        Glide.with(this).load(location.getMediumImageUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resource);
+                marker.setIcon(icon);
+            }
+        });
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem mSearchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
+    }
+
 }

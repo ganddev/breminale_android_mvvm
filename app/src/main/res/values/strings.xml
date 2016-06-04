@@ -16,4 +16,5 @@
     <string name="day_number">Day %d</string>
     <string name="breminale_funk">Breminale Funk</string>
     <string name="favorits_empty">You don\'t have any favorits yet.</string>
+    <string name="search">Search</string>
 </resources>

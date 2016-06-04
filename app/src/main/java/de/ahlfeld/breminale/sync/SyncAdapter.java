@@ -9,7 +9,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
-import rx.Subscription;
+import de.ahlfeld.breminale.core.DataManager;
 
 
 /**
@@ -20,8 +20,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String TAG = SyncAdapter.class.getSimpleName();
     private final AccountManager mAccountManager;
-    private Subscription locationSubscription;
-    private Subscription eventSubscription;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -39,11 +37,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 
     private void syncEvents() {
-        //TODO
+        DataManager manager = new DataManager(getContext());
+        manager.loadEvents();
+
     }
 
     private void syncLocations() {
-       //TODO
+        DataManager manager = new DataManager(getContext());
+        manager.loadLocations();
     }
 
 }

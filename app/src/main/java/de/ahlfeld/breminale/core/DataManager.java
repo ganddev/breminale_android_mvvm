@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,9 +35,13 @@ public class DataManager {
     private Subscription eventSubscription;
     private List<Location> locations;
     private List<Event> events;
+    private Subscription singleLocationSubscription;
+    private Subscription singleEventSubscription;
 
     public DataManager(@NonNull Context context) {
         this.context = context;
+        locations = new ArrayList<>();
+        events = new ArrayList<>();
     }
 
     /**
@@ -59,7 +64,6 @@ public class DataManager {
 
     public void loadLocations() {
         RestLocationAPIRepository apiRepository = new RestLocationAPIRepository();
-
         locationSubscripton = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Location>>() {
 
             @Override
@@ -75,8 +79,8 @@ public class DataManager {
 
             @Override
             public void onNext(List<Location> locations) {
-                Log.d(TAG, "size of locations: " + locations.size());
-                DataManager.this.locations = locations;
+                DataManager.this.locations.clear();
+                DataManager.this.locations.addAll(locations);
             }
         });
     }
@@ -89,7 +93,6 @@ public class DataManager {
         eventSubscription = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
             @Override
             public void onCompleted() {
-                Log.i(TAG, "onComplete loading events");
                 persistEvents(DataManager.this.events);
             }
 
@@ -100,8 +103,8 @@ public class DataManager {
 
             @Override
             public void onNext(List<Event> events) {
-                Log.d(TAG, "Size of events: " + events.size());
-                DataManager.this.events = events;
+                DataManager.this.events.clear();
+                DataManager.this.events.addAll(events);
             }
         });
     }
@@ -124,5 +127,47 @@ public class DataManager {
             }
             realmRepository.update(event);
         }
+    }
+
+    public void loadLocationById(int locationId) {
+        RestLocationAPIRepository apiRepository = new RestLocationAPIRepository();
+        singleLocationSubscription = apiRepository.getById(locationId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Location>() {
+            @Override
+            public void onCompleted() {
+                persistLocations(DataManager.this.locations);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "Error loading single location", e);
+            }
+
+            @Override
+            public void onNext(Location location) {
+                DataManager.this.locations.clear();
+                DataManager.this.locations.add(location);
+            }
+        });
+    }
+
+    public void loadEventById(int eventId) {
+        RestEventAPIRepository apiRepository = new RestEventAPIRepository();
+        singleEventSubscription = apiRepository.getById(eventId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Event>() {
+            @Override
+            public void onCompleted() {
+                persistEvents(DataManager.this.events);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "Error loading single event", e);
+            }
+
+            @Override
+            public void onNext(Event event) {
+                DataManager.this.events.clear();
+                DataManager.this.events.add(event);
+            }
+        });
     }
 }

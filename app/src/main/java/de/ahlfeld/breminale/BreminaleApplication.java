@@ -56,8 +56,8 @@ public class BreminaleApplication extends Application {
 
         DataManager dataManager = new DataManager(this);
         if(dataManager.shouldLoadData()) {
-           // dataManager.loadLocations();
-           // dataManager.loadEvents();
+           dataManager.loadLocations();
+           dataManager.loadEvents();
         }
     }
 

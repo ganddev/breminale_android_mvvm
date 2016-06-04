@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import de.ahlfeld.breminale.core.DataManager;
+
 /**
  * Created by bjornahlfeld on 25.04.16.
  */
@@ -39,10 +41,12 @@ public class BreminaleGcmListenerService extends GcmListenerService {
     }
 
     private void loadLocationRessource(int locationId) {
-        //TODO
+        DataManager manager = new DataManager(getApplicationContext());
+        manager.loadLocationById(locationId);
     }
 
     private void loadEventRessource(int eventId) {
-        //TODO
+        DataManager manager = new DataManager(getApplicationContext());
+        manager.loadEventById(eventId);
     }
 }
