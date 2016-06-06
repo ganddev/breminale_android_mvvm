@@ -59,16 +59,17 @@ public class BrefunkFragment extends Fragment implements TabLayout.OnTabSelected
         View v = inflater.inflate(R.layout.brefunk_tab,null,false);
         TextView headerTwitter = (TextView) v.findViewById(R.id.tab_header);
 
+        headerTwitter.setTextColor(getResources().getColorStateList(R.color.tab_colors));
         headerTwitter.setTypeface(FontCache.getInstance().get("roboto-medium"));
         headerTwitter.setText(R.string.twitter);
         headerTwitter.setCompoundDrawablesWithIntrinsicBounds(R.drawable.twitter_drawable,0,0,0);
 
         View v1 = inflater.inflate(R.layout.brefunk_tab,null,false);
         TextView headerInstagram = (TextView) v1.findViewById(R.id.tab_header);
-
+        headerInstagram.setTextColor(getResources().getColorStateList(R.color.tab_colors));
         headerInstagram.setTypeface(FontCache.getInstance().get("roboto-medium"));
         headerInstagram.setText(R.string.instagram);
-        headerInstagram.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.instagram_selected,0,0,0);
+        headerInstagram.setCompoundDrawablesWithIntrinsicBounds(R.drawable.instagram_drawable,0,0,0);
 
         tablayout.addTab(tablayout.newTab().setCustomView(v));
         tablayout.addTab(tablayout.newTab().setCustomView(v1));
