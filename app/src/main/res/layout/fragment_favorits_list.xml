@@ -63,7 +63,7 @@
             android:layout_centerHorizontal="true"
             android:layout_height="26dp"
             android:textColor="@android:color/white"
-            android:background="@color/carmine"
+            android:background="@drawable/button_background"
             android:onClick="@{viewModel::toProgram}"
             app:font="@{`roboto-medium`}"/>
 

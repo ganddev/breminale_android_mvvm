@@ -9,8 +9,7 @@
             type="de.ahlfeld.breminale.viewmodel.MapViewModel" />
     </data>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.MapFragment">
@@ -25,9 +24,52 @@
             app:title="@string/map" />
 
         <com.androidmapsextensions.MapView
+            android:layout_below="@id/toolbar"
             android:id="@+id/map_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/detailContainer"
+            android:layout_alignParentBottom="true"
+            android:visibility="@{viewModel.detailVisibility}"
+            android:layout_width="match_parent"
+            android:background="@android:color/white"
+            android:layout_height="63.5dp">
+            <TextView
+                android:id="@+id/tv_location_name"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="20.5dp"
+                android:textSize="14sp"
+                android:textColor="@color/greyish_brown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.locationName}"
+                app:font="@{`roboto-medium`}"/>
+            <TextView
+                android:layout_below="@id/tv_location_name"
+                android:layout_marginTop="7dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20.5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="@color/greyish_brown"
+                android:text="@string/osterdeich"/>
+            
+            <Button
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/button_background"
+                android:layout_width="151.5dp"
+                android:layout_height="25dp"
+                android:textColor="@android:color/white"
+                android:text="@string/directions"
+                android:onClick="@{viewModel::onNavigateToClick}"/>
+        </RelativeLayout>
+    </RelativeLayout>
 </layout>

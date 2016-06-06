@@ -1,18 +1,28 @@
 package de.ahlfeld.breminale.view;
 
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.MapView;
@@ -35,13 +45,16 @@ import java.util.List;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.databinding.FragmentBreminaleMapBinding;
+import de.ahlfeld.breminale.utils.DPtoPXUtils;
 import de.ahlfeld.breminale.viewmodel.MapViewModel;
+
+
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback, MapViewModel.DataListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, MapViewModel.DataListener, MapViewModel.NavigateListener, SearchView.OnQueryTextListener {
 
 
     private static final String TAG = MapFragment.class.getSimpleName();
@@ -52,22 +65,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     private GoogleMap mMap;
 
     private List<Location> locations;
+    private SearchView searchView;
 
     public MapFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_breminale_map, container, false);
-        viewModel = new MapViewModel(getContext(), this);
+        viewModel = new MapViewModel(getContext(), this, this);
 
-        setHasOptionsMenu(true);
+
 
         binding.setViewModel(viewModel);
+
+        //for crate home button
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(binding.toolbar);
+
         locations = new ArrayList<>();
         mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
@@ -110,8 +135,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         drawMarkers();
     }
 
+    private void hideSoftKeyboard() {
+        if(searchView != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        }
+    }
+
     private void drawMarkers() {
-        if (mMap != null && locations != null) {
+        if (mMap != null && locations != null && !locations.isEmpty()) {
+            mMap.clear();
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (Location location : locations) {
                 MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -122,8 +155,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                 loadMarkerIcon(marker, location);
             }
             LatLngBounds bounds = builder.build();
-            int padding = 0;
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+            int padding = 30;
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) DPtoPXUtils.convertDpToPixel(padding,getContext()));
             mMap.animateCamera(cu);
         } else {
             Log.e(TAG, "Map is null or locations is null");
@@ -141,21 +174,79 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem mSearchMenuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "map is ready");
         mMap = googleMap;
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng position) {
+                if(viewModel != null) {
+                    viewModel.onMapClick();
+                }
+                if(mMapView != null) {
+                    mMapView.setPadding(0,0,0,0);
+                }
+            }
+        });
         mMap.setOnMarkerClickListener(marker -> {
             if(viewModel != null) {
                 viewModel.onMarkerClick(marker.getData());
             }
+            if(mMapView != null) {
+                mMapView.setPadding(0,0,0, (int) DPtoPXUtils.convertDpToPixel(60F,getContext()));
+            }
             return true;
         });
         drawMarkers();
+    }
+
+    @Override
+    public void navigateTo(@NonNull Location location) {
+        Uri gmmIntentUri = Uri.parse("google.navigation:q="+location.getLatitude()+","+location.getLongitude());
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(mapIntent);
+        } else {
+            Toast.makeText(getContext(),R.string.no_google_maps,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_map, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            int searchImgId = android.support.v7.appcompat.R.id.search_button; // I used the explicit layout ID of searchview's ImageView
+            ImageView v = (ImageView) searchView.findViewById(searchImgId);
+            v.setImageResource(R.drawable.ic_search);
+            searchView.setQueryHint(getString(R.string.search_location));
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchView.setOnQueryTextListener(this);
+        }
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.d(TAG, "Search query: " + query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if(viewModel != null) {
+            if(newText.isEmpty()) {
+                viewModel.loadLocations();
+            } else {
+                viewModel.searchForLocationByName(newText);
+            }
+        }
+        return true;
     }
 }
