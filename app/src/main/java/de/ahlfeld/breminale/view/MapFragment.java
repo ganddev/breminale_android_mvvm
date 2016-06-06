@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -134,8 +135,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         drawMarkers();
     }
 
+    private void hideSoftKeyboard() {
+        if(searchView != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        }
+    }
+
     private void drawMarkers() {
-        if (mMap != null && locations != null) {
+        if (mMap != null && locations != null && !locations.isEmpty()) {
+            mMap.clear();
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (Location location : locations) {
                 MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -146,8 +155,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                 loadMarkerIcon(marker, location);
             }
             LatLngBounds bounds = builder.build();
-            int padding = 0;
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+            int padding = 30;
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) DPtoPXUtils.convertDpToPixel(padding,getContext()));
             mMap.animateCamera(cu);
         } else {
             Log.e(TAG, "Map is null or locations is null");
@@ -162,12 +171,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                 marker.setIcon(icon);
             }
         });
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem mSearchMenuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
     }
 
     @Override
@@ -231,11 +234,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        Log.d(TAG, "Search query: " + query);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        return false;
+        if(viewModel != null) {
+            if(newText.isEmpty()) {
+                viewModel.loadLocations();
+            } else {
+                viewModel.searchForLocationByName(newText);
+            }
+        }
+        return true;
     }
 }

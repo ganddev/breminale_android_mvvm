@@ -10,6 +10,7 @@ import java.util.List;
 
 import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.core.repositories.realm.LocationRealmRepository;
+import de.ahlfeld.breminale.core.repositories.realm.specifications.LocationByNameSpecification;
 import de.ahlfeld.breminale.core.repositories.realm.specifications.LocationSpecification;
 import rx.Subscription;
 
@@ -40,7 +41,7 @@ public class MapViewModel implements ViewModel {
         loadLocations();
     }
 
-    private void loadLocations() {
+    public void loadLocations() {
         LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
         LocationSpecification specification = new LocationSpecification();
         subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
@@ -72,6 +73,12 @@ public class MapViewModel implements ViewModel {
     }
     public void onMapClick() {
         detailVisibility.set(View.INVISIBLE);
+    }
+
+    public void searchForLocationByName(String query) {
+        LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
+        LocationByNameSpecification specification = new LocationByNameSpecification(query);
+        subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
     }
 
     public interface DataListener {
