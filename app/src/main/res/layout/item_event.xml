@@ -24,6 +24,12 @@
             android:layout_height="match_parent"
             app:imageUrl="@{viewModel.getImageUrl}"/>
 
+        <ImageView
+            android:layout_marginTop="35.5dp"
+            android:src="@drawable/item_event_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <TextView
             android:id="@+id/item_event_date_time"
             android:text="@{viewModel.getDateTime}"
