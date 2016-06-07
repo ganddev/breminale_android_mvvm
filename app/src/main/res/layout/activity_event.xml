@@ -7,7 +7,9 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="android.graphics.drawable.Drawable"/>
+
+        <import type="android.graphics.drawable.Drawable" />
+
         <variable
             name="viewModel"
             type="de.ahlfeld.breminale.viewmodel.EventViewModel" />
@@ -39,10 +41,10 @@
                     app:layout_collapseParallaxMultiplier="0.7" />
 
                 <ImageView
-                    android:layout_marginTop="54dp"
-                    android:src="@drawable/item_event_gradient"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="54dp"
+                    android:src="@drawable/item_event_gradient" />
 
                 <RelativeLayout
                     android:id="@+id/title_container"
@@ -115,9 +117,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/fab_margin_right"
+            android:background="@android:color/white"
             android:clickable="true"
             android:onClick="@{viewModel::onFabClick}"
-            android:background="@android:color/white"
             app:isFavorit="@{viewModel.isFavorit}"
             app:layout_anchor="@id/app_bar_layout"
             app:layout_anchorGravity="bottom|right|end" />
@@ -141,17 +143,17 @@
                     android:layout_marginTop="@dimen/event_description_margin_top"
                     android:text="@{viewModel.description}"
                     app:font="@{`roboto-regular`}" />
-                
+
                 <ImageButton
                     android:id="@+id/image_btn_expand_text"
-                    android:src="@drawable/row_down"
-                    android:layout_centerHorizontal="true"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_below="@id/textview_event_description"
+                    android:layout_centerHorizontal="true"
                     android:background="@null"
                     android:gravity="center"
                     android:onClick="@{viewModel::onExpandClick}"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp" />
+                    android:src="@drawable/row_down" />
 
                 <View
                     android:id="@+id/border1"
@@ -167,18 +169,49 @@
                     android:id="@+id/container_soundcloud"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.showSoundcloudFragment ? View.VISIBLE : View.GONE}"
+                    android:layout_alignParentLeft="true"
                     android:layout_below="@+id/border1"
-                    android:layout_alignParentLeft="true"/>
+                    android:visibility="@{viewModel.showSoundcloudFragment ? View.VISIBLE : View.GONE}" />
 
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/mapImageView"
-                    android:layout_below="@id/container_soundcloud"
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/event_map_height"
-                    map:liteMode="true"
-                    map:mapType="normal"
-                    map:cameraZoom="17"/>
+                    android:layout_height="150dp"
+                    android:layout_below="@id/container_soundcloud">
+
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/mapImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/event_map_height"
+                        map:cameraZoom="17"
+                        map:liteMode="true"
+                        map:mapType="normal" />
+                    <LinearLayout
+                        android:layout_alignParentTop="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="42.5dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_marginTop="6dp"
+                            android:layout_marginLeft="8dp"
+                            android:textSize="12sp"
+                            app:font="@{`roboto-medium`}"
+                            android:textColor="@color/greyish_brown"
+                            android:text="@{viewModel.locationName}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_marginTop="1dp"
+                            android:layout_marginLeft="8dp"
+                            android:text="@string/osterdeich"
+                            android:textColor="@color/greyish_brown"
+                            android:textSize="10sp"
+                            app:font="@{`roboto-regular`}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </RelativeLayout>
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
