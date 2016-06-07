@@ -190,7 +190,8 @@
                         android:layout_alignParentTop="true"
                         android:layout_width="match_parent"
                         android:layout_height="42.5dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="#A6FFFFFF">
                         <TextView
                             android:layout_marginTop="6dp"
                             android:layout_marginLeft="8dp"
