@@ -18,7 +18,7 @@ import de.ahlfeld.breminale.databinding.ActivityMainBinding;
 import de.ahlfeld.breminale.services.GcmRegistrationService;
 import de.ahlfeld.breminale.viewmodel.MainViewModel;
 
-public class MainActivity extends AppCompatActivity implements MainViewModel.Navigation {
+public class MainActivity extends AppCompatActivity implements MainViewModel.Navigation, FavoritsListFragment.OnProgramClickListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -153,5 +153,16 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.replace(R.id.fragment_container, MapFragment.newInstance());
         ft.commit();
+    }
+
+    public BottomBar getBottomBar() {
+        return bottomBar;
+    }
+
+    @Override
+    public void onProgramClick() {
+        if(bottomBar != null) {
+            bottomBar.selectTabAtPosition(0, true);
+        }
     }
 }

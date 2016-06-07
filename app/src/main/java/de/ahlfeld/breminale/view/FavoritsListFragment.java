@@ -1,5 +1,6 @@
 package de.ahlfeld.breminale.view;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,6 +30,11 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
     private static final String TAG = FavoritsListFragment.class.getSimpleName();
     private FavoritsListViewModel viewModel;
     private FragmentFavoritsListBinding binding;
+    private OnProgramClickListener mListener;
+
+    public interface OnProgramClickListener{
+        void onProgramClick();
+    }
 
 
     public static FavoritsListFragment newInstance() {
@@ -74,7 +80,19 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
 
     @Override
     public void onProgramClick() {
-        Log.d(TAG, "onProgramClick");
-        ((MainActivity)getActivity()).showProgram();
+        if(mListener != null) {
+            mListener.onProgramClick();
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (OnProgramClickListener) context;
+        } catch (ClassCastException e) {
+            Log.e(TAG, e.getMessage());
+            throw new IllegalStateException("Context must implement OnProgramClickListener");
+        }
     }
 }
