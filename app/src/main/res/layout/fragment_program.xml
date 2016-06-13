@@ -85,10 +85,10 @@
 
                 <com.viewpagerindicator.CirclePageIndicator
                     android:id="@+id/circles"
-                    android:layout_marginTop="12dp"
+                    android:padding="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
                     android:layout_centerHorizontal="true"
-                    android:minHeight="7dp"
-                    android:layout_below="@id/tv_day_number"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"/>
             </RelativeLayout>

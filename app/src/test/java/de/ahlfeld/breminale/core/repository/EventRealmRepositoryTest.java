@@ -51,7 +51,7 @@ public class EventRealmRepositoryTest extends AndroidTestCase {
         repository.add(event);
 
         // verify
-        repository.getById(String.valueOf(ID)).subscribe(
+        repository.getById(ID).subscribe(
                 item -> Assert.assertEquals(item.getName(), NAME)
         );
     }
@@ -62,7 +62,7 @@ public class EventRealmRepositoryTest extends AndroidTestCase {
 
         repository.add(plant);
 
-        repository.getById(String.valueOf(ID)).subscribe(eventFromDB -> Assert.assertEquals(eventFromDB.getName(), NAME));
+        repository.getById(ID).subscribe(eventFromDB -> Assert.assertEquals(eventFromDB.getName(), NAME));
     }
 
     public void testPersistEvents() {
@@ -91,7 +91,7 @@ public class EventRealmRepositoryTest extends AndroidTestCase {
         repository.update(event);
 
         // assertions
-        repository.getById(String.valueOf(ID)).subscribe(eventFromDB -> Assert.assertEquals(NEW_NAME, eventFromDB.getName()));
+        repository.getById(ID).subscribe(eventFromDB -> Assert.assertEquals(NEW_NAME, eventFromDB.getName()));
     }
 
     public void testRemoveOneEvent() {
@@ -101,7 +101,7 @@ public class EventRealmRepositoryTest extends AndroidTestCase {
 
         repository.add(plant);
 
-        repository.getById(String.valueOf(ID)).subscribe(plantFromDB -> Assert.assertEquals(plantFromDB.getName(), NAME));
+        repository.getById(ID).subscribe(plantFromDB -> Assert.assertEquals(plantFromDB.getName(), NAME));
 
         // when
         Observable<Integer> result = repository.remove(plant);
@@ -117,9 +117,9 @@ public class EventRealmRepositoryTest extends AndroidTestCase {
 
         repository.add(plant);
 
-        repository.getById(String.valueOf(ID)).subscribe(eventFromDB -> Assert.assertEquals(eventFromDB.getName(), NAME));
+        repository.getById(ID).subscribe(eventFromDB -> Assert.assertEquals(eventFromDB.getName(), NAME));
 
-        RealmSpecification realmSpecification = new EventByIdSpecification(String.valueOf(ID));
+        RealmSpecification realmSpecification = new EventByIdSpecification(ID);
 
         // when
         Observable<Integer> result = repository.remove(realmSpecification);

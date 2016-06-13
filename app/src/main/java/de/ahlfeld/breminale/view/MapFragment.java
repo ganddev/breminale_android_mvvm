@@ -180,6 +180,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng position) {
+                resetOpacityOfMarkers();
                 if(viewModel != null) {
                     viewModel.onMapClick();
                 }
@@ -191,6 +192,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         mMap.setOnMarkerClickListener(marker -> {
             if(viewModel != null) {
                 viewModel.onMarkerClick(marker.getData());
+                changeOpacityOfOtherMarkers(marker);
             }
             if(mMapView != null) {
                 mMapView.setPadding(0,0,0, (int) DPtoPXUtils.convertDpToPixel(60F,getContext()));
@@ -198,6 +200,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             return true;
         });
         drawMarkers();
+    }
+
+    private void resetOpacityOfMarkers() {
+        if(mMap != null) {
+            for (Marker marker : mMap.getMarkers()) {
+                marker.setAlpha(1.0f);
+            }
+        }
+    }
+
+    private void changeOpacityOfOtherMarkers(Marker clickedMarker) {
+        if(mMap != null) {
+            List<Marker> markers = mMap.getMarkers();
+            for(Marker marker : markers) {
+                if(!((Location)marker.getData()).getId().equals(((Location)clickedMarker.getData()).getId())) {
+                    marker.setAlpha(0.5f);
+                } else {
+                    marker.setAlpha(1.0f);
+                }
+            }
+        }
     }
 
     @Override
@@ -249,4 +272,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         }
         return true;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
 }

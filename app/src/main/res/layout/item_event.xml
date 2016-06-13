@@ -24,6 +24,12 @@
             android:layout_height="match_parent"
             app:imageUrl="@{viewModel.getImageUrl}"/>
 
+        <ImageView
+            android:layout_marginTop="35.5dp"
+            android:src="@drawable/item_event_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <TextView
             android:id="@+id/item_event_date_time"
             android:text="@{viewModel.getDateTime}"
@@ -63,6 +69,8 @@
         <ImageView
             android:layout_width="@dimen/item_event_favorit_image"
             android:layout_height="@dimen/item_event_favorit_image"
+            android:gravity="center"
+            android:onClick="@{viewModel::onFavoritClick}"
             app:favoritList="@{viewModel.isFavorit}"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"

@@ -21,4 +21,7 @@
     <string name="no_google_maps">Google Maps is not installed</string>
     <string name="directions">Directions</string>
     <string name="search_location">Search locations</string>
+    <string name="twitter">TWITTER</string>
+    <string name="instagram">INSTAGRAM</string>
+    <string name="liveblog">LIVEBLOG</string>
 </resources>

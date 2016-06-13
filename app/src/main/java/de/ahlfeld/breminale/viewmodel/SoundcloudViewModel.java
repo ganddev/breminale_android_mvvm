@@ -39,7 +39,12 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
 
     public ObservableBoolean isPlaying;
     public ObservableInt max;
+    public ObservableInt forwardButtonIsVisible;
+    public ObservableInt rewardButtonIsVisble;
 
+    public ObservableInt playButtonIsVisible;
+
+    public ObservableInt seekBarIsVisible;
 
     private Subscription mSoundclouduserSubscription;
 
@@ -75,6 +80,11 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
         isPlaying = new ObservableBoolean(false);
 
         myHandler = new Handler();
+
+        forwardButtonIsVisible = new ObservableInt(View.GONE);
+        rewardButtonIsVisble = new ObservableInt(View.GONE);
+        playButtonIsVisible = new ObservableInt(View.GONE);
+        seekBarIsVisible = new ObservableInt(View.GONE);
     }
 
     public void prepareProgress() {
@@ -124,6 +134,12 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
                     public void onNext(List<SoundcloudTrack> soundcloudTracks) {
                         Log.d(TAG, "Size of soundcloud tracks: " + soundcloudTracks.size());
                         mSoundcloudTracks = soundcloudTracks;
+                        if(!mSoundcloudTracks.isEmpty()) {
+                            forwardButtonIsVisible.set(View.VISIBLE);
+                            rewardButtonIsVisble.set(View.VISIBLE);
+                            playButtonIsVisible.set(View.VISIBLE);
+                            seekBarIsVisible.set(View.VISIBLE);
+                        }
                     }
                 });
     }

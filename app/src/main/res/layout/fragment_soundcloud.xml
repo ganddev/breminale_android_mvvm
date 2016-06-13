@@ -50,6 +50,7 @@
 
         <ImageButton
             android:id="@+id/image_btn_play"
+            android:visibility="@{viewModel.playButtonIsVisible}"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/play_button_margin_top"
@@ -64,6 +65,7 @@
         <ImageButton
             android:id="@+id/image_btn_rewind"
             android:src="@drawable/rewind"
+            android:visibility="@{viewModel.rewardButtonIsVisble}"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/image_view_soundcloud"
             android:layout_marginTop="@dimen/rewind_button_margin_top"
@@ -77,6 +79,7 @@
         <ImageButton
             android:id="@+id/image_btn_forward"
             android:layout_alignParentRight="true"
+            android:visibility="@{viewModel.forwardButtonIsVisible}"
             android:src="@drawable/forward_icon"
             android:layout_below="@id/image_btn_play"
             android:layout_marginTop="@dimen/forward_btn_margin_top"
@@ -90,6 +93,7 @@
         <SeekBar
             android:id="@+id/seekbar_soundcloud"
             android:layout_width="@dimen/seekbar_width"
+            android:visibility="@{viewModel.seekBarIsVisible}"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/seekbar_margin_top"
             android:clickable="false"

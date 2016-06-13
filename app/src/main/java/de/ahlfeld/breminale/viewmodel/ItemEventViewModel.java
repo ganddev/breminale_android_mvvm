@@ -10,6 +10,7 @@ import android.view.View;
 import java.text.SimpleDateFormat;
 
 import de.ahlfeld.breminale.core.domain.domain.Event;
+import de.ahlfeld.breminale.core.repositories.realm.EventRealmRepository;
 import de.ahlfeld.breminale.core.repositories.realm.LocationRealmRepository;
 import de.ahlfeld.breminale.core.repositories.realm.specifications.LocationByIdSpecification;
 import de.ahlfeld.breminale.view.EventActivity;
@@ -72,6 +73,13 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     public void onItemClick(View view) {
         context.startActivity(EventActivity.newIntent(context, event));
+    }
+
+    public void onFavoritClick(View view) {
+        EventRealmRepository repository = new EventRealmRepository(context);
+        event.setFavorit(!event.getFavorit());
+        repository.saveEventAsFavorit(event);
+        isFavorit.set(event.getFavorit());
     }
 
     public void setEvent(Event event) {
