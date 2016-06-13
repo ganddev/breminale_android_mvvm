@@ -272,4 +272,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         }
         return true;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
+
 }
