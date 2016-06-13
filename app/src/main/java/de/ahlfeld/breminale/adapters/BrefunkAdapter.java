@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import de.ahlfeld.breminale.view.InstagramFragment;
+import de.ahlfeld.breminale.view.LiveblogFragment;
 import de.ahlfeld.breminale.view.TwitterFragment;
 
 /**
@@ -29,11 +30,9 @@ public class BrefunkAdapter extends FragmentPagerAdapter {
             case 0:
                 return TwitterFragment.newInstance();
             case 1:
-                //TODO
                 return InstagramFragment.newInstance();
             case 2:
-                //TODO
-                return TwitterFragment.newInstance();
+                return LiveblogFragment.newInstance();
         }
         return null;
     }
