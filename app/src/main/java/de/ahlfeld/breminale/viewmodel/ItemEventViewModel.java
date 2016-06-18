@@ -2,7 +2,6 @@ package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
-import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.view.View;
 
@@ -27,14 +26,11 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     private Subscription locationSubscription;
     public ObservableField<String> locationName;
 
-    public ObservableBoolean isFavorit;
-
     public ItemEventViewModel(Context context, Event event) {
         this.context = context;
         this.event = event;
         locationName = new ObservableField<>("No location");
         getLocationName();
-        isFavorit = new ObservableBoolean(event.isFavorit());
     }
 
     @Override
@@ -77,12 +73,15 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
         EventRealmRepository repository = new EventRealmRepository(context);
         event.setFavorit(!event.isFavorit());
         repository.saveEventAsFavorit(event);
-        isFavorit.set(event.isFavorit());
+        notifyChange();
     }
 
     public void setEvent(Event event) {
-        isFavorit.set(event.isFavorit());
         this.event = event;
         notifyChange();
+    }
+
+    public boolean isFavorit() {
+        return this.event.isFavorit();
     }
 }
