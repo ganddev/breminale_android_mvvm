@@ -32,5 +32,6 @@
     <string name="imprint">Imprint</string>
     <string name="privacy">Privacy</string>
     <string name="contact">Contact</string>
-    <string name="licenses">Opensource Licenses</string>
+    <string name="licenses">Open Source Licenses</string>
+    <string name="title_activity_license">Open Source Licenses</string>
 </resources>

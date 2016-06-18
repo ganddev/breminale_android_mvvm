@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import de.ahlfeld.breminale.view.LicenseActivity;
+
 /**
  * Created by bjornahlfeld on 18.06.16.
  */
@@ -20,7 +22,8 @@ public class MoreViewModel implements ViewModel {
 
 
     public void onLicensesClick(View view) {
-
+        Intent intent = new Intent(context, LicenseActivity.class);
+        context.startActivity(intent);
     }
 
     public void onImprintClick(View view) {
