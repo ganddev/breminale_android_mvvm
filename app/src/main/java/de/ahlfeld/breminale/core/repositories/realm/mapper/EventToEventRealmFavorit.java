@@ -30,7 +30,7 @@ public class EventToEventRealmFavorit implements Mapper<Event, EventRealm> {
     @Override
     public EventRealm copy(Event event, EventRealm eventRealm) {
         eventRealm.setName(event.getName());
-        eventRealm.setFavorit(event.getFavorit());
+        eventRealm.setFavorit(event.isFavorit());
         eventRealm.setDescription(event.getDescription());
         eventRealm.setStartTime(event.getStartTime());
         eventRealm.setLocationId(event.getLocationId());

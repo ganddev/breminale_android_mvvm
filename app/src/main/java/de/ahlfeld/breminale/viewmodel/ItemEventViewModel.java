@@ -34,7 +34,7 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
         this.event = event;
         locationName = new ObservableField<>("No location");
         getLocationName();
-        isFavorit = new ObservableBoolean(event.getFavorit());
+        isFavorit = new ObservableBoolean(event.isFavorit());
     }
 
     @Override
@@ -75,12 +75,13 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     public void onFavoritClick(View view) {
         EventRealmRepository repository = new EventRealmRepository(context);
-        event.setFavorit(!event.getFavorit());
+        event.setFavorit(!event.isFavorit());
         repository.saveEventAsFavorit(event);
-        isFavorit.set(event.getFavorit());
+        isFavorit.set(event.isFavorit());
     }
 
     public void setEvent(Event event) {
+        isFavorit.set(event.isFavorit());
         this.event = event;
         notifyChange();
     }

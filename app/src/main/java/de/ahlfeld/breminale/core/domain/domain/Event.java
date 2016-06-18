@@ -199,7 +199,7 @@ public class Event implements Parcelable {
         dest.writeInt(deleted ? 1 : 0);
     }
 
-    public Boolean getFavorit() {
+    public Boolean isFavorit() {
         return favorit;
     }
 

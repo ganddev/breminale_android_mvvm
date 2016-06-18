@@ -43,7 +43,7 @@ public class EventViewModel implements ViewModel {
         this.isCompact = new ObservableBoolean(true);
         this.context = context;
 
-        isFavorit = new ObservableBoolean(event.getFavorit());
+        isFavorit = new ObservableBoolean(event.isFavorit());
 
         loadLocation();
     }
@@ -101,9 +101,9 @@ public class EventViewModel implements ViewModel {
 
     public void onFabClick(View view) {
         EventRealmRepository repository = new EventRealmRepository(context);
-        event.setFavorit(!event.getFavorit());
+        event.setFavorit(!event.isFavorit());
         repository.saveEventAsFavorit(event);
-        isFavorit.set(event.getFavorit());
+        isFavorit.set(event.isFavorit());
     }
 
     public String imageUrl() {
