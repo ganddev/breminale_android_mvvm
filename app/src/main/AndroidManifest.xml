@@ -122,6 +122,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.ahlfeld.breminale.view.MainActivity" />
         </activity>
+        <activity
+            android:name=".view.PrivacyActivity"
+            android:label="@string/title_activity_privacy"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.ahlfeld.breminale.view.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
