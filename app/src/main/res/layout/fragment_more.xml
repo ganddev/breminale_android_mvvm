@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="de.ahlfeld.breminale.viewmodel.MoreViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:titleTextColor="@android:color/white"
+            app:title="@string/more"
+            app:titleTextColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="22.5dp"
+            android:layout_marginTop="22.5dp"
+            android:background="@color/ugly_ping_25_opcacity"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="@string/information"
+            android:textColor="@color/purplish_grey"
+            android:textSize="12sp"
+            app:font="@{`roboto-medium`}" />
+
+        <View
+            style="@style/PrefBorder" />
+
+        <TextView
+            style="@style/PrefItem"
+            app:font="@{`roboto-regular`}"
+            android:onClick="@{viewModel::onImprintClick}"
+            android:text="@string/imprint" />
+
+        <View
+            style="@style/PrefBorder" />
+
+        <TextView
+            style="@style/PrefItem"
+            android:text="@string/privacy"
+            android:onClick="@{viewModel::onPrivacyClick}"
+            app:font="@{`roboto-regular`}" />
+
+        <View
+            style="@style/PrefBorder" />
+
+        <TextView
+            style="@style/PrefItem"
+            android:text="@string/contact"
+            android:onClick="@{viewModel::onContactClick}"
+            app:font="@{`roboto-regular`}" />
+
+        <View
+            style="@style/PrefBorder" />
+
+        <TextView
+            style="@style/PrefItem"
+            android:text="@string/licenses"
+            android:onClick="@{viewModel::onLicensesClick}"
+            app:font="@{`roboto-regular`}" />
+
+        <View
+            style="@style/PrefBorder" />
+    </LinearLayout>
+</layout>

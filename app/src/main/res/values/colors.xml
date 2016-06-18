@@ -11,4 +11,7 @@
     <color name="carmine">#9a0b1d</color>
     <color name="warm_grey">#979797</color>
     <color name="black">#343434</color>
+
+    <color name="ugly_ping_25_opcacity">#25ca6e79</color>
+    <color name="silver">#c8c7cc</color>
 </resources>

@@ -107,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
                     case R.id.brefunk_item:
                         mainViewModel.showBrefunk();
                         return;
+                    case R.id.more_item:
+                        mainViewModel.showMore();
+                        return;
                 }
 
             }
@@ -136,7 +139,10 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
 
     @Override
     public void showMore() {
-        //TODO
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.fragment_container, MoreFragment.newInstance());
+        ft.commit();
     }
 
     @Override

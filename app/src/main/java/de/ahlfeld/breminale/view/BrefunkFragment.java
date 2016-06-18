@@ -45,7 +45,6 @@ public class BrefunkFragment extends Fragment implements TabLayout.OnTabSelected
 
         setupTablayout(binding.tabLayout, inflater);
 
-
         binding.viewpager.setAdapter(adapter);
         binding.viewpager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
 
