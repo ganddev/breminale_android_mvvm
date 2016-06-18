@@ -8,6 +8,7 @@ import android.view.View;
 
 import de.ahlfeld.breminale.view.ImprintActivity;
 import de.ahlfeld.breminale.view.LicenseActivity;
+import de.ahlfeld.breminale.view.PrivacyActivity;
 
 /**
  * Created by bjornahlfeld on 18.06.16.
@@ -33,7 +34,8 @@ public class MoreViewModel implements ViewModel {
     }
 
     public void onPrivacyClick(View view) {
-
+        Intent intent = new Intent(context, PrivacyActivity.class);
+        context.startActivity(intent);
     }
 
     public void onContactClick(View view) {
