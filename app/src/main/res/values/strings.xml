@@ -34,4 +34,5 @@
     <string name="contact">Contact</string>
     <string name="licenses">Open Source Licenses</string>
     <string name="title_activity_license">Open Source Licenses</string>
+    <string name="title_activity_imprint">Imprint</string>
 </resources>

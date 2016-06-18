@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import de.ahlfeld.breminale.view.ImprintActivity;
 import de.ahlfeld.breminale.view.LicenseActivity;
 
 /**
@@ -27,7 +28,8 @@ public class MoreViewModel implements ViewModel {
     }
 
     public void onImprintClick(View view) {
-
+        Intent intent = new Intent(context, ImprintActivity.class);
+        context.startActivity(intent);
     }
 
     public void onPrivacyClick(View view) {
