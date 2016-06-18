@@ -16,32 +16,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:background="?attr/colorPrimary"
-            android:titleTextColor="@android:color/white"
-            app:title="@string/breminale_funk"
-            app:titleTextColor="@android:color/white" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            android:background="?attr/colorPrimary"
-            android:elevation="6dp"
-            app:tabIndicatorColor="@color/ugly_pink"
-            android:minHeight="?attr/actionBarSize"
-            app:tabTextAppearance="@style/BrefunkTabText"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:titleTextColor="@android:color/white"
+                app:title="@string/breminale_funk"
+                app:titleTextColor="@android:color/white" />
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar"
+                android:elevation="6dp"
+                android:minHeight="?attr/actionBarSize"
+                app:tabIndicatorColor="@color/ugly_pink"
+                app:tabTextAppearance="@style/BrefunkTabText" />
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
-            android:layout_below="@id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/app_bar_layout" />
 
 
     </RelativeLayout>
