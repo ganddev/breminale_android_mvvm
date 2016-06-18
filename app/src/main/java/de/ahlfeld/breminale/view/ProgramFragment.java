@@ -15,10 +15,12 @@ import de.ahlfeld.breminale.databinding.FragmentProgramBinding;
 import de.ahlfeld.breminale.viewmodel.ProgramViewModel;
 
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeListener, ProgramViewModel.OnPageChangeListener {
+public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeListener, ProgramViewModel.OnPageChangeListener, ProgramViewModel.SortClickListener {
 
     private FragmentProgramBinding binding;
 
@@ -38,7 +40,7 @@ public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeL
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_program,container,false);
         ProgramPageAdapter adapter = new ProgramPageAdapter(getChildFragmentManager());
-        viewModel = new ProgramViewModel(getContext(),adapter,this);
+        viewModel = new ProgramViewModel(getContext(),adapter,this, this);
         binding.setViewModel(viewModel);
         binding.viewpager.setAdapter(adapter);
         binding.viewpager.addOnPageChangeListener(this);
@@ -66,5 +68,11 @@ public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeL
         if(binding.viewpager != null) {
             binding.viewpager.setCurrentItem(currentPage, true);
         }
+    }
+
+    @Override
+    public void onSortClick() {
+        SortDialog sortDialog = SortDialog.newInstance();
+        sortDialog.show(getFragmentManager(), "sortdialog");
     }
 }

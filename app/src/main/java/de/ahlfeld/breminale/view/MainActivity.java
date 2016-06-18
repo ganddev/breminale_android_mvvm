@@ -155,10 +155,6 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
         ft.commit();
     }
 
-    public BottomBar getBottomBar() {
-        return bottomBar;
-    }
-
     @Override
     public void onProgramClick() {
         if(bottomBar != null) {

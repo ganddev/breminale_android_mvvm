@@ -1,17 +1,22 @@
 package de.ahlfeld.breminale.viewmodel;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.ObservableField;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.adapters.ProgramPageAdapter;
+import de.ahlfeld.breminale.core.SortOrderManager;
 
 /**
  * Created by bjornahlfeld on 22.05.16.
  */
-public class ProgramViewModel implements ViewModel {
+public class ProgramViewModel implements ViewModel, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String TAG = ProgramViewModel.class.getSimpleName();
     private final ProgramPageAdapter programPageAdapter;
     private Context context;
 
@@ -21,19 +26,36 @@ public class ProgramViewModel implements ViewModel {
 
     public ObservableField<String> day;
 
-    private OnPageChangeListener mListener;
+    public ObservableField<String> sortOrder;
 
-    public ProgramViewModel(Context context, ProgramPageAdapter programPageAdapter, OnPageChangeListener listener) {
+
+    private OnPageChangeListener mListener;
+    private SortClickListener mSortListener;
+
+    public ProgramViewModel(Context context, ProgramPageAdapter programPageAdapter, OnPageChangeListener listener, SortClickListener sortClickListener) {
         this.context = context;
         this.programPageAdapter = programPageAdapter;
         date = new ObservableField<>();
         day = new ObservableField<>();
         updateHeaders();
         mListener = listener;
+        mSortListener = sortClickListener;
+        sortOrder = new ObservableField<>();
+        createSortOrderString(sortOrder);
+        registerPreferenceChangeListener(context);
+    }
+
+    private void createSortOrderString(ObservableField<String> sortOrder) {
+        sortOrder.set(String.format(context.getString(R.string.sort_by),context.getString(SortOrderManager.getSelectedSortOrder(context).getName())));
+    }
+
+    private void registerPreferenceChangeListener(@NonNull Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void destroy() {
+        PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this);
         context = null;
     }
 
@@ -65,7 +87,22 @@ public class ProgramViewModel implements ViewModel {
         }
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        createSortOrderString(this.sortOrder);
+    }
+
     public interface OnPageChangeListener {
         void pageChanged(int currentPage);
+    }
+
+    public void onSortByClick(View view) {
+        if(mSortListener != null) {
+            mSortListener.onSortClick();
+        }
+    }
+
+    public interface SortClickListener {
+        void onSortClick();
     }
 }
