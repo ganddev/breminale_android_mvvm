@@ -38,7 +38,7 @@ public class Bindings {
                     .centerCrop()
                     .into(view);
         } else {
-            view.setImageDrawable(null);
+            view.setImageResource(R.mipmap.empty_image);
         }
     }
 
