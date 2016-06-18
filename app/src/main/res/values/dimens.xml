@@ -38,9 +38,11 @@
     <dimen name="event_description_text_height_max">100dp</dimen>
     <dimen name="soundcloud_track_margin_left">13.5dp</dimen>
     <dimen name="fab_margin_right">8dp</dimen>
-    <dimen name="program_height">120dp</dimen>
+    <dimen name="program_height">149dp</dimen>
     <dimen name="program_header_date">30sp</dimen>
     <dimen name="program_header_date_margin_top">20dp</dimen>
     <dimen name="program_btn_margin_top">18dp</dimen>
     <dimen name="program_nextpage_margin_right">15dp</dimen>
+    <dimen name="sorting_text_size">12sp</dimen>
+    <dimen name="sort_item_text_size">15sp</dimen>
 </resources>
