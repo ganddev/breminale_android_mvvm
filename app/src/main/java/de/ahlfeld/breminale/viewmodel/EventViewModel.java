@@ -4,7 +4,6 @@ import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 
 import java.text.SimpleDateFormat;
@@ -86,7 +85,6 @@ public class EventViewModel implements ViewModel {
     }
 
     public void onExpandClick(View view) {
-        Log.d(TAG, "onexpand click");
         this.isCompact.set(!this.isCompact.get());
     }
 
