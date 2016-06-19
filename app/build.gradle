@@ -100,6 +100,7 @@ dependencies {
     compile 'com.androidmapsextensions:android-maps-extensions:2.2.1'
     compile 'com.google.android.gms:play-services-maps:9.0.2'
     compile 'com.google.android.gms:play-services-gcm:9.0.2'
+    compile 'com.google.android.gms:play-services-analytics:9.0.2'
     compile 'io.reactivex:rxjava:1.1.2'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.google.code.gson:gson:2.6.2'

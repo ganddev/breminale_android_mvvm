@@ -8,11 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.databinding.ActivityMainBinding;
 import de.ahlfeld.breminale.services.GcmRegistrationService;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
     private MainViewModel mainViewModel;
 
     private BottomBar bottomBar;
+    private Tracker tracker;
 
 
     @Override
@@ -36,6 +40,10 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
         mainViewModel = new MainViewModel(this);
         binding.setViewModel(mainViewModel);
         setupBottomBar(savedInstanceState);
+
+        // Obtain the shared Tracker instance.
+        BreminaleApplication application = (BreminaleApplication) getApplication();
+        tracker = application.getDefaultTracker();
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
@@ -48,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
     @Override
     protected void onResume() {
         super.onResume();
+        tracker.setScreenName("MainActivity");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
 

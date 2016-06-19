@@ -6,8 +6,12 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.text.SimpleDateFormat;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.core.repositories.realm.EventRealmRepository;
@@ -34,6 +38,7 @@ public class EventViewModel implements ViewModel {
     private String TAG = EventViewModel.class.getSimpleName();
 
     public ObservableBoolean isFavorit;
+    private Tracker tracker;
 
     public EventViewModel(@NonNull Context context, @NonNull Event event, @NonNull DataListener dataListener) {
         this.event = event;
@@ -44,6 +49,7 @@ public class EventViewModel implements ViewModel {
 
         isFavorit = new ObservableBoolean(event.isFavorit());
 
+        tracker = ((BreminaleApplication)context.getApplicationContext()).getDefaultTracker();
         loadLocation();
     }
 
@@ -98,6 +104,7 @@ public class EventViewModel implements ViewModel {
 
 
     public void onFabClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("EventDetails").setAction("onFavoritClick").build());
         EventRealmRepository repository = new EventRealmRepository(context);
         event.setFavorit(!event.isFavorit());
         repository.saveEventAsFavorit(event);

@@ -10,10 +10,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.models.SoundcloudTrack;
 import de.ahlfeld.breminale.models.SoundcloudUser;
@@ -62,6 +65,7 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
     private static final String CLIENT_ID = "?client_id=469443570702bcc59666de5950139327";
     private int currentPlayingTrack;
     public ObservableInt progress;
+    private Tracker tracker;
 
     public SoundcloudViewModel(Context ctx, long soundcloudUserId) {
         mContext = ctx.getApplicationContext();
@@ -85,30 +89,8 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
         rewardButtonIsVisble = new ObservableInt(View.GONE);
         playButtonIsVisible = new ObservableInt(View.GONE);
         seekBarIsVisible = new ObservableInt(View.GONE);
-    }
 
-    public void prepareProgress() {
-        Observable.interval(16, TimeUnit.MILLISECONDS)
-                .map(y -> {
-                    Log.d(TAG, "tick: " + y);
-                    progress.set(mPlayer.getCurrentPosition());
-                    return null;
-                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Object>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(Object o) {
-                Log.d(TAG, "object" + o.toString());
-            }
-        });
+        tracker = ((BreminaleApplication)mContext.getApplicationContext()).getDefaultTracker();
     }
 
     private void getTracksForSoundcloudUser(long soundcloudUserId) {
@@ -167,6 +149,7 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
 
 
     public void onForwardClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("Soundcloud").setAction("onForwardClick").build());
         currentPlayingTrack++;
         if(currentPlayingTrack > mSoundcloudTracks.size()-1) {
             currentPlayingTrack-= mSoundcloudTracks.size();
@@ -194,6 +177,7 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
 
 
     public void onRewindClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("Soundcloud").setAction("onRewindClick").build());
         currentPlayingTrack--;
         if(currentPlayingTrack < 0) {
             currentPlayingTrack+=mSoundcloudTracks.size();
@@ -203,6 +187,7 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
     }
 
     public void onPlayClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("Soundcloud").setAction("onPlayPauseClick").build());
         startOrStopPlayer();
     }
 

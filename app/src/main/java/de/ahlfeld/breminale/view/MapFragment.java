@@ -35,6 +35,8 @@ import com.androidmapsextensions.OnMapReadyCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -45,6 +47,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.core.domain.domain.Location;
 import de.ahlfeld.breminale.databinding.FragmentBreminaleMapBinding;
@@ -69,6 +72,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     private List<Location> locations;
     private SearchView searchView;
+    private Tracker tracker;
 
     public MapFragment() {
         // Required empty public constructor
@@ -79,6 +83,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        // Obtain the shared Tracker instance.
+        BreminaleApplication application = (BreminaleApplication) getActivity().getApplication();
+        tracker = application.getDefaultTracker();
     }
 
     @Override
@@ -113,14 +120,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     @Override
     public void onResume() {
-        mMapView.onResume();
         super.onResume();
+        mMapView.onResume();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mMapView.onPause();
+        tracker.setScreenName("MapScreen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -191,6 +201,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng position) {
+                tracker.send(new HitBuilders.EventBuilder().setCategory("map").setAction("onMapClick").build());
                 resetOpacityOfMarkers();
                 if(viewModel != null) {
                     viewModel.onMapClick();
@@ -201,6 +212,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             }
         });
         mMap.setOnMarkerClickListener(marker -> {
+            tracker.send(new HitBuilders.EventBuilder().setCategory("map").setAction("onMarkerClick").build());
             if(viewModel != null) {
                 viewModel.onMarkerClick(marker.getData());
                 changeOpacityOfOtherMarkers(marker);

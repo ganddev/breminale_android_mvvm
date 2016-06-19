@@ -5,13 +5,18 @@ import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.Arrays;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.adapters.SortAdapter;
 import de.ahlfeld.breminale.core.repositories.realm.SortOptions;
@@ -25,11 +30,20 @@ import de.ahlfeld.breminale.viewmodel.ItemSortViewModel;
 public class SortDialog extends DialogFragment implements ItemSortViewModel.OnItemClickListener {
 
     private FragmentSortDialogBinding binding;
+    private Tracker tracker;
 
     public SortDialog() {}
 
     public static SortDialog newInstance() {return new SortDialog(); }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        BreminaleApplication application = (BreminaleApplication) getActivity().getApplication();
+        tracker = application.getDefaultTracker();
+    }
 
     @NonNull
     @Override
@@ -39,6 +53,13 @@ public class SortDialog extends DialogFragment implements ItemSortViewModel.OnIt
         setupRecyclerView(binding.rvSortList);
         builder.setView(binding.getRoot());
         return builder.create();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tracker.setScreenName("SortScreen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public void setupRecyclerView(@NonNull RecyclerView recyclerView) {

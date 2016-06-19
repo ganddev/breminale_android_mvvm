@@ -6,6 +6,10 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.core.SortOrderManager;
 import de.ahlfeld.breminale.core.repositories.realm.SortOptions;
 
@@ -18,6 +22,7 @@ public class ItemSortViewModel extends BaseObservable implements ViewModel {
     private Context context;
     private SortOptions sortOption;
     public ObservableInt isSelected;
+    private Tracker tracker;
 
     public ItemSortViewModel(@NonNull Context context,@NonNull SortOptions sortOption,@NonNull OnItemClickListener listener) {
         this.context = context;
@@ -29,6 +34,7 @@ public class ItemSortViewModel extends BaseObservable implements ViewModel {
             isSelected.set(View.GONE);
         }
         this.listener = listener;
+        tracker = ((BreminaleApplication)context.getApplicationContext()).getDefaultTracker();
     }
 
     public String getSortOrder() {
@@ -37,6 +43,7 @@ public class ItemSortViewModel extends BaseObservable implements ViewModel {
 
 
     public void onItemClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("sortItem").setAction("onSortItemClick").build());
         isSelected.set(View.VISIBLE);
         SortOrderManager.saveSortOrder(view.getContext().getApplicationContext(),sortOption);
         if(listener != null) {

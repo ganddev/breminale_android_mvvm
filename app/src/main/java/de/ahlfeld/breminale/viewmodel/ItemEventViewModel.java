@@ -5,8 +5,12 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.text.SimpleDateFormat;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.core.repositories.realm.EventRealmRepository;
 import de.ahlfeld.breminale.core.repositories.realm.LocationRealmRepository;
@@ -24,12 +28,14 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     private Subscription locationSubscription;
     public ObservableField<String> locationName;
+    private Tracker tracker;
 
     public ItemEventViewModel(Context context, Event event) {
         this.context = context;
         this.event = event;
         locationName = new ObservableField<>("No location");
         getLocationName();
+        tracker = ((BreminaleApplication)context.getApplicationContext()).getDefaultTracker();
     }
 
     @Override
@@ -64,10 +70,12 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     }
 
     public void onItemClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("eventItem").setAction("onItemClick").build());
         context.startActivity(EventActivity.newIntent(context, event));
     }
 
     public void onFavoritClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("eventItem").setAction("onFavoritClick").build());
         EventRealmRepository repository = new EventRealmRepository(context);
         event.setFavorit(!event.isFavorit());
         repository.saveEventAsFavorit(event);

@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.twitter.sdk.android.tweetui.SearchTimeline;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 
 /**
@@ -20,6 +23,8 @@ import de.ahlfeld.breminale.R;
  */
 public class TwitterFragment extends ListFragment {
 
+    private Tracker tracker;
+
     public TwitterFragment() {
         // Required empty public constructor
     }
@@ -28,6 +33,8 @@ public class TwitterFragment extends ListFragment {
         return new TwitterFragment();
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +42,16 @@ public class TwitterFragment extends ListFragment {
         final SearchTimeline searchTimeline = new SearchTimeline.Builder().query("#breminale").maxItemsPerRequest(50).build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter(getContext(),searchTimeline);
         setListAdapter(adapter);
+
+        BreminaleApplication application = (BreminaleApplication) getActivity().getApplication();
+        tracker = application.getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tracker.setScreenName("TwitterScreen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

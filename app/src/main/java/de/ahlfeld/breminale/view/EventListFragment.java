@@ -4,6 +4,7 @@ package de.ahlfeld.breminale.view;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,9 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.Date;
 import java.util.List;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.adapters.EventAdapter;
 import de.ahlfeld.breminale.core.domain.domain.Event;
@@ -33,11 +38,26 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
     private static final String DATE_TO = "dateto";
     private FragmentEventListBinding binding;
     private EventListViewModel viewModel;
+    private Tracker tracker;
 
     public EventListFragment() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        BreminaleApplication application = (BreminaleApplication) getActivity().getApplication();
+        tracker = application.getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tracker.setScreenName("EventListScreen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -5,25 +5,25 @@ import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import de.ahlfeld.breminale.caches.FontCache;
 import de.ahlfeld.breminale.core.DataManager;
-import de.ahlfeld.breminale.networking.BreminaleService;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import rx.Scheduler;
 
 /**
  * Created by bjornahlfeld on 31.03.16.
  */
 public class BreminaleApplication extends Application {
 
-    private BreminaleService breminaleService;
-    private Scheduler defaultSubscribeScheduler;
+    private Tracker tracker;
+
 
     private static Context context;
 
@@ -63,5 +63,18 @@ public class BreminaleApplication extends Application {
 
     public static BreminaleApplication get(Context ctx) {
         return (BreminaleApplication) ctx.getApplicationContext();
+    }
+
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        if (tracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            tracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return tracker;
     }
 }

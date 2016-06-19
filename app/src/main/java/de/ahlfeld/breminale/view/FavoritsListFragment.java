@@ -12,8 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.adapters.EventAdapter;
 import de.ahlfeld.breminale.core.domain.domain.Event;
@@ -31,6 +35,7 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
     private FavoritsListViewModel viewModel;
     private FragmentFavoritsListBinding binding;
     private OnProgramClickListener mListener;
+    private Tracker tracker;
 
     public interface OnProgramClickListener{
         void onProgramClick();
@@ -42,6 +47,20 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
     }
     public FavoritsListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        BreminaleApplication application = (BreminaleApplication) getActivity().getApplication();
+        tracker = application.getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tracker.setScreenName("FavoritsScreen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Nullable

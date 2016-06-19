@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import de.ahlfeld.breminale.BreminaleApplication;
 import de.ahlfeld.breminale.R;
 import de.ahlfeld.breminale.core.domain.domain.Event;
 import de.ahlfeld.breminale.core.domain.domain.Location;
@@ -61,6 +64,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
     private MapView mMapView;
     private GoogleMap mMap;
     private Location location;
+    private Tracker tracker;
 
     public static Intent newIntent(Context context, Event event) {
         Intent intent = new Intent(context, EventActivity.class);
@@ -100,7 +104,11 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
         addSoundcloudFragment(event);
 
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
+
+        BreminaleApplication application = (BreminaleApplication) getApplication();
+        tracker = application.getDefaultTracker();
     }
+
 
     private void addSoundcloudFragment(Event event) {
         try {
@@ -119,8 +127,10 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
 
     @Override
     public void onResume() {
-        mMapView.onResume();
         super.onResume();
+        mMapView.onResume();
+        tracker.setScreenName("EventDetailScreen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

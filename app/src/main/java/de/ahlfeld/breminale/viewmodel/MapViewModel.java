@@ -47,9 +47,6 @@ public class MapViewModel implements ViewModel {
         subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
     }
 
-    public void setDataListener(DataListener dataListener) {
-        this.dataListener = dataListener;
-    }
 
     @Override
     public void destroy() {
