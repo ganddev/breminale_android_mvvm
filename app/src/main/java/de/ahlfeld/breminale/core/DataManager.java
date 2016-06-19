@@ -31,12 +31,8 @@ public class DataManager {
     private static final String LAST_UPDATE = "lastupdate";
     private static final long FIVE_HOURS_IN_MS = 18000000;
     private final Context context;
-    private Subscription locationSubscripton;
-    private Subscription eventSubscription;
     private List<Location> locations;
     private List<Event> events;
-    private Subscription singleLocationSubscription;
-    private Subscription singleEventSubscription;
 
     public DataManager(@NonNull Context context) {
         this.context = context;
@@ -49,13 +45,13 @@ public class DataManager {
      * @return
      */
     public boolean shouldLoadData() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
         long lastUpdate = preferences.getLong(LAST_UPDATE, 0);
         Date now = new Date();
         if(lastUpdate <= 0) {
             return true;
         }
-        else if(now.getTime() - lastUpdate < FIVE_HOURS_IN_MS) {
+        else if(now.getTime() - lastUpdate >= FIVE_HOURS_IN_MS) {
             return  true;
         } else {
             return false;
@@ -64,12 +60,12 @@ public class DataManager {
 
     public void loadLocations() {
         RestLocationAPIRepository apiRepository = new RestLocationAPIRepository();
-        locationSubscripton = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Location>>() {
+        Subscription locationSubscripton = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Location>>() {
 
             @Override
             public void onCompleted() {
-                Log.i(TAG, "onComplete loading locations");
                 persistLocations(DataManager.this.locations);
+                updateLastUpdate();
             }
 
             @Override
@@ -85,15 +81,22 @@ public class DataManager {
         });
     }
 
+    private void updateLastUpdate() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(LAST_UPDATE, new Date().getTime());
+        editor.commit();
+    }
 
 
-    public void loadEvents() {
+    public Subscription loadEvents() {
         RestEventAPIRepository apiRepository = new RestEventAPIRepository();
 
-        eventSubscription = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
+        Subscription eventSubscription = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
             @Override
             public void onCompleted() {
                 persistEvents(DataManager.this.events);
+                updateLastUpdate();
             }
 
             @Override
@@ -107,6 +110,8 @@ public class DataManager {
                 DataManager.this.events.addAll(events);
             }
         });
+
+        return eventSubscription;
     }
 
     private void persistLocations(List<Location> locations) {
@@ -131,7 +136,7 @@ public class DataManager {
 
     public void loadLocationById(int locationId) {
         RestLocationAPIRepository apiRepository = new RestLocationAPIRepository();
-        singleLocationSubscription = apiRepository.getById(locationId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Location>() {
+        Subscription singleLocationSubscription = apiRepository.getById(locationId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Location>() {
             @Override
             public void onCompleted() {
                 persistLocations(DataManager.this.locations);
@@ -152,7 +157,7 @@ public class DataManager {
 
     public void loadEventById(int eventId) {
         RestEventAPIRepository apiRepository = new RestEventAPIRepository();
-        singleEventSubscription = apiRepository.getById(eventId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Event>() {
+        Subscription singleEventSubscription = apiRepository.getById(eventId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Event>() {
             @Override
             public void onCompleted() {
                 persistEvents(DataManager.this.events);

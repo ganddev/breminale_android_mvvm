@@ -1,39 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Breminale</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ayarlar</string>
 
     <string name="google_maps_key">AIzaSyCIx0X6dnh64a4b8jhtqFut5l_pgU2SY_o</string>
-    <string name="navigate_to_location">Route to location</string>
+    <string name="navigate_to_location">yol tarifi</string>
     <string name="title_activity_event">Event</string>
     <string name="program">Program</string>
-    <string name="map">Map</string>
-    <string name="favorits">Favorits</string>
+    <string name="map">Harita</string>
+    <string name="favorits">Favoriler</string>
     <string name="brefunk">Brefunk</string>
-    <string name="more">More</string>
+    <string name="more">Daha</string>
     <string name="empty_soundcloud_sounds">No sounds for event</string>
-    <string name="day_number">Day %d</string>
+    <string name="day_number">Gün %d</string>
     <string name="breminale_funk">Breminale Funk</string>
     <string name="favorits_empty">You don\'t have any favorits yet.</string>
-    <string name="search">Search</string>
+    <string name="search">Arama</string>
     <string name="osterdeich">Osterdeich</string>
     <string name="no_google_maps">Google Maps is not installed</string>
-    <string name="directions">Directions</string>
+    <string name="directions">Yol</string>
     <string name="search_location">Search locations</string>
     <string name="twitter">TWITTER</string>
     <string name="instagram">INSTAGRAM</string>
     <string name="liveblog">LIVEBLOG</string>
-    <string name="sort_by">Sort by: %1$2s</string>
-    <string name="by_alphabet">Alphabet</string>
-    <string name="by_time">Time</string>
-    <string name="by_location">Location</string>
+    <string name="sort_by">Göre sırala: %1$2s</string>
+    <string name="by_alphabet">Alfabe</string>
+    <string name="by_time">Zaman</string>
+    <string name="by_location">Yer</string>
 
     <string name="information">INFORMATION</string>
 
-    <string name="imprint">Imprint</string>
-    <string name="privacy">Privacy</string>
-    <string name="contact">Contact</string>
+    <string name="imprint">Baskı</string>
+    <string name="privacy">Gizlilik</string>
+    <string name="contact">Temas</string>
     <string name="licenses">Open Source Licenses</string>
     <string name="title_activity_license">Open Source Licenses</string>
-    <string name="title_activity_imprint">Imprint</string>
-    <string name="title_activity_privacy">Privacy</string>
+    <string name="title_activity_imprint">Baskı</string>
+    <string name="title_activity_privacy">Gizlilik</string>
 </resources>

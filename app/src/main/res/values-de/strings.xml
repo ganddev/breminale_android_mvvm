@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Breminale</string>
+    <string name="action_settings">Einstellungen</string>
+
+    <string name="google_maps_key">AIzaSyCIx0X6dnh64a4b8jhtqFut5l_pgU2SY_o</string>
+    <string name="navigate_to_location">Route zur Location</string>
+    <string name="title_activity_event">Event</string>
+    <string name="program">Programm</string>
+    <string name="map">Karte</string>
+    <string name="favorits">Favoriten</string>
+    <string name="brefunk">Brefunk</string>
+    <string name="more">Mehr</string>
+    <string name="empty_soundcloud_sounds">Keine Songs fürs Event</string>
+    <string name="day_number">Tag %d</string>
+    <string name="breminale_funk">Breminale Funk</string>
+    <string name="favorits_empty">Du hast bis jetzt noch keine Favoriten.</string>
+    <string name="search">Suche</string>
+    <string name="osterdeich">Osterdeich</string>
+    <string name="no_google_maps">Google Maps ist nicht installiert</string>
+    <string name="directions">Wegbeschreibung</string>
+    <string name="search_location">Suche Location</string>
+    <string name="twitter">TWITTER</string>
+    <string name="instagram">INSTAGRAM</string>
+    <string name="liveblog">LIVEBLOG</string>
+    <string name="sort_by">Sortiert nach: %1$2s</string>
+    <string name="by_alphabet">Alphabet</string>
+    <string name="by_time">Zeit</string>
+    <string name="by_location">Ort</string>
+
+    <string name="information">INFORMATION</string>
+
+    <string name="imprint">Impressum</string>
+    <string name="privacy">Datenschutz</string>
+    <string name="contact">Kontakt</string>
+    <string name="licenses">Open Source Licenses</string>
+    <string name="title_activity_license">Open Source Licenses</string>
+    <string name="title_activity_imprint">Impresum</string>
+    <string name="title_activity_privacy">Datenschutz</string>
+</resources>

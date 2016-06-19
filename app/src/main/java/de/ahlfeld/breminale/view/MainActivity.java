@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
     public void setupBottomBar(Bundle savedInstanceState) {
         bottomBar = BottomBar.attach(this, savedInstanceState);
         bottomBar.noTopOffset();
+        // Disable the left bar on tablets and behave exactly the same on mobile and tablets instead.
+        bottomBar.noTabletGoodness();
         bottomBar.noNavBarGoodness();
         bottomBar.setTextAppearance(R.style.MyBottomBarTextExperience);
         bottomBar.setTypeFace("fonts/Roboto-Regular.ttf");

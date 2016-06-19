@@ -55,7 +55,9 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
         subscription = repository.query(specification).subscribe(eventsFromDB ->
         {
             recyclerViewVisibility.set(View.VISIBLE);
-            dataListener.onEventsChanged(eventsFromDB);
+            if(dataListener != null) {
+                dataListener.onEventsChanged(eventsFromDB);
+            }
         });
     }
 
