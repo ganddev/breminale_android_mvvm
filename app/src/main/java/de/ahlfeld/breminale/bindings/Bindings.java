@@ -19,6 +19,7 @@ import de.ahlfeld.breminale.caches.FontCache;
 public class Bindings {
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
+    private static final String TAG = Bindings.class.getSimpleName();
 
     @BindingAdapter({"font"})
     public static void setFont(TextView textView, String fontName) {

@@ -1,6 +1,5 @@
 package de.ahlfeld.breminale.animations;
 
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -26,9 +25,9 @@ public class ResizeAnimation extends Animation {
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         int newHeight = 0;
         if(startHeight < targetHeight) {
-            newHeight = (int) (startHeight + targetHeight * interpolatedTime);
+            newHeight = (int) (startHeight + interpolatedTime * targetHeight);
         } else {
-            newHeight = (int) (startHeight - targetHeight * interpolatedTime);
+            newHeight = (int) (startHeight - ((startHeight-targetHeight) * interpolatedTime));
         }
         view.getLayoutParams().height = newHeight;
         view.requestLayout();
