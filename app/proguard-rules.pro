@@ -12,19 +12,41 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+   public *;
+}
 #Retrolambda
--keep class io.realm.annotations.RealmModule
--keep @io.realm.annotations.RealmModule class *
--keep class io.realm.internal.Keep
--keep @io.realm.internal.Keep class *
--dontwarn javax.**
--dontwarn io.realm.**
--dontwarn java.lang.invoke.*
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-    **[] $VALUES;
-    public *;
+-dontwarn com.viewpagerindicator.LinePageIndicator
+-dontwarn com.squareup.**
+-dontwarn okio.**
+-dontwarn org.codehaus
+-dontwarn java.nio
+-keep public class org.codehaus.**
+-keep public class java.nio.**
+-dontwarn okio.**
+-dontwarn retrofit2.Platform$Java8
+
+-dontwarn android.support.v7.**
+-keep class android.support.v7.** { *; }
+-keep interface android.support.v7.** { *; }
+# rxjava
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    long producerNode;
+    long consumerNode;
 }
