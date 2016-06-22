@@ -35,6 +35,6 @@
     <string name="contact">Kontakt</string>
     <string name="licenses">Open Source Licenses</string>
     <string name="title_activity_license">Open Source Licenses</string>
-    <string name="title_activity_imprint">Impresum</string>
+    <string name="title_activity_imprint">Impressum</string>
     <string name="title_activity_privacy">Datenschutz</string>
 </resources>
