@@ -25,7 +25,6 @@ public class EventViewModel implements ViewModel {
 
 
     private Context context;
-    private Location location;
 
     private Event event;
     private Subscription locationSubscription;
@@ -91,6 +90,7 @@ public class EventViewModel implements ViewModel {
     }
 
     public void onExpandClick(View view) {
+        tracker.send(new HitBuilders.EventBuilder().setCategory("EventDetails").setAction("onExpandTextClick").build());
         this.isCompact.set(!this.isCompact.get());
     }
 

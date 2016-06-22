@@ -54,8 +54,6 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
     private SoundcloudUser mSoundcloudUser;
     private Subscription mSoundcloudTracksSusbcriptions;
 
-    private Subscription progressSubscription;
-
     private List<SoundcloudTrack> mSoundcloudTracks;
 
     private MediaPlayer mPlayer;
