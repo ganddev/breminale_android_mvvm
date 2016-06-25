@@ -14,7 +14,6 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -37,9 +36,6 @@ public interface BreminaleService {
 
     class Factory {
         public static BreminaleService create() {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             final OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                     .connectTimeout(35, TimeUnit.SECONDS)
@@ -55,8 +51,6 @@ public interface BreminaleService {
                 }
             });
 
-// add logging as last interceptor
-            httpClient.addInterceptor(logging);
 
             //Stuff for realm!
             Gson gson = new GsonBuilder()

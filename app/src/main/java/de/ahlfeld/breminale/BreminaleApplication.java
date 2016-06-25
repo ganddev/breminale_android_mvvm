@@ -4,12 +4,10 @@ import android.app.Application;
 import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
-import com.facebook.stetho.Stetho;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import de.ahlfeld.breminale.caches.FontCache;
 import de.ahlfeld.breminale.core.DataManager;
@@ -40,13 +38,6 @@ public class BreminaleApplication extends Application {
 
         RealmConfiguration config = new RealmConfiguration.Builder(this).build();
         Realm.setDefaultConfiguration(config);
-
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this)
-                                .build())
-                        .build());
 
         FontCache.getInstance().addFont("roboto-regular", "Roboto-Regular.ttf");
         FontCache.getInstance().addFont("roboto-bold", "Roboto-Bold.ttf");

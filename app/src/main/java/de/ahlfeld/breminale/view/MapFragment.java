@@ -9,6 +9,7 @@ import android.databinding.OnRebindCallback;
 import android.databinding.ViewDataBinding;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,8 +56,6 @@ import de.ahlfeld.breminale.utils.DPtoPXUtils;
 import de.ahlfeld.breminale.viewmodel.MapViewModel;
 
 
-
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -93,16 +92,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_breminale_map, container, false);
+
         binding.addOnRebindCallback(new OnRebindCallback() {
             @Override
             public boolean onPreBind(ViewDataBinding binding) {
-                ViewGroup sceneRoot = (ViewGroup) binding.getRoot();
-                TransitionManager.beginDelayedTransition(sceneRoot);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    ViewGroup sceneRoot = (ViewGroup) binding.getRoot();
+                    TransitionManager.beginDelayedTransition(sceneRoot);
+                }
                 return true;
             }
         });
         viewModel = new MapViewModel(getContext(), this, this);
-
 
 
         binding.setViewModel(viewModel);
@@ -157,7 +158,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     private void hideSoftKeyboard() {
-        if(searchView != null) {
+        if (searchView != null) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
         }
@@ -177,7 +178,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             }
             LatLngBounds bounds = builder.build();
             int padding = 30;
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) DPtoPXUtils.convertDpToPixel(padding,getContext()));
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) DPtoPXUtils.convertDpToPixel(padding, getContext()));
             mMap.animateCamera(cu);
         } else {
             Log.e(TAG, "Map is null or locations is null");
@@ -203,22 +204,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             public void onMapClick(LatLng position) {
                 tracker.send(new HitBuilders.EventBuilder().setCategory("map").setAction("onMapClick").build());
                 resetOpacityOfMarkers();
-                if(viewModel != null) {
+                if (viewModel != null) {
                     viewModel.onMapClick();
                 }
-                if(mMapView != null) {
-                    mMapView.setPadding(0,0,0,0);
+                if (mMapView != null) {
+                    mMapView.setPadding(0, 0, 0, 0);
                 }
             }
         });
         mMap.setOnMarkerClickListener(marker -> {
             tracker.send(new HitBuilders.EventBuilder().setCategory("map").setAction("onMarkerClick").build());
-            if(viewModel != null) {
+            if (viewModel != null) {
                 viewModel.onMarkerClick(marker.getData());
                 changeOpacityOfOtherMarkers(marker);
             }
-            if(mMapView != null) {
-                mMapView.setPadding(0,0,0, (int) DPtoPXUtils.convertDpToPixel(60F,getContext()));
+            if (mMapView != null) {
+                mMapView.setPadding(0, 0, 0, (int) DPtoPXUtils.convertDpToPixel(60F, getContext()));
             }
             return true;
         });
@@ -226,7 +227,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     private void resetOpacityOfMarkers() {
-        if(mMap != null) {
+        if (mMap != null) {
             for (Marker marker : mMap.getMarkers()) {
                 marker.setAlpha(1.0f);
             }
@@ -234,10 +235,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     private void changeOpacityOfOtherMarkers(Marker clickedMarker) {
-        if(mMap != null) {
+        if (mMap != null) {
             List<Marker> markers = mMap.getMarkers();
-            for(Marker marker : markers) {
-                if(!((Location)marker.getData()).getId().equals(((Location)clickedMarker.getData()).getId())) {
+            for (Marker marker : markers) {
+                if (!((Location) marker.getData()).getId().equals(((Location) clickedMarker.getData()).getId())) {
                     marker.setAlpha(0.5f);
                 } else {
                     marker.setAlpha(1.0f);
@@ -248,13 +249,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     @Override
     public void navigateTo(@NonNull Location location) {
-        Uri gmmIntentUri = Uri.parse("google.navigation:q="+location.getLatitude()+","+location.getLongitude());
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + location.getLatitude() + "," + location.getLongitude());
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivity(mapIntent);
         } else {
-            Toast.makeText(getContext(),R.string.no_google_maps,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_google_maps, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -275,7 +276,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             searchView.setOnQueryTextListener(this);
         }
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -286,8 +287,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if(viewModel != null) {
-            if(newText.isEmpty()) {
+        if (viewModel != null) {
+            if (newText.isEmpty()) {
                 viewModel.loadLocations();
             } else {
                 viewModel.searchForLocationByName(newText);

@@ -1,23 +1,16 @@
 package de.ahlfeld.breminale.networking;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.ahlfeld.breminale.models.SoundcloudTrack;
 import de.ahlfeld.breminale.models.SoundcloudUser;
-import io.realm.RealmObject;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -40,9 +33,6 @@ public interface SoundcloudService {
 
     class Factory {
         public static SoundcloudService build() {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                     .connectTimeout(35, TimeUnit.SECONDS)
@@ -66,8 +56,6 @@ public interface SoundcloudService {
                 return chain.proceed(request);
             });
 
-// add logging as last interceptor
-            httpClient.addInterceptor(logging);  // <-- this is the important line!
 
             Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/DD HH:mm:ss Z").create();
             Retrofit retrofit = new Retrofit.Builder()

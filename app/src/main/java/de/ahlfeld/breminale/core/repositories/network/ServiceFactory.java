@@ -7,7 +7,6 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -21,9 +20,7 @@ public class ServiceFactory {
     public static final String API_ENDPOINT = "https://serene-ocean-3356.herokuapp.com/api/v1/";
 
     public static <T> T createRetrofitService(Class<T> clazz) {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
 
         final OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                 .connectTimeout(35, TimeUnit.SECONDS)
@@ -39,8 +36,6 @@ public class ServiceFactory {
             }
         });
 
-// add logging as last interceptor
-        httpClient.addInterceptor(logging);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(httpClient.build())
