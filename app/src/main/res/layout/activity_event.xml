@@ -155,6 +155,7 @@
                     android:background="@null"
                     android:gravity="center_horizontal|top"
                     android:onClick="@{viewModel::onExpandClick}"
+                    android:rotationX="@{viewModel.isCompact ? 0 : 180}"
                     android:src="@drawable/row_down" />
 
                 <ImageView
