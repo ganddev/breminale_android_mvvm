@@ -34,7 +34,6 @@ public class EventViewModel implements ViewModel {
     public ObservableBoolean isCompact;
 
     private DataListener dataListener;
-    private String TAG = EventViewModel.class.getSimpleName();
 
     public ObservableBoolean isFavorit;
     private Tracker tracker;
