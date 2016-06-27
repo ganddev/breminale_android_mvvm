@@ -16,6 +16,7 @@
    public *;
 }
 #Retrolambda
+-dontwarn java.lang.invoke**
 -dontwarn com.viewpagerindicator.LinePageIndicator
 -dontwarn com.squareup.**
 -dontwarn okio.**
@@ -23,9 +24,26 @@
 -dontwarn java.nio
 -keep public class org.codehaus.**
 -keep public class java.nio.**
--dontwarn okio.**
 -dontwarn retrofit2.Platform$Java8
 
+-keepclassmembers class * extends android.app.Activity {
+       public void *(android.view.View);
+}
+
+###################
+# Get rid of #can't find referenced method in library class java.lang.Object# warnings for clone() and finalize()
+# for details see http://stackoverflow.com/questions/23883028/how-to-fix-proguard-warning-cant-find-referenced-method-for-existing-methods
+-dontwarn net.fortuna.ical4j.model.**
+
+
+# standard, except v4.app.Fragment, its required when app uses Fragments
+-keep public class * extends android.app.Activity
+-keep public class * extends android.support.v7.app.ActionBarActivity
+-keep public class * extends android.support.v4.app.Fragment
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
 -dontwarn android.support.v7.**
 -keep class android.support.v7.** { *; }
 -keep interface android.support.v7.** { *; }
@@ -50,3 +68,6 @@
     long producerNode;
     long consumerNode;
 }
+
+-dontwarn groovy.**
+-keep class groovy.** { *; }

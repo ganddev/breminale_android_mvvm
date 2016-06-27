@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.ahlfeld.breminale">
+    package="de.ahlfeld.breminale.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -82,7 +83,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.ahlfeld.breminale.view.MainActivity" />
+                android:value=".view.MainActivity" />
         </activity>
 
         <service
@@ -109,7 +110,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.ahlfeld.breminale.view.MainActivity" />
+                android:value=".view.MainActivity" />
         </activity>
         <activity
             android:name=".view.ImprintActivity"
@@ -118,7 +119,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.ahlfeld.breminale.view.MainActivity" />
+                android:value=".view.MainActivity" />
         </activity>
         <activity
             android:name=".view.PrivacyActivity"
@@ -127,7 +128,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.ahlfeld.breminale.view.MainActivity" />
+                android:value=".view.MainActivity" />
         </activity>
     </application>
 

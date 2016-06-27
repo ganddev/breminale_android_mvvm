@@ -19,7 +19,39 @@
       ],
       "services": {
         "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-79587821-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
           "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163837648343:android:d68e7c731dddd281",
+        "android_client_info": {
+          "package_name": "de.ahlfeld.breminale.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGy1r2FbWNn7bA9UuFiJA4SvPm94StekA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-79587821-2"
+          }
         },
         "appinvite_service": {
           "status": 1,

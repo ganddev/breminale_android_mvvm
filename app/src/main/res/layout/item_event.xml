@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="de.ahlfeld.breminale.viewmodel.ItemEventViewModel" />
+            type="de.ahlfeld.breminale.app.viewmodel.ItemEventViewModel" />
     </data>
 
     <RelativeLayout
@@ -51,6 +51,8 @@
             android:textColor="@color/white"
             app:font="@{`georgia`}"
             android:text="@{viewModel.name}"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/iv_favorit"
             android:textSize="@dimen/item_event_artist_text_size" />
 
         <TextView
@@ -67,6 +69,7 @@
 
 
         <ImageView
+            android:id="@id/iv_favorit"
             android:layout_width="@dimen/item_event_favorit_image"
             android:layout_height="@dimen/item_event_favorit_image"
             android:gravity="center"

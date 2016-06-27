@@ -35,7 +35,7 @@
     <dimen name="expand_button_width">15dp</dimen>
     <dimen name="expand_button_height">5.5dp</dimen>
     <dimen name="event_description_text_height">47dp</dimen>
-    <dimen name="event_description_text_height_max">100dp</dimen>
+    <dimen name="event_description_text_height_max">300dp</dimen>
     <dimen name="soundcloud_track_margin_left">13.5dp</dimen>
     <dimen name="fab_margin_right">8dp</dimen>
     <dimen name="program_height">149dp</dimen>

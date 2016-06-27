@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="de.ahlfeld.breminale.viewmodel.SoundcloudViewModel" />
+            type="de.ahlfeld.breminale.app.viewmodel.SoundcloudViewModel" />
     </data>
 
     <RelativeLayout
@@ -27,12 +27,16 @@
             android:id="@+id/tv_soundcloud_track"
             android:layout_marginTop="@dimen/soundcloud_track_margin_top"
             android:layout_marginLeft="@dimen/soundcloud_track_margin_left"
+            android:layout_marginRight="13.5dp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/image_view_soundcloud"
             app:font="@{`roboto-regular`}"
             android:text="@{viewModel.currentTrack}"
             android:textSize="@dimen/soundcloud_artist_text_size"
             android:textColor="@android:color/black"
+            android:layout_toLeftOf="@+id/image_btn_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         
@@ -49,7 +53,7 @@
             app:font="@{`roboto-regular`}" />
 
         <ImageButton
-            android:id="@+id/image_btn_play"
+            android:id="@id/image_btn_play"
             android:visibility="@{viewModel.playButtonIsVisible}"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"

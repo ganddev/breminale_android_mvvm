@@ -12,7 +12,7 @@
 
         <variable
             name="viewModel"
-            type="de.ahlfeld.breminale.viewmodel.EventViewModel" />
+            type="de.ahlfeld.breminale.app.viewmodel.EventViewModel" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -144,16 +144,25 @@
                     android:text="@{viewModel.description}"
                     app:font="@{`roboto-regular`}" />
 
+
+
                 <ImageButton
                     android:id="@+id/image_btn_expand_text"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_below="@id/textview_event_description"
                     android:layout_centerHorizontal="true"
                     android:background="@null"
-                    android:gravity="center"
+                    android:gravity="center_horizontal|top"
                     android:onClick="@{viewModel::onExpandClick}"
+                    android:rotationX="@{viewModel.isCompact ? 0 : 180}"
                     android:src="@drawable/row_down" />
+
+                <ImageView
+                    android:layout_above="@id/image_btn_expand_text"
+                    android:src="@drawable/event_text_gradient"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp" />
 
                 <View
                     android:id="@+id/border1"
