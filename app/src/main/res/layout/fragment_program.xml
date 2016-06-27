@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="de.ahlfeld.breminale.viewmodel.ProgramViewModel" />
+            type="de.ahlfeld.breminale.app.viewmodel.ProgramViewModel" />
     </data>
 
     <LinearLayout

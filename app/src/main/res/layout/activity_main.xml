@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="de.ahlfeld.breminale.viewmodel.MainViewModel" />
+            type="de.ahlfeld.breminale.app.viewmodel.MainViewModel" />
     </data>
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/three_buttons_activity"

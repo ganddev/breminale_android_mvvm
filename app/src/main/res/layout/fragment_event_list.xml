@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="de.ahlfeld.breminale.viewmodel.EventListViewModel" />
+            type="de.ahlfeld.breminale.app.viewmodel.EventListViewModel" />
     </data>
 
     <RelativeLayout

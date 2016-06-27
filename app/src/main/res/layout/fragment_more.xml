@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="de.ahlfeld.breminale.viewmodel.MoreViewModel" />
+            type="de.ahlfeld.breminale.app.viewmodel.MoreViewModel" />
     </data>
 
     <LinearLayout
