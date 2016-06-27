@@ -84,6 +84,7 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     public void setEvent(Event event) {
         this.event = event;
+        this.getLocationName();
         notifyChange();
     }
 
