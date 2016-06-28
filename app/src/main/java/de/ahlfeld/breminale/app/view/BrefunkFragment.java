@@ -52,6 +52,13 @@ public class BrefunkFragment extends Fragment implements TabLayout.OnTabSelected
         return binding.getRoot();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(viewModel != null) {
+            viewModel.destroy();
+        }
+    }
 
     public void setupTablayout(@NonNull TabLayout tablayout, LayoutInflater inflater) {
 

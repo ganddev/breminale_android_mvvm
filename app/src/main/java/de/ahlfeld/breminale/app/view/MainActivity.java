@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mainViewModel.destroy();
+        if(mainViewModel != null) {
+            mainViewModel.destroy();
+        }
     }
 
 

@@ -22,7 +22,6 @@ import rx.Subscription;
  */
 public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
-    private static final String TAG = ItemEventViewModel.class.getSimpleName();
     private Context context;
     private Event event;
 

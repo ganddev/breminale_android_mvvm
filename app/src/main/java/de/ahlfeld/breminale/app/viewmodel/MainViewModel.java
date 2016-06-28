@@ -10,7 +10,7 @@ public class MainViewModel implements ViewModel {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
 
-    private final Navigation listener;
+    private Navigation listener;
 
 
     public MainViewModel(@NonNull Navigation listener) {
@@ -20,7 +20,7 @@ public class MainViewModel implements ViewModel {
 
     @Override
     public void destroy() {
-
+        listener = null;
     }
 
 

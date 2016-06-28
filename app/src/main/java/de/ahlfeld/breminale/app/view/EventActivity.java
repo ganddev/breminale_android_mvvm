@@ -125,6 +125,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
         }
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -143,6 +144,9 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+        if(eventViewModel != null) {
+            eventViewModel.destroy();
+        }
     }
 
     @Override

@@ -53,7 +53,9 @@ public class SoundcloudFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        viewModel.destroy();
+        if(viewModel != null) {
+            viewModel.destroy();
+        }
         super.onDestroy();
     }
 }

@@ -18,7 +18,7 @@ import de.ahlfeld.breminale.app.core.repositories.realm.SortOptions;
  */
 public class ItemSortViewModel extends BaseObservable implements ViewModel {
 
-    private final OnItemClickListener listener;
+    private OnItemClickListener listener;
     private Context context;
     private SortOptions sortOption;
     public ObservableInt isSelected;
@@ -64,7 +64,8 @@ public class ItemSortViewModel extends BaseObservable implements ViewModel {
 
     @Override
     public void destroy() {
-
+        listener = null;
+        context = null;
     }
 
     public interface OnItemClickListener{

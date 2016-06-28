@@ -55,6 +55,8 @@ public class MapViewModel implements ViewModel {
         }
         subscription = null;
         context = null;
+        dataListener = null;
+        navigateListener = null;
     }
 
     public void onMarkerClick(Location location) {
