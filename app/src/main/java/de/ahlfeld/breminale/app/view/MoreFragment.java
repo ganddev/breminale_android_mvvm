@@ -65,6 +65,8 @@ public class MoreFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewModel.destroy();
+        if (viewModel != null) {
+            viewModel.destroy();
+        }
     }
 }

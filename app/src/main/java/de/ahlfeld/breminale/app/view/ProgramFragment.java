@@ -75,4 +75,12 @@ public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeL
         SortDialog sortDialog = SortDialog.newInstance();
         sortDialog.show(getFragmentManager(), "sortdialog");
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(viewModel != null) {
+            viewModel.destroy();
+        }
+    }
 }

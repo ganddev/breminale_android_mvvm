@@ -57,6 +57,8 @@ public class ProgramViewModel implements ViewModel, SharedPreferences.OnSharedPr
     public void destroy() {
         PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this);
         context = null;
+        mListener = null;
+        mSortListener = null;
     }
 
     public void onPageSelected(int position) {

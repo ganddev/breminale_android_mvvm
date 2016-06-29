@@ -66,6 +66,7 @@ public class EventViewModel implements ViewModel {
         if (locationSubscription != null && !locationSubscription.isUnsubscribed()) {
             locationSubscription.unsubscribe();
         }
+        dataListener = null;
         locationSubscription = null;
         context = null;
     }

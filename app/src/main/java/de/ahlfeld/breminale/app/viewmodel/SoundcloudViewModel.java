@@ -35,7 +35,7 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
 
 
     private static final String TAG = SoundcloudViewModel.class.getSimpleName();
-    private final Context mContext;
+    private Context mContext;
 
     public ObservableField<String> soundCloudArtist;
     public ObservableField<String> currentTrack;
@@ -216,9 +216,11 @@ public class SoundcloudViewModel implements ViewModel, MediaPlayer.OnCompletionL
             mPlayer.stop();
             mPlayer.release();
         }
+        mContext = null;
         mPlayer = null;
         mSoundcloudTracksSusbcriptions = null;
         mSoundclouduserSubscription = null;
+        myHandler = null;
     }
 
 
