@@ -18,11 +18,9 @@
 
     <!-- EXTERNAL_STORAGE permissions are optional for Android 6.0 onwards. -->
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="22" />
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="22" />
+        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"

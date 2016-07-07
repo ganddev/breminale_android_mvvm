@@ -12,14 +12,11 @@ import io.realm.Realm;
  */
 public class EventToEventRealm implements Mapper<Event, EventRealm> {
 
-    private final Realm realm;
-
-    public EventToEventRealm(@NonNull Realm realm) {
-        this.realm = realm;
+    public EventToEventRealm() {
     }
 
     @Override
-    public EventRealm map(@NonNull Event event) {
+    public EventRealm map(@NonNull Realm realm, @NonNull Event event) {
         EventRealm eventRealm = realm.createObject(EventRealm.class);
         eventRealm.setId(event.getId());
         copy(event, eventRealm);

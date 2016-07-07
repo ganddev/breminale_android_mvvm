@@ -6,6 +6,7 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import de.ahlfeld.breminale.app.core.domain.domain.Location;
@@ -19,9 +20,7 @@ import rx.Subscription;
  */
 public class MapViewModel implements ViewModel {
 
-
-    private static final String TAG = MapViewModel.class.getSimpleName();
-    private Context context;
+    private WeakReference<Context> contextReference;
     private DataListener dataListener;
 
     public ObservableInt detailVisibility;
@@ -33,7 +32,7 @@ public class MapViewModel implements ViewModel {
     private NavigateListener navigateListener;
 
     public MapViewModel(@NonNull Context context, @NonNull DataListener dataListener, @NonNull NavigateListener navigateListener) {
-        this.context = context;
+        this.contextReference = new WeakReference<>(context);
         this.dataListener = dataListener;
         this.navigateListener = navigateListener;
         detailVisibility = new ObservableInt(View.INVISIBLE);
@@ -42,7 +41,7 @@ public class MapViewModel implements ViewModel {
     }
 
     public void loadLocations() {
-        LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
+        LocationRealmRepository realmRepository = new LocationRealmRepository(this.contextReference.get().getApplicationContext());
         LocationSpecification specification = new LocationSpecification();
         subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
     }
@@ -54,7 +53,7 @@ public class MapViewModel implements ViewModel {
             subscription.unsubscribe();
         }
         subscription = null;
-        context = null;
+        contextReference = null;
         dataListener = null;
         navigateListener = null;
     }
@@ -75,7 +74,7 @@ public class MapViewModel implements ViewModel {
     }
 
     public void searchForLocationByName(String query) {
-        LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
+        LocationRealmRepository realmRepository = new LocationRealmRepository(this.contextReference.get().getApplicationContext());
         LocationByNameSpecification specification = new LocationByNameSpecification(query);
         subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
     }

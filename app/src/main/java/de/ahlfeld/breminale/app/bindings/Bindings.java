@@ -34,7 +34,7 @@ public class Bindings {
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         if(!imageUrl.isEmpty()) {
-            Glide.with(view.getContext())
+            Glide.with(view.getContext().getApplicationContext())
                     .load(imageUrl)
                     .centerCrop()
                     .into(view);

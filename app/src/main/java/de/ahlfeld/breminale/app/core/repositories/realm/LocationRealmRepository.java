@@ -49,7 +49,7 @@ public class LocationRealmRepository implements Repository<Location> {
     @Override
     public Observable<String> add(Location item) {
         final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realmParam -> realmParam.copyToRealmOrUpdate(toLocationRealm.map(item)));
+        realm.executeTransactionAsync(realmParam -> realmParam.copyToRealmOrUpdate(toLocationRealm.map(realmParam,item)));
         realm.close();
         return Observable.just(String.valueOf(item.getId()));
     }
@@ -57,37 +57,31 @@ public class LocationRealmRepository implements Repository<Location> {
     @Override
     public Observable<Integer> add(Iterable<Location> items) {
         int size = 0;
-
         final Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(realmParam -> {
+        realm.executeTransactionAsync(realmParam -> {
             for (de.ahlfeld.breminale.app.core.domain.domain.Location location : items) {
-                realm.copyToRealmOrUpdate(toLocationRealm.map(location));
+                realmParam.copyToRealmOrUpdate(toLocationRealm.map(realmParam,location));
             }
         });
         realm.close();
-
         if (items instanceof Collection<?>) {
             size = ((Collection<?>) items).size();
         }
-
         return Observable.just(size);
     }
 
     @Override
     public Observable<Location> update(@NonNull Location item) {
         final Realm realm = Realm.getDefaultInstance();
-        LocationRealm locationRealm = realm.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
-
-        if(locationRealm != null) {
-            realm.executeTransaction(realmParam -> {
-                realm.copyToRealmOrUpdate(toLocationRealm.copy(item, locationRealm));
-            });
-        } else {
-            add(item);
-        }
+        realm.executeTransactionAsync(realmParam -> {
+            LocationRealm locationRealm = realmParam.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
+            if (locationRealm != null) {
+                realmParam.copyToRealmOrUpdate(toLocationRealm.copy(item, locationRealm));
+            } else {
+                realmParam.copyToRealmOrUpdate(toLocationRealm.map(realmParam,item));
+            }
+        });
         realm.close();
-
         return Observable.just(item);
     }
 
@@ -95,8 +89,8 @@ public class LocationRealmRepository implements Repository<Location> {
     public Observable<Integer> remove(@NonNull Location item) {
         final Realm realm = Realm.getDefaultInstance();
         LocationRealm locationRealm = realm.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
-        if (locationRealm != null){
-            realm.executeTransaction(realmParam -> locationRealm.deleteFromRealm());
+        if (locationRealm != null) {
+            realm.executeTransactionAsync(realmParam -> locationRealm.deleteFromRealm());
 
             // if locationrealm.isValid() is false, it is because the realm object was deleted
             return Observable.just(locationRealm.isValid() ? 0 : 1);
@@ -113,7 +107,7 @@ public class LocationRealmRepository implements Repository<Location> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
         final LocationRealm locationRealm = (LocationRealm) realmSpecification.toPlantRealm(realm);
 
-        realm.executeTransaction(realmParam -> locationRealm.deleteFromRealm());
+        realm.executeTransactionAsync(realmParam -> locationRealm.deleteFromRealm());
 
         realm.close();
 
@@ -127,14 +121,20 @@ public class LocationRealmRepository implements Repository<Location> {
         final Realm realm = Realm.getDefaultInstance();
         final Observable<RealmResults<LocationRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
 
+        realm.close();
         // convert Observable<RealmResults<PlantRealm>> into Observable<List<Plant>>
         return realmResults.flatMap(list ->
                 Observable.from(list)
-                        .map(locationRealm -> toLocation.map(locationRealm))
+                        .map(locationRealm -> toLocation.map(realm,locationRealm))
                         .toList());
     }
 
     public void removeAll() {
-
+        // Delete all
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.deleteAll();
+        realm.commitTransaction();
+        realm.close();
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.RefWatcher;
 import com.twitter.sdk.android.tweetui.SearchTimeline;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 
@@ -61,4 +62,11 @@ public class TwitterFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_twitter, container, false);
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
+    }
 }

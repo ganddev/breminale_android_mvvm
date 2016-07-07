@@ -6,6 +6,8 @@ import android.content.Context;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -23,6 +25,13 @@ public class BreminaleApplication extends Application {
     private Tracker tracker;
 
 
+    private RefWatcher refWatcher;
+
+    public static RefWatcher getRefWatcher(Context context) {
+        BreminaleApplication application = (BreminaleApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
     private static Context context;
 
     public static Context getAppContext() {
@@ -32,6 +41,7 @@ public class BreminaleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        refWatcher = LeakCanary.install(this);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
         context = getApplicationContext();

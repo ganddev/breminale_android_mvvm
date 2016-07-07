@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.leakcanary.RefWatcher;
+
+import de.ahlfeld.breminale.app.BreminaleApplication;
 import de.ahlfeld.breminale.app.R;
 import de.ahlfeld.breminale.app.databinding.FragmentSoundcloudBinding;
 import de.ahlfeld.breminale.app.viewmodel.SoundcloudViewModel;
@@ -57,5 +60,7 @@ public class SoundcloudFragment extends Fragment {
             viewModel.destroy();
         }
         super.onDestroy();
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 }

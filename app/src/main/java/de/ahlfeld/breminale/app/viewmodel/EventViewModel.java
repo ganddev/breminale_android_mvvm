@@ -52,7 +52,7 @@ public class EventViewModel implements ViewModel {
     }
 
     private void loadLocation() {
-        LocationRealmRepository realmRepository = new LocationRealmRepository(context);
+        LocationRealmRepository realmRepository = new LocationRealmRepository(context.getApplicationContext());
         locationSubscription = realmRepository.getById(event.getLocationId()).subscribe(locationFromDB -> {
             if(dataListener != null) {
                 dataListener.onLocationChanged(locationFromDB);

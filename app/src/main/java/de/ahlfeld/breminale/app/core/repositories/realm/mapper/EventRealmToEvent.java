@@ -4,13 +4,15 @@ import android.support.annotation.NonNull;
 
 import de.ahlfeld.breminale.app.core.domain.domain.Event;
 import de.ahlfeld.breminale.app.core.repositories.realm.modelRealm.EventRealm;
+import io.realm.Realm;
 
 /**
  * Created by bjornahlfeld on 30.05.16.
  */
 public class EventRealmToEvent implements de.ahlfeld.breminale.app.core.repositories.Mapper<EventRealm, Event> {
+
     @Override
-    public Event map(@NonNull EventRealm eventRealm) {
+    public Event map(@NonNull Realm realm, @NonNull EventRealm eventRealm) {
         Event event = new Event();
         event.setId(eventRealm.getId());
         copy(eventRealm, event);

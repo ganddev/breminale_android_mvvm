@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.databinding.ObservableInt;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.List;
 
@@ -27,15 +29,16 @@ import rx.Subscription;
  */
 public class EventListViewModel implements ViewModel, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String TAG = EventListViewModel.class.getSimpleName();
     private final Date from;
     private final Date to;
     public ObservableInt recyclerViewVisibility;
     private DataListener dataListener;
-    private Context context;
+    private WeakReference<Context> context;
     private Subscription subscription;
 
     public EventListViewModel(Context context, DataListener dataListener, @NonNull Date from, @NonNull Date to) {
-        this.context = context;
+        this.context = new WeakReference<>(context);
         this.dataListener = dataListener;
         recyclerViewVisibility = new ObservableInt(View.INVISIBLE);
         this.from = from;
@@ -50,8 +53,8 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
     }
 
     private void loadEvents(@NonNull Date from,@NonNull Date to) {
-        EventRealmRepository repository = new EventRealmRepository(context);
-        RealmSpecification<EventRealm> specification = getSpecification(to, from);new EventsByDateSpecification(from, to);
+        EventRealmRepository repository = new EventRealmRepository(context.get().getApplicationContext());
+        RealmSpecification<EventRealm> specification = getSpecification(to, from);
         subscription = repository.query(specification).subscribe(eventsFromDB ->
         {
             recyclerViewVisibility.set(View.VISIBLE);
@@ -62,7 +65,7 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
     }
 
     private RealmSpecification<EventRealm> getSpecification(@NonNull Date to, @NonNull Date from) {
-        SortOptions sortOption = SortOrderManager.getSelectedSortOrder(context);
+        SortOptions sortOption = SortOrderManager.getSelectedSortOrder(context.get().getApplicationContext());
         switch (sortOption) {
             case ALPHABETICALLY:
                 return new EventsSortByNameSpecification(from, to);
@@ -78,10 +81,11 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
 
     @Override
     public void destroy() {
+        Log.d(TAG, "destroy");
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
-        PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(context.get().getApplicationContext()).unregisterOnSharedPreferenceChangeListener(this);
         subscription = null;
         context = null;
         dataListener = null;

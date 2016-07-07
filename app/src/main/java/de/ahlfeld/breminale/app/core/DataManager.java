@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,12 +31,12 @@ public class DataManager {
     private static final String TAG = DataManager.class.getSimpleName();
     private static final String LAST_UPDATE = "lastupdate";
     private static final long FIVE_HOURS_IN_MS = 18000000;
-    private final Context context;
+    private WeakReference<Context> context;
     private List<Location> locations;
     private List<Event> events;
 
     public DataManager(@NonNull Context context) {
-        this.context = context;
+        this.context = new WeakReference<>(context);
         locations = new ArrayList<>();
         events = new ArrayList<>();
     }
@@ -45,7 +46,7 @@ public class DataManager {
      * @return
      */
     public boolean shouldLoadData() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context.get().getApplicationContext());
         long lastUpdate = preferences.getLong(LAST_UPDATE, 0);
         Date now = new Date();
         if(lastUpdate <= 0) {
@@ -82,7 +83,7 @@ public class DataManager {
     }
 
     private void updateLastUpdate() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.get().getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong(LAST_UPDATE, new Date().getTime());
         editor.commit();
@@ -115,7 +116,7 @@ public class DataManager {
     }
 
     private void persistLocations(List<Location> locations) {
-        LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
+        LocationRealmRepository realmRepository = new LocationRealmRepository(this.context.get().getApplicationContext());
         for(Location location : locations) {
             if(location.getDeleted()) {
                 realmRepository.remove(location);
@@ -125,7 +126,7 @@ public class DataManager {
     }
 
     private void persistEvents(List<Event> events) {
-        EventRealmRepository realmRepository = new EventRealmRepository(this.context);
+        EventRealmRepository realmRepository = new EventRealmRepository(this.context.get().getApplicationContext());
         for(Event event : events) {
             if(event.getDeleted()) {
                 realmRepository.remove(event);

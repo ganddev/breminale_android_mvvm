@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.transition.TransitionManager;
@@ -44,6 +45,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +70,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     private MapView mMapView;
     private GoogleMap mMap;
+
+    private MenuItem searchItem;
 
     private List<Location> locations;
     private SearchView searchView;
@@ -103,7 +107,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
                 return true;
             }
         });
-        viewModel = new MapViewModel(getContext(), this, this);
+        viewModel = new MapViewModel(getContext().getApplicationContext(), this, this);
 
 
         binding.setViewModel(viewModel);
@@ -116,6 +120,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
         mMapView.getExtendedMapAsync(this);
+
         return binding.getRoot();
     }
 
@@ -135,12 +140,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+        if(searchItem != null) {
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            searchView.setOnQueryTextListener(null);
+            searchItem = null;
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
         if(viewModel != null) {
             viewModel.destroy();
         }
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 
     @Override
@@ -188,7 +205,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     private void loadMarkerIcon(@NonNull final Marker marker, @NonNull final Location location) {
-        Glide.with(this).load(location.getMediumImageUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(getContext().getApplicationContext()).load(location.getMediumImageUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resource);
@@ -199,7 +216,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.i(TAG, "map is ready");
         mMap = googleMap;
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -264,7 +280,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_map, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 
         if (searchItem != null) {

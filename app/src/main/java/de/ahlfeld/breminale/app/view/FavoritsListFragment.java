@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
 
         setupRecyclerView(binding.eventsRecyclerView);
 
-        viewModel = new FavoritsListViewModel(this.getContext(),this, this);
+        viewModel = new FavoritsListViewModel(getContext().getApplicationContext(),this, this);
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }
@@ -90,6 +91,8 @@ public class FavoritsListFragment extends Fragment implements FavoritsListViewMo
         if (viewModel != null) {
             viewModel.destroy();
         }
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 
     public void setupRecyclerView(RecyclerView recyclerView) {

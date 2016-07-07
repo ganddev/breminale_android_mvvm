@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.RefWatcher;
 
 import de.ahlfeld.breminale.app.BreminaleApplication;
 import de.ahlfeld.breminale.app.R;
@@ -68,5 +69,7 @@ public class MoreFragment extends Fragment {
         if (viewModel != null) {
             viewModel.destroy();
         }
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

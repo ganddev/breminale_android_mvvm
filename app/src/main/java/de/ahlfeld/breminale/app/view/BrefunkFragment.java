@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.leakcanary.RefWatcher;
+
+import de.ahlfeld.breminale.app.BreminaleApplication;
 import de.ahlfeld.breminale.app.R;
 import de.ahlfeld.breminale.app.adapters.BrefunkAdapter;
 import de.ahlfeld.breminale.app.caches.FontCache;
@@ -58,6 +61,9 @@ public class BrefunkFragment extends Fragment implements TabLayout.OnTabSelected
         if(viewModel != null) {
             viewModel.destroy();
         }
+
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 
     public void setupTablayout(@NonNull TabLayout tablayout, LayoutInflater inflater) {

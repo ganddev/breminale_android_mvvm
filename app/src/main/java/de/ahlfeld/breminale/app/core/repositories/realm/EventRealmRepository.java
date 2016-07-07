@@ -30,15 +30,16 @@ public class EventRealmRepository implements Repository<Event> {
     private final Mapper<Event, EventRealm> toEventRealm;
     private final RealmConfiguration realmConfiguration;
     private final Mapper<Event, EventRealm> toEventRealmFavorit;
+    private final Realm realm;
 
     public EventRealmRepository(@NonNull Context context) {
 
         this.realmConfiguration = new RealmConfiguration.Builder(context).build();
-        final Realm realm = Realm.getInstance(realmConfiguration);
+        realm = Realm.getInstance(realmConfiguration);
 
         this.toEvent = new EventRealmToEvent();
-        this.toEventRealm = new EventToEventRealm(realm);
-        this.toEventRealmFavorit = new EventToEventRealmFavorit(realm);
+        this.toEventRealm = new EventToEventRealm();
+        this.toEventRealmFavorit = new EventToEventRealmFavorit();
     }
 
     @Override
@@ -49,44 +50,40 @@ public class EventRealmRepository implements Repository<Event> {
     @Override
     public Observable<String> add(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realmParam -> realmParam.copyToRealmOrUpdate(toEventRealm.map(item)));
+        realm.executeTransactionAsync(realmParam -> realmParam.copyToRealmOrUpdate(toEventRealm.map(realmParam,item)));
         realm.close();
         return Observable.just(String.valueOf(item.getId()));
     }
 
     @Override
     public Observable<Integer> add(@NonNull Iterable<Event> items) {
-
         int size = 0;
-
         final Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(realmParam -> {
-            for(Event event : items){
-                realm.copyToRealmOrUpdate(toEventRealm.map(event));
+        realm.executeTransactionAsync(realmParam -> {
+            for (Event event : items) {
+                realm.copyToRealmOrUpdate(toEventRealm.map(realmParam,event));
             }
         });
         realm.close();
 
-        if(items instanceof Collection<?>) {
+        if (items instanceof Collection<?>) {
             size = ((Collection<?>) items).size();
         }
-
         return Observable.just(size);
     }
 
     @Override
     public Observable<Event> update(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
-        EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
-
-        if(eventRealm != null) {
-            realm.executeTransaction(realmParam -> {
+        realm.executeTransactionAsync(realmParam -> {
+            EventRealm eventRealm = realmParam.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
+            if (eventRealm != null) {
                 realmParam.copyToRealmOrUpdate(toEventRealm.copy(item, eventRealm));
-            });
-        } else {
-            add(item);
-        }
+            } else {
+                realmParam.copyToRealmOrUpdate(toEventRealm.map(realmParam, item));
+            }
+        });
+
         realm.close();
 
         return Observable.just(item);
@@ -96,8 +93,9 @@ public class EventRealmRepository implements Repository<Event> {
     public Observable<Integer> remove(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
         EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
-        if(eventRealm != null) {
-            realm.executeTransaction(realmParam -> eventRealm.deleteFromRealm());
+        if (eventRealm != null) {
+            realm.executeTransactionAsync(realmParam -> eventRealm.deleteFromRealm());
+            realm.close();
             return Observable.just(eventRealm.isValid() ? 0 : 1);
         }
         realm.close();
@@ -112,7 +110,7 @@ public class EventRealmRepository implements Repository<Event> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
         final EventRealm eventRealm = (EventRealm) realmSpecification.toPlantRealm(realm);
 
-        realm.executeTransaction(realmParam -> eventRealm.deleteFromRealm());
+        realm.executeTransactionAsync(realmParam -> eventRealm.deleteFromRealm());
 
         realm.close();
 
@@ -127,10 +125,11 @@ public class EventRealmRepository implements Repository<Event> {
         final Realm realm = Realm.getDefaultInstance();
         final Observable<RealmResults<EventRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
 
+        realm.close();
         // convert Observable<RealmResults<PlantRealm>> into Observable<List<Plant>>
         return realmResults.flatMap(list ->
                 Observable.from(list)
-                        .map(eventRealm -> toEvent.map(eventRealm))
+                        .map(eventRealm -> toEvent.map(realm,eventRealm))
                         .toList());
 
     }
@@ -146,15 +145,13 @@ public class EventRealmRepository implements Repository<Event> {
 
     public Observable<Event> saveEventAsFavorit(Event item) {
         final Realm realm = Realm.getDefaultInstance();
-        EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
-
-        if(eventRealm != null) {
-            realm.executeTransaction(realmParam -> {
-                realmParam.copyToRealmOrUpdate(toEventRealmFavorit.copy(item, eventRealm));
-            });
-        }
+        realm.executeTransactionAsync(realmParam -> {
+            EventRealm eventRealm = realmParam.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
+            realmParam.copyToRealmOrUpdate(toEventRealmFavorit.copy(item, eventRealm));
+        });
         realm.close();
 
         return Observable.just(item);
     }
+
 }

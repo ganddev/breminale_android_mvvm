@@ -8,6 +8,7 @@ import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 
 import de.ahlfeld.breminale.app.BreminaleApplication;
@@ -22,7 +23,7 @@ import rx.Subscription;
  */
 public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
-    private Context context;
+    private WeakReference<Context> context;
     private Event event;
 
     private Subscription locationSubscription;
@@ -30,7 +31,7 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     private Tracker tracker;
 
     public ItemEventViewModel(Context context, Event event) {
-        this.context = context;
+        this.context = new WeakReference<>(context);
         this.event = event;
         locationName = new ObservableField<>("No location");
         getLocationName();
@@ -64,18 +65,18 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     }
 
     public void getLocationName() {
-        LocationRealmRepository realmRepository = new LocationRealmRepository(context);
+        LocationRealmRepository realmRepository = new LocationRealmRepository(context.get().getApplicationContext());
         locationSubscription = realmRepository.getById(event.getLocationId()).subscribe(locationFromDB -> locationName.set(locationFromDB.getName()));
     }
 
     public void onItemClick(View view) {
         tracker.send(new HitBuilders.EventBuilder().setCategory("eventItem").setAction("onItemClick").build());
-        context.startActivity(EventActivity.newIntent(context, event));
+        context.get().startActivity(EventActivity.newIntent(context.get(), event));
     }
 
     public void onFavoritClick(View view) {
         tracker.send(new HitBuilders.EventBuilder().setCategory("eventItem").setAction("onFavoritClick").build());
-        EventRealmRepository repository = new EventRealmRepository(context);
+        EventRealmRepository repository = new EventRealmRepository(context.get().getApplicationContext());
         event.setFavorit(!event.isFavorit());
         repository.saveEventAsFavorit(event);
         notifyChange();
@@ -89,5 +90,9 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
 
     public boolean isFavorit() {
         return this.event.isFavorit();
+    }
+
+    public void setContext(Context context) {
+        this.context = new WeakReference<>(context);
     }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 
 import de.ahlfeld.breminale.app.R;
@@ -55,6 +56,7 @@ public class ProgramViewModel implements ViewModel, SharedPreferences.OnSharedPr
 
     @Override
     public void destroy() {
+        Log.d(TAG, "destroy");
         PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this);
         context = null;
         mListener = null;

@@ -22,6 +22,31 @@
             app:title="@string/more"
             app:titleTextColor="@android:color/white" />
 
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="22.5dp"
+            android:layout_marginTop="22.5dp"
+            android:background="@color/ugly_ping_25_opcacity"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="@string/settings"
+            android:textColor="@color/purplish_grey"
+            android:textSize="12sp"
+            app:font="@{`roboto-medium`}" />
+
+        <View
+            style="@style/PrefBorder" />
+
+        <TextView
+            style="@style/PrefItem"
+            app:font="@{`roboto-regular`}"
+            android:onClick="@{viewModel::onLoadDataClick}"
+            android:text="@string/load_data" />
+
+        <View
+            style="@style/PrefBorder" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="22.5dp"

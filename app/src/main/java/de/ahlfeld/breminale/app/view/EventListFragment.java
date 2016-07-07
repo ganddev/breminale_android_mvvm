@@ -8,13 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.Date;
 import java.util.List;
@@ -69,7 +69,7 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
 
         setupRecyclerView(binding.eventsRecyclerView);
 
-        viewModel = new EventListViewModel(this.getContext(), this, new Date(args.getLong(DATE_FROM)), new Date(args.getLong(DATE_TO)));
+        viewModel = new EventListViewModel(getContext().getApplicationContext(), this, new Date(args.getLong(DATE_FROM)), new Date(args.getLong(DATE_TO)));
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }
@@ -80,6 +80,8 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
         if (viewModel != null) {
             viewModel.destroy();
         }
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 
 
@@ -99,7 +101,6 @@ public class EventListFragment extends Fragment implements EventListViewModel.Da
 
     @Override
     public void onEventsChanged(@NonNull List<Event> events) {
-        Log.i(TAG, "onEventsChanged size of events: " +events.size());
         EventAdapter adapter = (EventAdapter) binding.eventsRecyclerView.getAdapter();
         adapter.setEvents(events);
         adapter.notifyDataSetChanged();

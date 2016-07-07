@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.leakcanary.RefWatcher;
+
+import de.ahlfeld.breminale.app.BreminaleApplication;
 import de.ahlfeld.breminale.app.R;
 import de.ahlfeld.breminale.app.adapters.ProgramPageAdapter;
 import de.ahlfeld.breminale.app.databinding.FragmentProgramBinding;
@@ -40,7 +43,7 @@ public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeL
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_program,container,false);
         ProgramPageAdapter adapter = new ProgramPageAdapter(getChildFragmentManager());
-        viewModel = new ProgramViewModel(getContext(),adapter,this, this);
+        viewModel = new ProgramViewModel(getContext().getApplicationContext(),adapter,this, this);
         binding.setViewModel(viewModel);
         binding.viewpager.setAdapter(adapter);
         binding.viewpager.addOnPageChangeListener(this);
@@ -82,5 +85,7 @@ public class ProgramFragment extends Fragment implements ViewPager.OnPageChangeL
         if(viewModel != null) {
             viewModel.destroy();
         }
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

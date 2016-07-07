@@ -14,6 +14,7 @@ import android.webkit.WebView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.RefWatcher;
 
 import de.ahlfeld.breminale.app.BreminaleApplication;
 import de.ahlfeld.breminale.app.R;
@@ -65,5 +66,12 @@ public class InstagramFragment extends Fragment {
         WebSettings webSettings = webview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webview.loadUrl("file:///android_asset/instagram.html");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = BreminaleApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 }

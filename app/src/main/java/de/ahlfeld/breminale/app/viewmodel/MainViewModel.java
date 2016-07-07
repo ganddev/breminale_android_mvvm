@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
  */
 public class MainViewModel implements ViewModel {
 
-    private static final String TAG = MainViewModel.class.getSimpleName();
 
     private Navigation listener;
 

@@ -68,6 +68,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             if (binding.getViewModel() == null) {
                 binding.setViewModel(new ItemEventViewModel(itemView.getContext(), event));
             } else {
+                binding.getViewModel().destroy();
+                binding.getViewModel().setContext(itemView.getContext());
                 binding.getViewModel().setEvent(event);
             }
         }
