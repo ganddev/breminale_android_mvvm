@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Breminale</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">SETTINGS</string>
 
     <string name="google_maps_key">AIzaSyCIx0X6dnh64a4b8jhtqFut5l_pgU2SY_o</string>
     <string name="navigate_to_location">Route to location</string>
@@ -36,4 +36,5 @@
     <string name="title_activity_license">Open Source Licenses</string>
     <string name="title_activity_imprint">Imprint</string>
     <string name="title_activity_privacy">Privacy</string>
+    <string name="download_image_only_wifi">Download images only on wifi</string>
 </resources>

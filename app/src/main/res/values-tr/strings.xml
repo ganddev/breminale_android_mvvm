@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Breminale</string>
-    <string name="action_settings">Ayarlar</string>
+    <string name="action_settings">AYARLAR</string>
     <string name="navigate_to_location">yol tarifi</string>
     <string name="title_activity_event">Event</string>
     <string name="program">Program</string>

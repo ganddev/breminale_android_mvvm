@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Breminale</string>
-    <string name="action_settings">Einstellungen</string>
+    <string name="action_settings">EINSTELLUNGEN</string>
     <string name="navigate_to_location">Route zur Location</string>
     <string name="title_activity_event">Event</string>
     <string name="program">Programm</string>
