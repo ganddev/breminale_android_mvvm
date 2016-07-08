@@ -37,4 +37,5 @@
     <string name="title_activity_imprint">Imprint</string>
     <string name="title_activity_privacy">Privacy</string>
     <string name="download_image_only_wifi">Download images only on wifi</string>
+    <string name="download_images_only_if_connected_to_wifi">Download images only if connected to wifi?</string>
 </resources>
