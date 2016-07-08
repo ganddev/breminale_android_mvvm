@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Breminale</string>
-    <string name="action_settings">Ayarlar</string>
+    <string name="action_settings">AYARLAR</string>
     <string name="navigate_to_location">yol tarifi</string>
     <string name="title_activity_event">Event</string>
     <string name="program">Program</string>
@@ -35,4 +35,8 @@
     <string name="title_activity_license">Open Source Licenses</string>
     <string name="title_activity_imprint">Baskı</string>
     <string name="title_activity_privacy">Gizlilik</string>
+    <string name="download_image_only_wifi">Sadece Wi-Fi görüntüleri indirmek</string>
+    <string name="download_images_only_if_connected_to_wifi">Resimler 3G üzerinden indirmek olan veya LTE veri hacmi etkiler. Sadece Wi-Fi görüntüleri indirin?</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
 </resources>

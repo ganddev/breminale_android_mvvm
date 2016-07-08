@@ -29,6 +29,33 @@
             android:background="@color/ugly_ping_25_opcacity"
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
+            android:text="@string/action_settings"
+            android:textColor="@color/purplish_grey"
+            android:textSize="12sp"
+            app:font="@{`roboto-medium`}" />
+
+        <View
+            style="@style/PrefBorder" />
+
+        <android.support.v7.widget.SwitchCompat
+            style="@style/PrefItem"
+            app:font="@{`roboto-regular`}"
+            android:text="@string/download_image_only_wifi"
+            android:onClick="@{viewModel::onOnlyWifiClick}"
+            android:id="@+id/switch_only_wifi"
+            android:checked="@{viewModel.wifiOnly}"
+            app:theme="@style/Color1SwitchStyle"/>
+
+        <View
+            style="@style/PrefBorder" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="22.5dp"
+            android:layout_marginTop="22.5dp"
+            android:background="@color/ugly_ping_25_opcacity"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
             android:text="@string/information"
             android:textColor="@color/purplish_grey"
             android:textSize="12sp"
