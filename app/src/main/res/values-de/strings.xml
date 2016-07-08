@@ -35,4 +35,8 @@
     <string name="title_activity_license">Open Source Licenses</string>
     <string name="title_activity_imprint">Impressum</string>
     <string name="title_activity_privacy">Datenschutz</string>
+    <string name="download_image_only_wifi">Bilder nur im WLAN runterladen</string>
+    <string name="download_images_only_if_connected_to_wifi">Bilder mittels 3G oder LTE runterladen hat Einfluss auf dein Datenvolumen. Bilder nur im WLAN runterladen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

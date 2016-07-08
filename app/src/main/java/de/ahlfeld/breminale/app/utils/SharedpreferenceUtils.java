@@ -22,4 +22,15 @@ public class SharedpreferenceUtils {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sharedPreferences.getBoolean(BreminaleConsts.DOWNLOAD_IMAGES_ONLY_ON_WIFI, true);
     }
+
+    public static void toggleFirstStart(@NonNull Context ctx, boolean isFirstStart) {
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(BreminaleConsts.IS_FIRST_START, isFirstStart);
+        editor.commit();
+    }
+    public static boolean isFirstStart(@NonNull Context ctx) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return sharedPreferences.getBoolean(BreminaleConsts.IS_FIRST_START, true);
+    }
 }

@@ -34,21 +34,36 @@ public class WifiOnlyDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(R.string.download_image_only_wifi).setMessage(R.string.download_images_only_if_connected_to_wifi);
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        AlertDialog dialog = new AlertDialog.Builder(getContext()).setCancelable(false)
+                .setTitle(R.string.download_image_only_wifi)
+                .setMessage(R.string.download_images_only_if_connected_to_wifi)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        tracker.send(new HitBuilders.EventBuilder().setCategory("WifiOnly").setAction("onYesClicked").build());
+                        SharedpreferenceUtils.toggleFirstStart(getContext(), false);
+                        SharedpreferenceUtils.toggleWifiState(getContext().getApplicationContext(), true);
+                        dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        tracker.send(new HitBuilders.EventBuilder().setCategory("WifiOnly").setAction("onNoClicked").build());
+                        SharedpreferenceUtils.toggleFirstStart(getContext(), false);
+                        SharedpreferenceUtils.toggleWifiState(getContext().getApplicationContext(), false);
+                        dismiss();
+                    }
+                }).create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SharedpreferenceUtils.toggleWifiState(getContext().getApplicationContext(),true);
+            public void onShow(DialogInterface dialogInterface) {
+                dialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(android.R.color.black));
             }
         });
-        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SharedpreferenceUtils.toggleWifiState(getContext().getApplicationContext(), false);
-            }
-        });
-        return builder.create();
+
+        return dialog;
     }
 
     @Override

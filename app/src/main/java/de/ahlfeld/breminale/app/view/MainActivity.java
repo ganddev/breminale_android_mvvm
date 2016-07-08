@@ -19,6 +19,7 @@ import de.ahlfeld.breminale.app.BreminaleApplication;
 import de.ahlfeld.breminale.app.R;
 import de.ahlfeld.breminale.app.databinding.ActivityMainBinding;
 import de.ahlfeld.breminale.app.services.GcmRegistrationService;
+import de.ahlfeld.breminale.app.utils.SharedpreferenceUtils;
 import de.ahlfeld.breminale.app.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity implements MainViewModel.Navigation, FavoritsListFragment.OnProgramClickListener {
@@ -58,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Nav
         super.onResume();
         tracker.setScreenName("MainActivity");
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        if(SharedpreferenceUtils.isFirstStart(getApplicationContext())) {
+            WifiOnlyDialog dialog = new WifiOnlyDialog();
+            dialog.show(getSupportFragmentManager(), "wifionly");
+        }
     }
 
 
