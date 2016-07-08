@@ -8,10 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import de.ahlfeld.breminale.app.R;
 import de.ahlfeld.breminale.app.animations.ResizeAnimation;
 import de.ahlfeld.breminale.app.caches.FontCache;
+import de.ahlfeld.breminale.app.utils.NetworkUtils;
+import de.ahlfeld.breminale.app.utils.SharedpreferenceUtils;
 
 /**
  * Created by bjornahlfeld on 12.04.16.
@@ -33,19 +36,34 @@ public class Bindings {
 
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
-        if(!imageUrl.isEmpty()) {
-            Glide.with(view.getContext())
-                    .load(imageUrl)
-                    .centerCrop()
-                    .into(view);
-        } else {
+        if (SharedpreferenceUtils.isWifiOnly(view.getContext()) && NetworkUtils.isConnectedToWifi(view.getContext())) {
+            if (!imageUrl.isEmpty()) {
+                Glide.with(view.getContext().getApplicationContext())
+                        .load(imageUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+                        .into(view);
+            } else {
+                view.setImageResource(R.mipmap.empty_image);
+            }
+        } else if (SharedpreferenceUtils.isWifiOnly(view.getContext()) && !NetworkUtils.isConnectedToWifi(view.getContext())) {
             view.setImageResource(R.mipmap.empty_image);
+        } else {
+            if (!imageUrl.isEmpty()) {
+                Glide.with(view.getContext().getApplicationContext())
+                        .load(imageUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+                        .into(view);
+            } else {
+                view.setImageResource(R.mipmap.empty_image);
+            }
         }
     }
 
     @BindingAdapter({"isFavorit"})
     public static void isFavorit(ImageView iv, boolean isFavorit) {
-        if(isFavorit) {
+        if (isFavorit) {
             iv.setImageResource(R.mipmap.favorit_selected);
         } else {
             iv.setImageResource(R.mipmap.favorit_menu);
@@ -54,7 +72,7 @@ public class Bindings {
 
     @BindingAdapter({"favoritList"})
     public static void favoritList(ImageView iv, boolean isFavorit) {
-        if(isFavorit) {
+        if (isFavorit) {
             iv.setImageResource(R.drawable.is_favorit_list);
         } else {
             iv.setImageResource(R.mipmap.favorit_menu);
@@ -63,7 +81,7 @@ public class Bindings {
 
     @BindingAdapter("android:layout_height")
     public static void setLayoutHeight(TextView view, float height) {
-        ResizeAnimation resizeAnimation = new ResizeAnimation(view, (int)height, view.getHeight());
+        ResizeAnimation resizeAnimation = new ResizeAnimation(view, (int) height, view.getHeight());
         resizeAnimation.setDuration(1200);
         view.startAnimation(resizeAnimation);
     }

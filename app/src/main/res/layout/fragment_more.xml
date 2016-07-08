@@ -43,6 +43,7 @@
             android:text="@string/download_image_only_wifi"
             android:onClick="@{viewModel::onOnlyWifiClick}"
             android:id="@+id/switch_only_wifi"
+            android:checked="@{viewModel.wifiOnly}"
             app:theme="@style/Color1SwitchStyle"/>
 
         <View
