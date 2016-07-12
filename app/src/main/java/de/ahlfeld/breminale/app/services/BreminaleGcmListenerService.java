@@ -51,7 +51,7 @@ public class BreminaleGcmListenerService extends GcmListenerService {
     private void showNotification(@NonNull String message) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.zelt)
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText(message);
 
