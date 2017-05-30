@@ -15,9 +15,9 @@ import de.ahlfeld.breminale.app.view.EventListFragment;
  */
 public class ProgramPageAdapter extends FragmentPagerAdapter {
 
-    public static final int FIRST_DAY = 13;
+    public static final int FIRST_DAY = 05;
     public static final int MONTH_JULY = 06;
-    public static final int YEAR = 2016;
+    public static final int YEAR = 2017;
     public static final int HOUR_OF_DAY = 0;
     public static final int MINUTE = 0;
     public static final int SECOND = 0;
