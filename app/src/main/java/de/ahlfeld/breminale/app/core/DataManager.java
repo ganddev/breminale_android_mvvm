@@ -119,8 +119,9 @@ public class DataManager {
         for(Location location : locations) {
             if(location.getDeleted()) {
                 realmRepository.remove(location);
+            } else {
+                realmRepository.update(location);
             }
-            realmRepository.update(location);
         }
     }
 
@@ -129,8 +130,9 @@ public class DataManager {
         for(Event event : events) {
             if(event.getDeleted()) {
                 realmRepository.remove(event);
+            } else {
+                realmRepository.update(event);
             }
-            realmRepository.update(event);
         }
     }
 

@@ -22,7 +22,7 @@ public class Event implements Parcelable {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("image_url")
+    @SerializedName("image_url_medium")
     @Expose
     private String imageUrl;
     @SerializedName("start_time")

@@ -32,7 +32,7 @@ public class LocationRealmRepository implements Repository<Location> {
 
     public LocationRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .build();
         final Realm realm = Realm.getInstance(realmConfiguration);
 
@@ -49,7 +49,8 @@ public class LocationRealmRepository implements Repository<Location> {
     @Override
     public Observable<String> add(Location item) {
         final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realmParam -> realmParam.copyToRealmOrUpdate(toLocationRealm.map(item)));
+        LocationRealm locationRealm = toLocationRealm.map(item);
+        realm.executeTransactionAsync(bgRealm -> bgRealm.copyToRealmOrUpdate(locationRealm));
         realm.close();
         return Observable.just(String.valueOf(item.getId()));
     }
@@ -60,9 +61,10 @@ public class LocationRealmRepository implements Repository<Location> {
 
         final Realm realm = Realm.getDefaultInstance();
 
-        realm.executeTransaction(realmParam -> {
+        realm.executeTransactionAsync(bgRealm -> {
             for (de.ahlfeld.breminale.app.core.domain.domain.Location location : items) {
-                realm.copyToRealmOrUpdate(toLocationRealm.map(location));
+                LocationRealm locationRealm = toLocationRealm.map(location);
+                bgRealm.copyToRealmOrUpdate(locationRealm);
             }
         });
         realm.close();
@@ -80,6 +82,7 @@ public class LocationRealmRepository implements Repository<Location> {
         LocationRealm locationRealm = realm.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
 
         if(locationRealm != null) {
+
             realm.executeTransaction(realmParam -> {
                 realm.copyToRealmOrUpdate(toLocationRealm.copy(item, locationRealm));
             });

@@ -114,7 +114,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
 
         locations = new ArrayList<>();
         mMapView = binding.mapView;
-        mMapView.onCreate(savedInstanceState);
+        final Bundle mapViewSavedInstanceState = savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null;
+        mMapView.onCreate(mapViewSavedInstanceState);
         mMapView.getExtendedMapAsync(this);
         return binding.getRoot();
     }
@@ -300,9 +301,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState){
+        //This MUST be done before saving any of your own or your base class's     variables
+        final Bundle mapViewSaveState = new Bundle(outState);
+        mMapView.onSaveInstanceState(mapViewSaveState);
+        outState.putBundle("mapViewSaveState", mapViewSaveState);
+        //Add any other variables here.
         super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
     }
 
 }

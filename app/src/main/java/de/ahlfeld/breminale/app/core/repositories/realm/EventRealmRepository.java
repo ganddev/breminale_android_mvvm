@@ -33,7 +33,7 @@ public class EventRealmRepository implements Repository<Event> {
 
     public EventRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context).build();
+        this.realmConfiguration = new RealmConfiguration.Builder().build();
         final Realm realm = Realm.getInstance(realmConfiguration);
 
         this.toEvent = new EventRealmToEvent();
@@ -49,7 +49,8 @@ public class EventRealmRepository implements Repository<Event> {
     @Override
     public Observable<String> add(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realmParam -> realmParam.copyToRealmOrUpdate(toEventRealm.map(item)));
+        EventRealm eventRealm = toEventRealm.map(item);
+        realm.executeTransaction(bgRealm -> bgRealm.copyToRealmOrUpdate(eventRealm));
         realm.close();
         return Observable.just(String.valueOf(item.getId()));
     }
@@ -61,9 +62,10 @@ public class EventRealmRepository implements Repository<Event> {
 
         final Realm realm = Realm.getDefaultInstance();
 
-        realm.executeTransaction(realmParam -> {
+        realm.executeTransactionAsync(bgRealm -> {
             for(Event event : items){
-                realm.copyToRealmOrUpdate(toEventRealm.map(event));
+                EventRealm eventRealm = toEventRealm.map(event);
+                bgRealm.copyToRealmOrUpdate(eventRealm);
             }
         });
         realm.close();

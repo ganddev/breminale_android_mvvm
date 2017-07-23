@@ -43,18 +43,17 @@ import de.ahlfeld.breminale.app.databinding.ActivityEventBinding;
 import de.ahlfeld.breminale.app.viewmodel.EventViewModel;
 
 
-
 public class EventActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, OnMapReadyCallback, EventViewModel.DataListener {
 
     private static final String EXTRA_EVENT = "event";
     private EventViewModel eventViewModel;
     private ActivityEventBinding binding;
 
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.7f;
-    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f;
+    private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
-    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
     private RelativeLayout mTitleContainer;
@@ -98,6 +97,8 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
         setTitle("");
 
         mMapView = binding.mapImageView;
+        final Bundle mapViewSavedInstanceState = savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null;
+        mMapView.onCreate(mapViewSavedInstanceState);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
@@ -113,14 +114,14 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
     private void addSoundcloudFragment(Event event) {
         try {
             long soundcloudUserId = Long.parseLong(event.getSoundcloudUserId());
-            if(soundcloudUserId > 0 ) {
+            if (soundcloudUserId > 0) {
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 SoundcloudFragment sFm = SoundcloudFragment.newInstance(soundcloudUserId);
                 ft.replace(R.id.container_soundcloud, sFm);
                 ft.commit();
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             Log.e(TAG, e.getMessage());
         }
     }
@@ -144,7 +145,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
-        if(eventViewModel != null) {
+        if (eventViewModel != null) {
             eventViewModel.destroy();
         }
     }
@@ -172,7 +173,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
 
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-            if(!mIsTheTitleVisible) {
+            if (!mIsTheTitleVisible) {
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
@@ -186,7 +187,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if(mIsTheTitleContainerVisible) {
+            if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }
@@ -198,7 +199,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
         }
     }
 
-    public static void startAlphaAnimation (View v, long duration, int visibility) {
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);
@@ -221,7 +222,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
     }
 
     private void drawLocation() {
-        if(mMap != null && location != null) {
+        if (mMap != null && location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
             CameraUpdate cameraUpdate = CameraUpdateFactory
@@ -231,7 +232,7 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
         }
     }
 
-    private void loadMarkerIcon(@NonNull final Marker marker,@NonNull final Location location) {
+    private void loadMarkerIcon(@NonNull final Marker marker, @NonNull final Location location) {
         Glide.with(this).load(location.getMediumImageUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -239,5 +240,14 @@ public class EventActivity extends AppCompatActivity implements AppBarLayout.OnO
                 marker.setIcon(icon);
             }
         });
+    }
+
+    public void onSaveInstanceState(Bundle outState){
+        //This MUST be done before saving any of your own or your base class's     variables
+        final Bundle mapViewSaveState = new Bundle(outState);
+        mMapView.onSaveInstanceState(mapViewSaveState);
+        outState.putBundle("mapViewSaveState", mapViewSaveState);
+        //Add any other variables here.
+        super.onSaveInstanceState(outState);
     }
 }

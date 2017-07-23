@@ -36,7 +36,8 @@ public class Bindings {
 
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
-        if (SharedpreferenceUtils.isWifiOnly(view.getContext()) && NetworkUtils.isConnectedToWifi(view.getContext())) {
+        boolean wifiOnly = SharedpreferenceUtils.isWifiOnly(view.getContext());
+        if ((wifiOnly && NetworkUtils.isConnectedToWifi(view.getContext())) || !wifiOnly) {
             if (!imageUrl.isEmpty()) {
                 Glide.with(view.getContext().getApplicationContext())
                         .load(imageUrl)
@@ -46,20 +47,11 @@ public class Bindings {
             } else {
                 view.setImageResource(R.mipmap.empty_image);
             }
-        } else if (SharedpreferenceUtils.isWifiOnly(view.getContext()) && !NetworkUtils.isConnectedToWifi(view.getContext())) {
-            view.setImageResource(R.mipmap.empty_image);
-        } else {
-            if (!imageUrl.isEmpty()) {
-                Glide.with(view.getContext().getApplicationContext())
-                        .load(imageUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .centerCrop()
-                        .into(view);
-            } else {
-                view.setImageResource(R.mipmap.empty_image);
-            }
+            return;
         }
+        view.setImageResource(R.mipmap.empty_image);
     }
+
 
     @BindingAdapter({"isFavorit"})
     public static void isFavorit(ImageView iv, boolean isFavorit) {
