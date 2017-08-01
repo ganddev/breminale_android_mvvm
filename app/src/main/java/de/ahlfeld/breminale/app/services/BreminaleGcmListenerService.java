@@ -1,6 +1,8 @@
 package de.ahlfeld.breminale.app.services;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -10,6 +12,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import de.ahlfeld.breminale.app.R;
 import de.ahlfeld.breminale.app.core.DataManager;
+import de.ahlfeld.breminale.app.view.MainActivity;
 
 /**
  * Created by bjornahlfeld on 25.04.16.
@@ -49,13 +52,22 @@ public class BreminaleGcmListenerService extends GcmListenerService {
     }
 
     private void showNotification(@NonNull String message) {
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.zelt)
                         .setContentTitle(getString(R.string.app_name))
-                        .setContentText(message);
+                        .setContentText(message)
+                        .setContentIntent(pendingIntent)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(message));
 
         int mNotificationId = 001;
+
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
