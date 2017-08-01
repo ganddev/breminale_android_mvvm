@@ -32,7 +32,7 @@ public class LocationRealmRepository implements Repository<Location> {
 
     public LocationRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .build();
         final Realm realm = Realm.getInstance(realmConfiguration);
 

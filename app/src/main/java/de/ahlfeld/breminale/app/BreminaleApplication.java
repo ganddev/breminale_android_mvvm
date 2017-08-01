@@ -15,6 +15,9 @@ import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
+import static de.ahlfeld.breminale.app.BuildConfig.TWITTER_KEY;
+import static de.ahlfeld.breminale.app.BuildConfig.TWITTER_SECRET;
+
 /**
  * Created by bjornahlfeld on 31.03.16.
  */
@@ -32,12 +35,14 @@ public class BreminaleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
         context = getApplicationContext();
 
-        RealmConfiguration config = new RealmConfiguration.Builder(this).build();
+        Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(config);
+
 
         FontCache.getInstance().addFont("roboto-regular", "Roboto-Regular.ttf");
         FontCache.getInstance().addFont("roboto-bold", "Roboto-Bold.ttf");

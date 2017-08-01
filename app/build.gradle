@@ -19,7 +19,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
         applicationId "de.ahlfeld.breminale.app"
@@ -103,9 +103,7 @@ dependencies {
 
 //return a BREMINALE API KEY from a properties file.
 def getApiKey(String property) {
-    Properties properties = new Properties()
-    properties.load(new FileInputStream('/Users/bjornahlfeld/breminale_android_mvvm/.breminale_api_key'))
-    return "\"" + properties.getProperty(property) + "\""
+    return "\"" + System.getenv(property) + "\""
 }
 
 apply plugin: 'com.google.gms.google-services'
