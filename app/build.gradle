@@ -103,8 +103,7 @@ dependencies {
 
 //return a BREMINALE API KEY from a properties file.
 def getApiKey(String property) {
-    String variable = System.getenv(property)
-    return variable == null || variable.isEmpty() ? "" : variable
+    return "\"" + System.getenv(property) + "\""
 }
 
 apply plugin: 'com.google.gms.google-services'
