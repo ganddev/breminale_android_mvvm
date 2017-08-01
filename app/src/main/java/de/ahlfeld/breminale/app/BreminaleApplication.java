@@ -36,8 +36,10 @@ public class BreminaleApplication extends Application {
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
         context = getApplicationContext();
 
-        RealmConfiguration config = new RealmConfiguration.Builder(this).build();
+        Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(config);
+
 
         FontCache.getInstance().addFont("roboto-regular", "Roboto-Regular.ttf");
         FontCache.getInstance().addFont("roboto-bold", "Roboto-Bold.ttf");

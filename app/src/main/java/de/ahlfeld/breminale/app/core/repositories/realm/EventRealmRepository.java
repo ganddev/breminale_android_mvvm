@@ -33,7 +33,8 @@ public class EventRealmRepository implements Repository<Event> {
 
     public EventRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context).build();
+        this.realmConfiguration = new RealmConfiguration.Builder()
+                .build();
         final Realm realm = Realm.getInstance(realmConfiguration);
 
         this.toEvent = new EventRealmToEvent();
