@@ -35,16 +35,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         syncEvents();
     }
 
-
+    //TODO Move this to own Service class pass datamanager as dependency verify method calls at least in tests
     private void syncEvents() {
         DataManager manager = new DataManager(getContext());
         manager.loadEvents();
-
     }
 
     private void syncLocations() {
         DataManager manager = new DataManager(getContext());
         manager.loadLocations();
     }
-
 }

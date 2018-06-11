@@ -24,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -159,13 +158,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         drawMarkers();
     }
 
-    private void hideSoftKeyboard() {
-        if (searchView != null) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-        }
-    }
-
     private void drawMarkers() {
         if (mMap != null && locations != null && !locations.isEmpty()) {
             mMap.clear();
@@ -205,7 +197,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             @Override
             public void onMapClick(LatLng position) {
                 tracker.send(new HitBuilders.EventBuilder().setCategory("map").setAction("onMapClick").build());
-                resetOpacityOfMarkers();
+                resetOpacityOfMarkers(); //TODO First delegate to viewModel then back to activity / fragment
                 if (viewModel != null) {
                     viewModel.onMapClick();
                 }
@@ -218,7 +210,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
             tracker.send(new HitBuilders.EventBuilder().setCategory("map").setAction("onMarkerClick").build());
             if (viewModel != null) {
                 viewModel.onMarkerClick(marker.getData());
-                changeOpacityOfOtherMarkers(marker);
+                changeOpacityOfOtherMarkers(marker); //TODO should be called via an listener from the viewModel
             }
             if (mMapView != null) {
                 mMapView.setPadding(0, 0, 0, (int) DPtoPXUtils.convertDpToPixel(60F, getContext()));
@@ -236,6 +228,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         }
     }
 
+    //TODO Extract this to a service class or util method
+    /* public List<Marker> changeOpacityOfMarkers(Marker clickedMarker, List<Marker> markers) { ...
+            List<Marker> markers = new ArrayList<>();
+            for (Marker marker : markers) {
+                alpha = 1.0f
+                if (!((Location) marker.getData()).getId().equals(((Location) clickedMarker.getData()).getId())) {
+                    alpha = 0.5f
+                }
+                marker.setAlpha()
+            }
+
+            Add equal method to own marker class...
+            if (!((Location) marker.getData()).getId().equals(((Location) clickedMarker.getData()).getId())) {
+
+    */
     private void changeOpacityOfOtherMarkers(Marker clickedMarker) {
         if (mMap != null) {
             List<Marker> markers = mMap.getMarkers();
@@ -304,5 +311,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapView
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
     }
-
 }

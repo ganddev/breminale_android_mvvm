@@ -13,8 +13,6 @@ public class SyncService extends Service {
     /*
      * Instantiate the sync adapter object.
      */
-
-
     @Override
     public void onCreate() {
         synchronized (sSyncAdapterLock) {
