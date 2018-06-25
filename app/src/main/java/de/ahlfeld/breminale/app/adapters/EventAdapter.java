@@ -35,7 +35,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.events = events;
     }
 
-
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemEventBinding binding = DataBindingUtil.inflate(

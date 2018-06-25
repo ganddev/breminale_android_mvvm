@@ -3,6 +3,7 @@ package de.ahlfeld.breminale.app.core.repositories.realm;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,47 +16,45 @@ import de.ahlfeld.breminale.app.core.repositories.realm.mapper.LocationToLocatio
 import de.ahlfeld.breminale.app.core.repositories.realm.modelRealm.LocationRealm;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.LocationByIdSpecification;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.RealmSpecification;
+import io.reactivex.Flowable;
+import io.reactivex.functions.Function;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 28.05.16.
  */
 public class LocationRealmRepository implements Repository<Location> {
 
-    private final Mapper<LocationRealm, Location> toLocation;
     private final Mapper<Location, LocationRealm> toLocationRealm;
     private final RealmConfiguration realmConfiguration;
 
 
     public LocationRealmRepository(@NonNull Context context) {
-
         this.realmConfiguration = new RealmConfiguration.Builder()
                 .build();
         final Realm realm = Realm.getInstance(realmConfiguration);
 
-        this.toLocation = new LocationRealmToLocation();
         this.toLocationRealm = new LocationToLocationRealm(realm);
 
     }
 
     @Override
-    public Observable<Location> getById(@NonNull Integer id) {
-        return query(new LocationByIdSpecification(id)).flatMap(Observable::from);
+    public Flowable<Location> getById(@NonNull Integer id) {
+        return query(new LocationByIdSpecification(id)).flatMap(Flowable::fromIterable);
     }
 
     @Override
-    public Observable<String> add(Location item) {
+    public Flowable<String> add(Location item) {
         final Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(realmParam -> realmParam.copyToRealmOrUpdate(toLocationRealm.map(item)));
         realm.close();
-        return Observable.just(String.valueOf(item.getId()));
+        return Flowable.just(String.valueOf(item.getId()));
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Location> items) {
+    public Flowable<Integer> add(Iterable<Location> items) {
         int size = 0;
 
         final Realm realm = Realm.getDefaultInstance();
@@ -71,15 +70,15 @@ public class LocationRealmRepository implements Repository<Location> {
             size = ((Collection<?>) items).size();
         }
 
-        return Observable.just(size);
+        return Flowable.just(size);
     }
 
     @Override
-    public Observable<Location> update(@NonNull Location item) {
+    public Flowable<Location> update(@NonNull Location item) {
         final Realm realm = Realm.getDefaultInstance();
         LocationRealm locationRealm = realm.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
 
-        if(locationRealm != null) {
+        if (locationRealm != null) {
             realm.executeTransaction(realmParam -> {
                 realm.copyToRealmOrUpdate(toLocationRealm.copy(item, locationRealm));
             });
@@ -88,26 +87,26 @@ public class LocationRealmRepository implements Repository<Location> {
         }
         realm.close();
 
-        return Observable.just(item);
+        return Flowable.just(item);
     }
 
     @Override
-    public Observable<Integer> remove(@NonNull Location item) {
+    public Flowable<Integer> remove(@NonNull Location item) {
         final Realm realm = Realm.getDefaultInstance();
         LocationRealm locationRealm = realm.where(LocationRealm.class).equalTo("id", item.getId()).findFirst();
-        if (locationRealm != null){
+        if (locationRealm != null) {
             realm.executeTransaction(realmParam -> locationRealm.deleteFromRealm());
 
             // if locationrealm.isValid() is false, it is because the realm object was deleted
-            return Observable.just(locationRealm.isValid() ? 0 : 1);
+            return Flowable.just(locationRealm.isValid() ? 0 : 1);
         }
         realm.close();
 
-        return Observable.just(0);
+        return Flowable.just(0);
     }
 
     @Override
-    public Observable<Integer> remove(Specification specification) {
+    public Flowable<Integer> remove(Specification specification) {
         Realm realm = Realm.getDefaultInstance();
 
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
@@ -118,20 +117,27 @@ public class LocationRealmRepository implements Repository<Location> {
         realm.close();
 
         // if plantRealm.isValid() is false, it is because the realm object was deleted
-        return Observable.just(locationRealm.isValid() ? 0 : 1);
+        return Flowable.just(locationRealm.isValid() ? 0 : 1);
     }
 
     @Override
-    public Observable<List<Location>> query(Specification specification) {
+    public Flowable<List<Location>> query(Specification specification) {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
         final Realm realm = Realm.getDefaultInstance();
-        final Observable<RealmResults<LocationRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<LocationRealm>> realmResults = realmSpecification.toFlowableRealmResults(realm);
+        final LocationRealmToLocation mapper = new LocationRealmToLocation();
 
-        // convert Observable<RealmResults<PlantRealm>> into Observable<List<Plant>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(locationRealm -> toLocation.map(locationRealm))
-                        .toList());
+        // convert Observable<RealmResults<LocationRealm>> into Flowable<List<Location>>
+        return realmResults.map(new Function<RealmResults<LocationRealm>, List<Location>>() {
+            @Override
+            public List<Location> apply(RealmResults<LocationRealm> locationRealms) throws Exception {
+                List<Location> locations = new ArrayList<>();
+                for (LocationRealm locationRealm : locationRealms) {
+                    locations.add(mapper.map(locationRealm));
+                }
+                return locations;
+            }
+        });
     }
 
     public void removeAll() {

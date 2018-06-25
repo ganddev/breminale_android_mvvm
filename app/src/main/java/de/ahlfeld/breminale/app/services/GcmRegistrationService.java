@@ -10,13 +10,14 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.gson.JsonObject;
 
+import org.reactivestreams.Subscription;
+
 import de.ahlfeld.breminale.app.BuildConfig;
 import de.ahlfeld.breminale.app.R;
 import de.ahlfeld.breminale.app.networking.BreminaleService;
 import de.ahlfeld.breminale.app.utils.BreminaleConsts;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.observables.BlockingObservable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -26,8 +27,6 @@ import rx.observables.BlockingObservable;
  * TODO: Customize class - update intent actions and extra parameters.
  */
 public class GcmRegistrationService extends IntentService {
-
-
     private static final String TAG = GcmRegistrationService.class.getSimpleName();
     private Subscription deviceSubscription;
 
@@ -51,8 +50,8 @@ public class GcmRegistrationService extends IntentService {
 
     @Override
     public void onDestroy() {
-        if(deviceSubscription != null && !deviceSubscription.isUnsubscribed()) {
-            deviceSubscription.unsubscribe();
+        if (deviceSubscription != null) {
+            deviceSubscription.cancel();
         }
         deviceSubscription = null;
         super.onDestroy();
@@ -69,13 +68,10 @@ public class GcmRegistrationService extends IntentService {
     private void sendRegistrationToServer(JsonObject device) {
         // Add custom implementation, as needed.
         final BreminaleService service = BreminaleService.Factory.create();
-        BlockingObservable<JsonObject> call = service.postDeviceToken(BuildConfig.BREMINALE_API_KEY, device).toBlocking();
-
-        call.subscribe(new Subscriber<JsonObject>() {
+        service.postDeviceToken(BuildConfig.BREMINALE_API_KEY, device).blockingSubscribe(new Observer<JsonObject>() {
             @Override
-            public void onCompleted() {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GcmRegistrationService.this);
-                sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, true).apply();
+            public void onSubscribe(Disposable d) {
+
             }
 
             @Override
@@ -86,6 +82,12 @@ public class GcmRegistrationService extends IntentService {
             @Override
             public void onNext(JsonObject jsonObject) {
                 Log.i(TAG, jsonObject.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(GcmRegistrationService.this);
+                sharedPreferences.edit().putBoolean(BreminaleConsts.SENT_TOKEN_TO_SERVER, true).apply();
             }
         });
     }

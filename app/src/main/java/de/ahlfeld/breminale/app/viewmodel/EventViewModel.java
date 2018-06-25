@@ -16,7 +16,7 @@ import de.ahlfeld.breminale.app.core.domain.domain.Event;
 import de.ahlfeld.breminale.app.core.domain.domain.Location;
 import de.ahlfeld.breminale.app.core.repositories.realm.EventRealmRepository;
 import de.ahlfeld.breminale.app.core.repositories.realm.LocationRealmRepository;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by bjornahlfeld on 05.04.16.
@@ -27,7 +27,7 @@ public class EventViewModel implements ViewModel {
     private Context context;
 
     private Event event;
-    private Subscription locationSubscription;
+    private Disposable locationSubscription;
 
     public ObservableField<String> locationName;
 
@@ -47,14 +47,14 @@ public class EventViewModel implements ViewModel {
 
         isFavorit = new ObservableBoolean(event.isFavorit());
 
-        tracker = ((BreminaleApplication)context.getApplicationContext()).getDefaultTracker();
+        tracker = ((BreminaleApplication) context.getApplicationContext()).getDefaultTracker();
         loadLocation();
     }
 
     private void loadLocation() {
         LocationRealmRepository realmRepository = new LocationRealmRepository(context);
         locationSubscription = realmRepository.getById(event.getLocationId()).subscribe(locationFromDB -> {
-            if(dataListener != null) {
+            if (dataListener != null) {
                 dataListener.onLocationChanged(locationFromDB);
             }
             locationName.set(locationFromDB.getName());
@@ -63,8 +63,8 @@ public class EventViewModel implements ViewModel {
 
     @Override
     public void destroy() {
-        if (locationSubscription != null && !locationSubscription.isUnsubscribed()) {
-            locationSubscription.unsubscribe();
+        if (locationSubscription != null && !locationSubscription.isDisposed()) {
+            locationSubscription.dispose();
         }
         dataListener = null;
         locationSubscription = null;

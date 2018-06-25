@@ -3,9 +3,9 @@ package de.ahlfeld.breminale.app.core.repositories.restAPI.services;
 import java.util.List;
 
 import de.ahlfeld.breminale.app.core.domain.domain.Event;
+import io.reactivex.Flowable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 31.05.16.
@@ -13,9 +13,9 @@ import rx.Observable;
 public interface EventRestAPI {
 
     @GET("events.json")
-    Observable<List<Event>> getEvents();
+    Flowable<List<Event>> getEvents();
 
     @GET("events/{id}.json")
-    Observable<Event> getEvent(@Path("id") int eventId);
+    Flowable<Event> getEvent(@Path("id") int eventId);
 
 }

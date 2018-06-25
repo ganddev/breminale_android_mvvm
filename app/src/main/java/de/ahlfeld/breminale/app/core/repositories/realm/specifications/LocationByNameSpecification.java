@@ -3,10 +3,9 @@ package de.ahlfeld.breminale.app.core.repositories.realm.specifications;
 import android.support.annotation.NonNull;
 
 import de.ahlfeld.breminale.app.core.repositories.realm.modelRealm.LocationRealm;
+import io.reactivex.Flowable;
 import io.realm.Realm;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 06.06.16.
@@ -20,8 +19,12 @@ public class LocationByNameSpecification implements RealmSpecification {
     }
 
     @Override
-    public Observable<RealmResults<LocationRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(LocationRealm.class).beginsWith("name",query).findAllAsync().asObservable();
+    public Flowable<RealmResults<LocationRealm>> toFlowableRealmResults(@NonNull Realm realm) {
+        return realm
+                .where(LocationRealm.class)
+                .beginsWith("name",query)
+                .findAllAsync()
+                .asFlowable();
     }
 
     @Override
@@ -30,7 +33,7 @@ public class LocationByNameSpecification implements RealmSpecification {
     }
 
     @Override
-    public RealmObject toPlantRealm(@NonNull Realm realm) {
+    public LocationRealm toPlantRealm(@NonNull Realm realm) {
         return null;
     }
 }

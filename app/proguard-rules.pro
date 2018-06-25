@@ -25,6 +25,8 @@
 -keep public class org.codehaus.**
 -keep public class java.nio.**
 -dontwarn retrofit2.Platform$Java8
+-keep class android.arch.** { *; }
+
 
 -keepclassmembers class * extends android.app.Activity {
        public void *(android.view.View);

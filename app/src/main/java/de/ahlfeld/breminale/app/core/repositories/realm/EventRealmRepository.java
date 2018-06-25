@@ -3,6 +3,7 @@ package de.ahlfeld.breminale.app.core.repositories.realm;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,12 +15,13 @@ import de.ahlfeld.breminale.app.core.repositories.realm.mapper.EventRealmToEvent
 import de.ahlfeld.breminale.app.core.repositories.realm.mapper.EventToEventRealm;
 import de.ahlfeld.breminale.app.core.repositories.realm.mapper.EventToEventRealmFavorit;
 import de.ahlfeld.breminale.app.core.repositories.realm.modelRealm.EventRealm;
-import de.ahlfeld.breminale.app.core.repositories.realm.specifications.EventByIdSpecification;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.RealmSpecification;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 28.05.16.
@@ -43,45 +45,43 @@ public class EventRealmRepository implements Repository<Event> {
     }
 
     @Override
-    public Observable<Event> getById(@NonNull Integer id) {
-        return query(new EventByIdSpecification(id)).flatMap(Observable::from);
+    public Flowable<Event> getById(@NonNull Integer id) {
+        return null;
     }
 
     @Override
-    public Observable<String> add(@NonNull final Event item) {
+    public Flowable<String> add(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(realmParam -> realmParam.copyToRealmOrUpdate(toEventRealm.map(item)));
         realm.close();
-        return Observable.just(String.valueOf(item.getId()));
+        return Flowable.just(String.valueOf(item.getId()));
     }
 
     @Override
-    public Observable<Integer> add(@NonNull Iterable<Event> items) {
-
+    public Flowable<Integer> add(@NonNull Iterable<Event> items) {
         int size = 0;
 
         final Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(realmParam -> {
-            for(Event event : items){
+            for (Event event : items) {
                 realm.copyToRealmOrUpdate(toEventRealm.map(event));
             }
         });
         realm.close();
 
-        if(items instanceof Collection<?>) {
+        if (items instanceof Collection<?>) {
             size = ((Collection<?>) items).size();
         }
-
-        return Observable.just(size);
+        return Flowable.just(size);
     }
 
     @Override
-    public Observable<Event> update(@NonNull final Event item) {
+    public Flowable<Event> update(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
         EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
 
-        if(eventRealm != null) {
+        if (eventRealm != null) {
             realm.executeTransaction(realmParam -> {
                 realmParam.copyToRealmOrUpdate(toEventRealm.copy(item, eventRealm));
             });
@@ -90,24 +90,24 @@ public class EventRealmRepository implements Repository<Event> {
         }
         realm.close();
 
-        return Observable.just(item);
+        return Flowable.just(item);
     }
 
     @Override
-    public Observable<Integer> remove(@NonNull final Event item) {
+    public Flowable<Integer> remove(@NonNull final Event item) {
         final Realm realm = Realm.getDefaultInstance();
         EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
-        if(eventRealm != null) {
+        if (eventRealm != null) {
             realm.executeTransaction(realmParam -> eventRealm.deleteFromRealm());
-            return Observable.just(eventRealm.isValid() ? 0 : 1);
+            return Flowable.just(eventRealm.isValid() ? 0 : 1);
         }
         realm.close();
         // if eventRealm.isValid() is false, it is because the realm object was deleted
-        return Observable.just(0);
+        return Flowable.just(0);
     }
 
     @Override
-    public Observable<Integer> remove(@NonNull Specification specification) {
+    public Flowable<Integer> remove(@NonNull Specification specification) {
         Realm realm = Realm.getDefaultInstance();
 
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
@@ -118,21 +118,28 @@ public class EventRealmRepository implements Repository<Event> {
         realm.close();
 
         // if plantRealm.isValid() is false, it is because the realm object was deleted
-        return Observable.just(eventRealm.isValid() ? 0 : 1);
+        return Flowable.just(eventRealm.isValid() ? 0 : 1);
     }
 
 
     @Override
-    public Observable<List<Event>> query(@NonNull final Specification specification) {
+    public Flowable<List<Event>> query(@NonNull final Specification specification) {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
         final Realm realm = Realm.getDefaultInstance();
-        final Observable<RealmResults<EventRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        EventRealmToEvent mapper = new EventRealmToEvent();
+        final Flowable<RealmResults<EventRealm>> realmResults = realmSpecification.toFlowableRealmResults(realm);
 
-        // convert Observable<RealmResults<PlantRealm>> into Observable<List<Plant>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(eventRealm -> toEvent.map(eventRealm))
-                        .toList());
+        // convert Flowable<RealmResults<EventRealm>> into Flowable<List<Event>>
+        return realmResults.map(new Function<RealmResults<EventRealm>, List<Event>>() {
+            @Override
+            public List<Event> apply(RealmResults<EventRealm> eventRealms) throws Exception {
+                List<Event> events = new ArrayList<>();
+                for (EventRealm eventRealm : eventRealms) {
+                    events.add(mapper.map(eventRealm));
+                }
+                return events;
+            }
+        });
 
     }
 
@@ -149,7 +156,7 @@ public class EventRealmRepository implements Repository<Event> {
         final Realm realm = Realm.getDefaultInstance();
         EventRealm eventRealm = realm.where(EventRealm.class).equalTo("id", item.getId()).findFirst();
 
-        if(eventRealm != null) {
+        if (eventRealm != null) {
             realm.executeTransaction(realmParam -> {
                 realmParam.copyToRealmOrUpdate(toEventRealmFavorit.copy(item, eventRealm));
             });

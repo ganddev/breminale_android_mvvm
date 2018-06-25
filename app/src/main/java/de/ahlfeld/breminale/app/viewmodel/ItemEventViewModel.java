@@ -15,7 +15,7 @@ import de.ahlfeld.breminale.app.core.domain.domain.Event;
 import de.ahlfeld.breminale.app.core.repositories.realm.EventRealmRepository;
 import de.ahlfeld.breminale.app.core.repositories.realm.LocationRealmRepository;
 import de.ahlfeld.breminale.app.view.EventActivity;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by bjornahlfeld on 04.04.16.
@@ -25,7 +25,7 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
     private Context context;
     private Event event;
 
-    private Subscription locationSubscription;
+    private Disposable locationSubscription;
     public ObservableField<String> locationName;
     private Tracker tracker;
 
@@ -34,13 +34,13 @@ public class ItemEventViewModel extends BaseObservable implements ViewModel {
         this.event = event;
         locationName = new ObservableField<>("No location");
         getLocationName();
-        tracker = ((BreminaleApplication)context.getApplicationContext()).getDefaultTracker();
+        tracker = ((BreminaleApplication) context.getApplicationContext()).getDefaultTracker();
     }
 
     @Override
     public void destroy() {
-        if(locationSubscription != null && !locationSubscription.isUnsubscribed()) {
-            locationSubscription.unsubscribe();
+        if (locationSubscription != null && !locationSubscription.isDisposed()) {
+            locationSubscription.dispose();
         }
         locationSubscription = null;
         context = null;

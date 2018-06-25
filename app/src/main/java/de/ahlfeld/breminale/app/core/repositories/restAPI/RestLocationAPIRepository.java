@@ -9,7 +9,7 @@ import de.ahlfeld.breminale.app.core.repositories.Repository;
 import de.ahlfeld.breminale.app.core.repositories.Specification;
 import de.ahlfeld.breminale.app.core.repositories.network.ServiceFactory;
 import de.ahlfeld.breminale.app.core.repositories.restAPI.services.LocationRestAPI;
-import rx.Observable;
+import io.reactivex.Flowable;
 
 /**
  * Created by bjornahlfeld on 31.05.16.
@@ -23,37 +23,37 @@ public class RestLocationAPIRepository implements Repository<Location> {
     }
 
     @Override
-    public Observable<Location> getById(@NonNull Integer id) {
+    public Flowable<Location> getById(@NonNull Integer id) {
         return api.getLocation(id);
     }
 
     @Override
-    public Observable<String> add(Location item) {
+    public Flowable<String> add(Location item) {
         return null;
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Location> items) {
+    public Flowable<Integer> add(Iterable<Location> items) {
         return null;
     }
 
     @Override
-    public Observable<Location> update(Location item) {
+    public Flowable<Location> update(Location item) {
         return null;
     }
 
     @Override
-    public Observable<Integer> remove(Location item) {
+    public Flowable<Integer> remove(Location item) {
         return null;
     }
 
     @Override
-    public Observable<Integer> remove(Specification specification) {
+    public Flowable<Integer> remove(Specification specification) {
         return null;
     }
 
     @Override
-    public Observable<List<Location>> query(Specification specification) {
+    public Flowable<List<Location>> query(Specification specification) {
         return api.getLocations();
     }
 }

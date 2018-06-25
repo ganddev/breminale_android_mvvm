@@ -3,11 +3,11 @@ package de.ahlfeld.breminale.app.core.repositories.realm.specifications;
 import android.support.annotation.NonNull;
 
 import de.ahlfeld.breminale.app.core.repositories.realm.modelRealm.EventRealm;
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 30.05.16.
@@ -23,8 +23,14 @@ public class EventByFavoritSpecification implements RealmSpecification {
         this.isDeleted = false;
     }
     @Override
-    public Observable<RealmResults<EventRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(EventRealm.class).equalTo("favorit",this.isFavorit).equalTo("deleted", this.isDeleted).findAllSortedAsync("startTime", Sort.ASCENDING).asObservable();
+    public Flowable<RealmResults<EventRealm>> toFlowableRealmResults(@NonNull Realm realm) {
+        return realm
+                .where(EventRealm.class)
+                .equalTo("favorit",this.isFavorit)
+                .equalTo("deleted", this.isDeleted)
+                .sort("startTime", Sort.ASCENDING)
+                .findAllAsync()
+                .asFlowable();
     }
 
     @Override

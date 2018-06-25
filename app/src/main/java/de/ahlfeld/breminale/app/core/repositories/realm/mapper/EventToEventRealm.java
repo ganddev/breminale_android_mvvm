@@ -20,8 +20,7 @@ public class EventToEventRealm implements Mapper<Event, EventRealm> {
 
     @Override
     public EventRealm map(@NonNull Event event) {
-        EventRealm eventRealm = realm.createObject(EventRealm.class);
-        eventRealm.setId(event.getId());
+        EventRealm eventRealm = realm.createObject(EventRealm.class, event.getId());
         copy(event, eventRealm);
         return eventRealm;
     }
