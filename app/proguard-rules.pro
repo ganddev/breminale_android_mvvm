@@ -37,7 +37,9 @@
 # for details see http://stackoverflow.com/questions/23883028/how-to-fix-proguard-warning-cant-find-referenced-method-for-existing-methods
 -dontwarn net.fortuna.ical4j.model.**
 
-
+-dontwarn com.androidmapsextension.*
+-dontwarn com.google.android.gms.maps.*
+-dontwarn com.google.android.gms.maps.model.*
 # standard, except v4.app.Fragment, its required when app uses Fragments
 -keep public class * extends android.app.Activity
 -keep public class * extends android.support.v7.app.ActionBarActivity
@@ -70,6 +72,14 @@
     long producerNode;
     long consumerNode;
 }
-
+-keep class com.google.android.gms.maps.** { *; }
+-keep interface com.google.android.gms.maps.** { *; }
 -dontwarn groovy.**
 -keep class groovy.** { *; }
+
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase

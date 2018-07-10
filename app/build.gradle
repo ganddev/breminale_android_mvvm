@@ -24,8 +24,8 @@ android {
         applicationId "de.ahlfeld.breminale.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.1.3"
+        versionCode 12
+        versionName "1.1.5"
         buildConfigField "String", "BREMINALE_API_KEY", getApiKey("BREMINALE_API_KEY")
         buildConfigField "String", "TWITTER_KEY", getApiKey("TWITTER_KEY")
         buildConfigField "String", "TWITTER_SECRET", getApiKey("TWITTER_SECRET")
@@ -76,10 +76,10 @@ dependencies {
     implementation "com.android.support:design:$rootProject.supportLibraryVersion"
     implementation "com.roughike:bottom-bar:$rootProject.bottomBar"
     implementation 'com.viewpagerindicator:library:2.4.1@aar'
-    implementation "com.androidmapsextensions:android-maps-extensions:$rootProject.mapExtensions"
     implementation "com.google.android.gms:play-services-maps:$rootProject.playServices"
     implementation "com.google.android.gms:play-services-gcm:$rootProject.playServices"
     implementation "com.google.android.gms:play-services-analytics:$rootProject.playServices"
+    implementation "com.androidmapsextensions:android-maps-extensions:$rootProject.mapExtensions"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroid"
     implementation "com.google.code.gson:gson:$rootProject.gson"
