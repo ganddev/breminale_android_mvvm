@@ -24,8 +24,8 @@ android {
         applicationId "de.ahlfeld.breminale.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "1.1.5"
+        versionCode 13
+        versionName "1.1.6"
         buildConfigField "String", "BREMINALE_API_KEY", getApiKey("BREMINALE_API_KEY")
         buildConfigField "String", "TWITTER_KEY", getApiKey("TWITTER_KEY")
         buildConfigField "String", "TWITTER_SECRET", getApiKey("TWITTER_SECRET")
