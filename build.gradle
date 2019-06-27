@@ -11,12 +11,12 @@ buildscript {
         }
         jcenter()
         mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'io.realm:realm-gradle-plugin:3.5.0'
-        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'io.realm:realm-gradle-plugin:5.2.0'
+        classpath 'com.google.gms:google-services:4.0.1'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
@@ -34,7 +34,31 @@ allprojects {
         }
         jcenter()
         mavenCentral()
+        google()
     }
+}
+
+// Define versions in a single place
+ext {
+    // Sdk and tools
+    // Support library and architecture components support minSdk 14 and above.
+
+    minSdkVersion = 16
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+    buildToolsVersion = '28.0.0'
+
+    // App dependencies
+    supportLibraryVersion = '26.1.0'
+    bottomBar = '1.3.9'
+    mapExtensions = '2.4.0'
+    retrofit = '2.4.0'
+    okHttp = '3.10.0'
+    glide = '3.5.2'
+    rxjava = '2.1.0'
+    playServices='9.0.2'
+    gson='2.8.5'
+    rxAndroid='2.0.2'
 }
 
 task clean(type: Delete) {

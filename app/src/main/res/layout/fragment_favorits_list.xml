@@ -13,68 +13,64 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/ic_empty_state_bg"
         android:orientation="vertical">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
             android:background="?attr/colorPrimary"
             android:titleTextColor="@android:color/white"
-            app:titleTextColor="@android:color/white"
-            app:title="@string/favorits" />
-
-
-        <ImageView
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:visibility="@{viewModel.emptyViewVisibility}"
-            android:src="@mipmap/empty_state_favorits"/>
+            app:title="@string/favorits"
+            app:titleTextColor="@android:color/white" />
 
         <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_below="@id/toolbar"
-            android:layout_marginTop="137.5dp"
-            android:visibility="@{viewModel.emptyViewVisibility}"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/empty_favorits_heart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginTop="68dp"
+            app:srcCompat="@drawable/ic_dove"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            tools:visibility="visible" />
+
         <TextView
             android:id="@+id/tv_empty_favorits"
-            android:layout_below="@id/toolbar"
-            android:layout_marginTop="192dp"
-            android:textSize="16sp"
-            android:textColor="@color/purplish_grey"
-            android:layout_centerHorizontal="true"
-            android:text="@string/favorits_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.emptyViewVisibility}"
-            app:font="@{`roboto-medium`}"/>
-        
-        <Button
             android:layout_below="@id/toolbar"
-            android:text="@string/program"
-            android:visibility="@{viewModel.emptyViewVisibility}"
-            android:layout_marginTop="291dp"
-            android:layout_width="166dp"
             android:layout_centerHorizontal="true"
-            android:layout_height="26dp"
+            android:layout_marginTop="240dp"
+            android:text="@string/favorits_empty"
             android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            app:font="@{`roboto-medium`}"
+            tools:visibility="visible" />
+
+        <Button
+            android:layout_width="166dp"
+            android:layout_height="26dp"
+            android:layout_below="@id/toolbar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="291dp"
             android:background="@drawable/button_background"
             android:onClick="@{viewModel::toProgram}"
-            app:font="@{`roboto-medium`}"/>
+            android:text="@string/program"
+            android:textColor="@android:color/white"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            app:font="@{`roboto-medium`}" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/events_recycler_view"
-            android:layout_below="@id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
             android:clipToPadding="false"
             android:scrollbars="vertical"
-            app:visibility="@{viewModel.recyclerViewVisibility}"/>
+            app:visibility="@{viewModel.recyclerViewVisibility}" />
 
     </RelativeLayout>
 

@@ -12,7 +12,7 @@ import de.ahlfeld.breminale.app.core.domain.domain.Location;
 import de.ahlfeld.breminale.app.core.repositories.realm.LocationRealmRepository;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.LocationByNameSpecification;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.LocationSpecification;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by bjornahlfeld on 07.04.16.
@@ -28,7 +28,7 @@ public class MapViewModel implements ViewModel {
 
     public ObservableField<String> locationName;
 
-    private Subscription subscription;
+    private Disposable subscription;
     private Location location;
     private NavigateListener navigateListener;
 
@@ -44,14 +44,16 @@ public class MapViewModel implements ViewModel {
     public void loadLocations() {
         LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
         LocationSpecification specification = new LocationSpecification();
-        subscription = realmRepository.query(specification).subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
+        subscription = realmRepository
+                .query(specification)
+                .subscribe(locationsFromDB -> dataListener.onLocationsChanged(locationsFromDB));
     }
 
 
     @Override
     public void destroy() {
-        if(subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+        if(subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
         }
         subscription = null;
         context = null;

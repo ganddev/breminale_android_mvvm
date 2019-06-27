@@ -15,14 +15,13 @@ import de.ahlfeld.breminale.app.view.EventListFragment;
  */
 public class ProgramPageAdapter extends FragmentPagerAdapter {
 
-    public static final int FIRST_DAY = 05;
+    public static final int FIRST_DAY = 25;
     public static final int MONTH_JULY = 06;
-    public static final int YEAR = 2017;
+    public static final int YEAR = 2018;
     public static final int HOUR_OF_DAY = 0;
     public static final int MINUTE = 0;
     public static final int SECOND = 0;
     private Calendar[] titles;
-    private String TAG = ProgramPageAdapter.class.getSimpleName();
 
     public ProgramPageAdapter(FragmentManager manager) {
         super(manager);

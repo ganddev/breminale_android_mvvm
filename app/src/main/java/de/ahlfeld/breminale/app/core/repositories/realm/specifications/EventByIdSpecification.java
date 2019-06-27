@@ -3,9 +3,9 @@ package de.ahlfeld.breminale.app.core.repositories.realm.specifications;
 import android.support.annotation.NonNull;
 
 import de.ahlfeld.breminale.app.core.repositories.realm.modelRealm.EventRealm;
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 28.05.16.
@@ -20,10 +20,11 @@ public class EventByIdSpecification implements RealmSpecification {
 
 
     @Override
-    public Observable<RealmResults<EventRealm>> toObservableRealmResults(@NonNull Realm realm) {
+    public Flowable<RealmResults<EventRealm>> toFlowableRealmResults(@NonNull Realm realm) {
         return realm.where(EventRealm.class)
                 .equalTo("id", id)
-                .findAllAsync().asObservable();
+                .findAllAsync()
+                .asFlowable();
     }
 
     @Override

@@ -6,6 +6,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,16 +19,14 @@ import de.ahlfeld.breminale.app.core.repositories.realm.EventRealmRepository;
 import de.ahlfeld.breminale.app.core.repositories.realm.LocationRealmRepository;
 import de.ahlfeld.breminale.app.core.repositories.restAPI.RestEventAPIRepository;
 import de.ahlfeld.breminale.app.core.repositories.restAPI.RestLocationAPIRepository;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by bjornahlfeld on 03.06.16.
  */
 public class DataManager {
-
 
     private static final String TAG = DataManager.class.getSimpleName();
     private static final String LAST_UPDATE = "lastupdate";
@@ -42,17 +43,17 @@ public class DataManager {
 
     /**
      * Returns true if data was never been loaded or the last update is more then 5 hours ago.
+     *
      * @return
      */
     public boolean shouldLoadData() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
         long lastUpdate = preferences.getLong(LAST_UPDATE, 0);
         Date now = new Date();
-        if(lastUpdate <= 0) {
+        if (lastUpdate <= 0) {
             return true;
-        }
-        else if(now.getTime() - lastUpdate >= FIVE_HOURS_IN_MS) {
-            return  true;
+        } else if (now.getTime() - lastUpdate >= FIVE_HOURS_IN_MS) {
+            return true;
         } else {
             return false;
         }
@@ -60,25 +61,34 @@ public class DataManager {
 
     public void loadLocations() {
         RestLocationAPIRepository apiRepository = new RestLocationAPIRepository();
-        Subscription locationSubscripton = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Location>>() {
+        apiRepository
+                .query(null)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Location>>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(1);
+                    }
 
-            @Override
-            public void onCompleted() {
-                persistLocations(DataManager.this.locations);
-                updateLastUpdate();
-            }
+                    @Override
+                    public void onNext(List<Location> locations) {
+                        Log.d(TAG, "size of locations: " + locations.size());
+                        DataManager.this.locations.clear();
+                        DataManager.this.locations.addAll(locations);
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "Error loading locations from server", e);
-            }
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(TAG, "Error loading locations from server", t);
+                    }
 
-            @Override
-            public void onNext(List<Location> locations) {
-                DataManager.this.locations.clear();
-                DataManager.this.locations.addAll(locations);
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        persistLocations(DataManager.this.locations);
+                        updateLastUpdate();
+                    }
+                });
     }
 
     private void updateLastUpdate() {
@@ -89,35 +99,41 @@ public class DataManager {
     }
 
 
-    public Subscription loadEvents() {
+    public void loadEvents() {
         RestEventAPIRepository apiRepository = new RestEventAPIRepository();
+        apiRepository
+                .query(null)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Event>>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(1);
+                    }
 
-        Subscription eventSubscription = apiRepository.query(null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Event>>() {
-            @Override
-            public void onCompleted() {
-                persistEvents(DataManager.this.events);
-                updateLastUpdate();
-            }
+                    @Override
+                    public void onNext(List<Event> events) {
+                        DataManager.this.events.clear();
+                        DataManager.this.events.addAll(events);
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "Error loading events from server", e);
-            }
+                    @Override
+                    public void onError(Throwable t) {
 
-            @Override
-            public void onNext(List<Event> events) {
-                DataManager.this.events.clear();
-                DataManager.this.events.addAll(events);
-            }
-        });
+                    }
 
-        return eventSubscription;
+                    @Override
+                    public void onComplete() {
+                        persistEvents(DataManager.this.events);
+                        updateLastUpdate();
+                    }
+                });
     }
 
     private void persistLocations(List<Location> locations) {
         LocationRealmRepository realmRepository = new LocationRealmRepository(this.context);
-        for(Location location : locations) {
-            if(location.getDeleted()) {
+        for (Location location : locations) {
+            if (location.getDeleted()) {
                 realmRepository.remove(location);
             }
             realmRepository.update(location);
@@ -126,8 +142,8 @@ public class DataManager {
 
     private void persistEvents(List<Event> events) {
         EventRealmRepository realmRepository = new EventRealmRepository(this.context);
-        for(Event event : events) {
-            if(event.getDeleted()) {
+        for (Event event : events) {
+            if (event.getDeleted()) {
                 realmRepository.remove(event);
             }
             realmRepository.update(event);
@@ -136,15 +152,10 @@ public class DataManager {
 
     public void loadLocationById(int locationId) {
         RestLocationAPIRepository apiRepository = new RestLocationAPIRepository();
-        Subscription singleLocationSubscription = apiRepository.getById(locationId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Location>() {
+        apiRepository.getById(locationId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Location>() {
             @Override
-            public void onCompleted() {
-                persistLocations(DataManager.this.locations);
-            }
+            public void onSubscribe(Subscription s) {
 
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "Error loading single location", e);
             }
 
             @Override
@@ -152,27 +163,45 @@ public class DataManager {
                 DataManager.this.locations.clear();
                 DataManager.this.locations.add(location);
             }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                persistLocations(DataManager.this.locations);
+            }
         });
     }
 
     public void loadEventById(int eventId) {
         RestEventAPIRepository apiRepository = new RestEventAPIRepository();
-        Subscription singleEventSubscription = apiRepository.getById(eventId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Event>() {
-            @Override
-            public void onCompleted() {
-                persistEvents(DataManager.this.events);
-            }
+        apiRepository
+                .getById(eventId).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Event>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
 
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "Error loading single event", e);
-            }
+                    }
 
-            @Override
-            public void onNext(Event event) {
-                DataManager.this.events.clear();
-                DataManager.this.events.add(event);
-            }
-        });
+                    @Override
+                    public void onNext(Event event) {
+                        DataManager.this.events.clear();
+                        DataManager.this.events.add(event);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(TAG, "Error loading single event", t);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        persistEvents(DataManager.this.events);
+                    }
+                });
     }
 }

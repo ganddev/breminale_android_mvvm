@@ -6,21 +6,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.realm.RealmObject;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 31.03.16.
@@ -28,11 +25,8 @@ import rx.Observable;
 public interface BreminaleService {
 
 
-
-
     @POST("devices.json")
     Observable<JsonObject> postDeviceToken(@Header("XAuthToken") String authToken, @Body JsonObject device);
-
 
     class Factory {
         public static BreminaleService create() {
@@ -41,14 +35,10 @@ public interface BreminaleService {
                     .connectTimeout(35, TimeUnit.SECONDS)
                     .writeTimeout(35, TimeUnit.SECONDS)
                     .readTimeout(35, TimeUnit.SECONDS);
-// add your other interceptors …
-            httpClient.addInterceptor(new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    Request.Builder requestBuilder = chain.request().newBuilder();
 
-                    return chain.proceed(requestBuilder.build());
-                }
+            httpClient.addInterceptor(chain -> {
+                Request.Builder requestBuilder = chain.request().newBuilder();
+                return chain.proceed(requestBuilder.build());
             });
 
 
@@ -72,7 +62,7 @@ public interface BreminaleService {
                     .client(httpClient.build())
                     .baseUrl("https://serene-ocean-3356.herokuapp.com/api/v1/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
             return retrofit.create(BreminaleService.class);
         }

@@ -8,15 +8,15 @@ import java.util.concurrent.TimeUnit;
 
 import de.ahlfeld.breminale.app.models.SoundcloudTrack;
 import de.ahlfeld.breminale.app.models.SoundcloudUser;
+import io.reactivex.Flowable;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 02.05.16.
@@ -26,10 +26,10 @@ public interface SoundcloudService {
     public static final String CLIENT_ID = "469443570702bcc59666de5950139327";
 
     @GET("/users/{id}")
-    Observable<SoundcloudUser> getUser(@Path("id") long userId);
+    Flowable<SoundcloudUser> getUser(@Path("id") long userId);
 
     @GET("/users/{id}/tracks")
-    Observable<List<SoundcloudTrack>> getTracksForUser(@Path("id") long userId);
+    Flowable<List<SoundcloudTrack>> getTracksForUser(@Path("id") long userId);
 
     class Factory {
         public static SoundcloudService build() {
@@ -62,7 +62,7 @@ public interface SoundcloudService {
                     .client(httpClient.build())
                     .baseUrl("https://api.soundcloud.com")
                     .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
             return retrofit.create(SoundcloudService.class);
         }

@@ -19,7 +19,7 @@ import de.ahlfeld.breminale.app.core.repositories.realm.specifications.EventsByD
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.EventsSortByLocationSpecification;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.EventsSortByNameSpecification;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.RealmSpecification;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -32,7 +32,7 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
     public ObservableInt recyclerViewVisibility;
     private DataListener dataListener;
     private Context context;
-    private Subscription subscription;
+    private Disposable subscription;
 
     public EventListViewModel(Context context, DataListener dataListener, @NonNull Date from, @NonNull Date to) {
         this.context = context;
@@ -49,16 +49,18 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
         PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(this);
     }
 
-    private void loadEvents(@NonNull Date from,@NonNull Date to) {
+    private void loadEvents(@NonNull Date from, @NonNull Date to) {
         EventRealmRepository repository = new EventRealmRepository(context);
-        RealmSpecification<EventRealm> specification = getSpecification(to, from);new EventsByDateSpecification(from, to);
-        subscription = repository.query(specification).subscribe(eventsFromDB ->
-        {
-            recyclerViewVisibility.set(View.VISIBLE);
-            if(dataListener != null) {
-                dataListener.onEventsChanged(eventsFromDB);
-            }
-        });
+        RealmSpecification<EventRealm> specification = getSpecification(to, from);
+        new EventsByDateSpecification(from, to);
+        subscription = repository
+                .query(specification)
+                .subscribe(eventsFromDB -> {
+                    recyclerViewVisibility.set(View.VISIBLE);
+                    if (dataListener != null) {
+                        dataListener.onEventsChanged(eventsFromDB);
+                    }
+                });
     }
 
     private RealmSpecification<EventRealm> getSpecification(@NonNull Date to, @NonNull Date from) {
@@ -67,7 +69,7 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
             case ALPHABETICALLY:
                 return new EventsSortByNameSpecification(from, to);
             case TIME:
-                return new EventsByDateSpecification(from,to);
+                return new EventsByDateSpecification(from, to);
             case LOCATION:
                 return new EventsSortByLocationSpecification(from, to);
             default:
@@ -78,8 +80,8 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
 
     @Override
     public void destroy() {
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+        if (subscription != null && !subscription.isDisposed()) {
+            subscription.dispose();
         }
         PreferenceManager.getDefaultSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(this);
         subscription = null;
@@ -89,7 +91,7 @@ public class EventListViewModel implements ViewModel, SharedPreferences.OnShared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        loadEvents(from,to);
+        loadEvents(from, to);
     }
 
 

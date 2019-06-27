@@ -20,8 +20,7 @@ public class LocationToLocationRealm implements Mapper<Location, LocationRealm> 
 
     @Override
     public LocationRealm map(@NonNull Location location) {
-        LocationRealm locationRealm = realm.createObject(LocationRealm.class);
-        locationRealm.setId(location.getId());
+        LocationRealm locationRealm = realm.createObject(LocationRealm.class, location.getId());
         copy(location, locationRealm);
         return locationRealm;
     }

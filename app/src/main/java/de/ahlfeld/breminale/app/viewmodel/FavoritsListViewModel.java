@@ -11,7 +11,7 @@ import java.util.List;
 import de.ahlfeld.breminale.app.core.domain.domain.Event;
 import de.ahlfeld.breminale.app.core.repositories.realm.EventRealmRepository;
 import de.ahlfeld.breminale.app.core.repositories.realm.specifications.EventByFavoritSpecification;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by bjornahlfeld on 03.06.16.
@@ -21,7 +21,7 @@ public class FavoritsListViewModel implements ViewModel {
     private static final String TAG = FavoritsListViewModel.class.getSimpleName();
     private final Navigation navigationListener;
     private Context context;
-    private Subscription favoritSubscription;
+    private Disposable favoritSubscription;
     private DataListener dataListener;
     public ObservableInt recyclerViewVisibility;
 
@@ -54,8 +54,8 @@ public class FavoritsListViewModel implements ViewModel {
 
     @Override
     public void destroy() {
-        if(favoritSubscription != null && !favoritSubscription.isUnsubscribed()) {
-            favoritSubscription.unsubscribe();
+        if(favoritSubscription != null && !favoritSubscription.isDisposed()) {
+            favoritSubscription.dispose();
         }
         favoritSubscription = null;
         context = null;

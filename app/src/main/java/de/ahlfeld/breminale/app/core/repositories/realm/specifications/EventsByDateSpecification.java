@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 
 import de.ahlfeld.breminale.app.core.repositories.realm.modelRealm.EventRealm;
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import rx.Observable;
 
 /**
  * Created by bjornahlfeld on 02.06.16.
@@ -25,8 +25,14 @@ public class EventsByDateSpecification implements RealmSpecification<EventRealm>
     }
 
     @Override
-    public Observable<RealmResults<EventRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(EventRealm.class).equalTo("deleted",false).between("startTime", from, to).findAllSortedAsync("startTime", Sort.ASCENDING).asObservable();
+    public Flowable<RealmResults<EventRealm>> toFlowableRealmResults(@NonNull Realm realm) {
+        return realm
+                .where(EventRealm.class)
+                .equalTo("deleted",false)
+                .between("startTime", from, to)
+                .sort("startTime", Sort.ASCENDING)
+                .findAllAsync()
+                .asFlowable();
     }
 
     @Override
